@@ -1,6 +1,7 @@
-const CACHE_NAME = "my-pwa-cache-v1";
+const CACHE_NAME = "agend-med-cache-v1";
 const ASSETS = [
     "./",
+    "./manifest.json",
     "./index.html",
     "./style.css",
     "./app.js",
