@@ -49,6 +49,16 @@ body {
     font-weight: 700;
 }
 
+.form-container h4 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+.form-container hr {
+    color: #007bff;
+}
+
 .form-container label {
     font-size: 14px;
     color: #333;
