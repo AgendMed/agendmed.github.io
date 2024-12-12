@@ -9,7 +9,9 @@ const ASSETS = [
     "./cadastramento.css",
     "./login.css",
     "./login.html",
-    // "./",
+    "./img/google-logo.png",
+    "./img/Logo-Azul-AgendMed.png",
+    "./img/Logo-branca-AgendMed.png"
 ];
 
 // Evento de instalação do Service Worker
