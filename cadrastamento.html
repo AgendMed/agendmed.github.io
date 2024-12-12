@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - AgendMed</title>
+    <link rel="stylesheet" href="cadastramento.css">
+    <script src="scripts.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+</head>
+<body>
+    <header class="header">
+        AgendMed
+    </header>
+
+    <main class="content">
+        <div class="form-container">
+            <img src="logo.png" alt="Logo AgendMed">
+
+            <h2>Cadastro</h2>
+            <form action="register_handler.php" method="POST">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+
+                <label for="emailCadastro">E-mail</label>
+                <input type="email" id="emailCadastro" name="email" placeholder="exemplo@123.com" required>
+
+                <label for="senhaCadastro">Senha</label>
+                <input type="password" id="senhaCadastro" name="senha" placeholder="Digite pelo menos 6 caracteres" required>
+
+                <label for="confirmarSenha">Confirmar Senha</label>
+                <input type="password" id="confirmarSenha" name="confirmar-senha" placeholder="Repita sua senha" required>
+
+                <button type="submit">Cadastrar</button>
+            </form>
+
+            <div class="link">
+                <a href="login.html">Já tem conta? Faça login</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

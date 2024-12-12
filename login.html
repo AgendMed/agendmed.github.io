@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AgendMed</title>
+    <link rel="stylesheet" href="login.css">
+    <script src="scripts.js" defer></script>
+</head>
+<body>
+    <header class="header">
+        AgendMed
+    </header>
+
+    <main class="content">
+        <div class="form-container">
+            <img src="logo.png" alt="Logo AgendMed">
+
+            <h2>Login</h2>
+            <form action="login_handler.php" method="POST">
+                <label for="email-login">E-mail</label>
+                <input type="email" id="email-login" name="email" placeholder="exemplo@123.com" required>
+
+                <label for="senha-login">Senha</label>
+                <input type="password" id="senha-login" name="senha" placeholder="Digite pelo menos 6 caracteres" required>
+
+                <button type="submit">Entrar</button>
+            </form>
+
+            <div class="link">
+                <a href="cadastro.html">Não tem conta? Cadastre-se</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
