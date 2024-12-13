@@ -10,6 +10,8 @@ const ASSETS = [
     "./cadastro.css",
     "./login.css",
     "./login.html",
+    "./Pre_login.css",
+    "./Pre_login.html",
     "./img/google-logo.png",
     "./img/Logo-Azul-AgendMed.png",
     "./img/Logo-branca-AgendMed.png"
