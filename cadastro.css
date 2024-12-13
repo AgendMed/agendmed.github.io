@@ -64,12 +64,12 @@ body {
     color: #333;
     display: block;
     margin-bottom: 5px;
+    margin-top: 15px;
 }
 
 .form-container input {
     width: 100%;
     padding: 12px;
-    margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 14px;
@@ -112,4 +112,8 @@ body {
 
 .form-container .link a:hover {
     text-decoration: underline;
+}
+.form-container span {
+    color: red;
+    font-size: 0.8em;
 }
