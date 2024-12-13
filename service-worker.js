@@ -1,5 +1,5 @@
 const CACHE_NAME = "agend-med-cache-v1";
-const ASSETS = [
+const URLS_TO_CACHE = [
     "./",
     "./manifest.json",
     "./index.html",
