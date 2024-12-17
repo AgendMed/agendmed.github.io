@@ -1,7 +1,6 @@
 const CACHE_NAME = "agend-med-cache-v1.3";
 const URLS_TO_CACHE = [
     "./",
-    "./img/google-logo.png",
     "./img/Logo-Azul-AgendMed.png",
     "./img/Logo-branca-AgendMed.png",
     "./img/calendario.png",
