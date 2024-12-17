@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function validarCartaoSus(value) {
-        return value !== '';
+        return value !== ''; // Você pode adicionar mais validações se necessário
     }
 
     function validarCPF(value) {
@@ -107,6 +107,9 @@ document.addEventListener('DOMContentLoaded', function() {
     Object.keys(fields).forEach(key => {
         fields[key].addEventListener('input', function() {
             switch (key) {
+                case 'cartSus':
+                    validarCampo(fields.cartSus, errorMessages.cartSusError, validarCartaoSus);
+                    break;
                 case 'cpf':
                     fields.cpf.value = aplicarMascaraCPF(fields.cpf.value);
                     validarCampo(fields.cpf, errorMessages.cpfError, validarCPF);
@@ -139,6 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         Object.keys(fields).forEach(key => {
             switch (key) {
+                case 'cartSus':
+                    isValid &= validarCampo(fields.cartSus, errorMessages.cartSusError, validarCartaoSus);
+                    break;
                 case 'cpf':
                     isValid &= validarCampo(fields.cpf, errorMessages.cpfError, validarCPF);
                     break;
@@ -201,4 +207,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     form.addEventListener('submit', validarFormulario);
-});
+}); 
