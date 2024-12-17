@@ -5,7 +5,7 @@
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#333333",
-    "img": [
+    "icons": [
         {
             "src": "/img/Logo-branca-AgendMed.png",
             "sizes": "192x192",
