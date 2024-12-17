@@ -12,12 +12,12 @@
             "type": "image/png"
         },
         {
-            "src": "/img/Logo-branca-AgendMed.png",
+            "src": "/img/Logo-Azul-AgendMed.png",
             "sizes": "512x512",
             "type": "image/png"
         },
         {
-            "src": "/img/Logo-branca-AgendMed.png.png",
+            "src": "/img/Logo-branca-AgendMed.png",
             "sizes": "50x50",
             "type": "image/png"
         }
