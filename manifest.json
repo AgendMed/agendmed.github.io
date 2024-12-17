@@ -1,5 +1,5 @@
 {
-    "name": "Agendamento Hospitalar",
+    "name": "AgendMed",
     "short_name": "AgendamentoHospitalar",
     "start_url": "./index.html",
     "display": "standalone",
