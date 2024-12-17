@@ -12,7 +12,6 @@ const URLS_TO_CACHE = [
     "./login.html",
     "./login.js",
     "./Pre_login.css",
-    "./Pre_login.html",
     "./user.css",
     "./user.html",
     "./img/google-logo.png",
