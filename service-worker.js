@@ -1,23 +1,29 @@
-const CACHE_NAME = "agend-med-cache-v1.2";
+const CACHE_NAME = "agend-med-cache-v1.3";
 const URLS_TO_CACHE = [
     "./",
-    "./manifest.json",
-    "./index.html",
-    "./style.css",
+    "./img/google-logo.png",
+    "./img/Logo-Azul-AgendMed.png",
+    "./img/Logo-branca-AgendMed.png",
+    "./img/calendario.png",
+    "./img/news.png",
+    "./img/ticket.png",
     "./app.js",
-    "./cadastro.html",
-    "./scripts.js",
     "./cadastro.css",
+    "./cadastro.html",
+    "./index.html",
     "./login.css",
     "./login.html",
     "./login.js",
-    "./Pre_login.css",
-    "./Pre_login.html",
-    "./user.css",
+    "./manifest.json",
+    "./onboarding.css",
+    "./onboarding.html",
+    "./onboarding.js",
+    "./Pre_Login.css",
+    "./scripts.js",
+    "./service-worker.js",
+    "./style.css",
     "./user.html",
-    "./img/google-logo.png",
-    "./img/Logo-Azul-AgendMed.png",
-    "./img/Logo-branca-AgendMed.png"
+    "./user.css"
 ];
 
 // Evento de instalação do Service Worker
