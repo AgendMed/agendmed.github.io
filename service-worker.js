@@ -10,10 +10,11 @@ const URLS_TO_CACHE = [
     "./cadastro.css",
     "./login.css",
     "./login.html",
+    "./login.js",
     "./Pre_login.css",
     "./Pre_login.html",
-    ".user.css",
-    ".user.html",
+    "./user.css",
+    "./user.html",
     "./img/google-logo.png",
     "./img/Logo-Azul-AgendMed.png",
     "./img/Logo-branca-AgendMed.png"
