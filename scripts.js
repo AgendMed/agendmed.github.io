@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     validarCampo(fields.email, errorMessages.emailError, validarEmail);
                     break;
                 case 'senha':
- validarCampo(fields.senha, errorMessages.senhaError, validarSenha);
+                    validarCampo(fields.senha, errorMessages.senhaError, validarSenha);
                     break;
                 case 'confirmarSenha':
                     validarCampo(fields.confirmarSenha, errorMessages.confirmarSenhaError, validarConfirmarSenha);
