@@ -1,159 +1,204 @@
-// Scripts de cadastro
 document.addEventListener('DOMContentLoaded', function() {
-    var nome = document.getElementById('nome');
-    var cartSus = document.getElementById('cartSus');
-    var cpf = document.getElementById('cpf');
-    var dataNascimento = document.getElementById('dataNascimento');
-    var telefone = document.getElementById('telefone');
-    var bairro = document.getElementById('bairro');
-    var rua = document.getElementById('rua');
-    var email = document.getElementById('emailCadastro');
-    var senha = document.getElementById('senhaCadastro');
-    var confirmarSenha = document.getElementById('confirmarSenha');
+    // Seleção de elementos
+    const form = document.querySelector('form');
+    const fields = {
+        nome: document.getElementById('nome'),
+        cartSus: document.getElementById('cartSus'),
+        cpf: document.getElementById('cpf'),
+        dataNascimento: document.getElementById('dataNascimento'),
+        telefone: document.getElementById('telefone'),
+        bairro: document.getElementById('bairro'),
+        rua: document.getElementById('rua'),
+        complemento: document.getElementById('complemento'),
+        grupoPrioritario: document.getElementById('grupoPrioritario'),
+        email: document.getElementById('emailCadastro'),
+        senha: document.getElementById('senhaCadastro'),
+        confirmarSenha: document.getElementById('confirmarSenha')
+    };
 
-    var nomeError = document.getElementById('nomeError');
-    var cartSusError = document.getElementById('cartSusError');
-    var cpfError = document.getElementById('cpfError');
-    var dataNascimentoError = document.getElementById('dataNascimentoError');
-    var telefoneError = document.getElementById('telefoneError');
-    var bairroError = document.getElementById('bairroError');
-    var ruaError = document.getElementById('ruaError');
-    var emailError = document.getElementById('emailError');
-    var senhaError = document.getElementById('senhaError');
-    var confirmarSenhaError = document.getElementById('confirmarSenhaError');
+    const errorMessages = {
+        nomeError: document.getElementById('nomeError'),
+        cartSusError: document.getElementById('cartSusError'),
+        cpfError: document.getElementById('cpfError'),
+        dataNascimentoError: document.getElementById('dataNascimentoError'),
+        telefoneError: document.getElementById('telefoneError'),
+        bairroError: document.getElementById('bairroError'),
+        ruaError: document.getElementById('ruaError'),
+        emailError: document.getElementById('emailError'),
+        senhaError: document.getElementById('senhaError'),
+        confirmarSenhaError: document.getElementById('confirmarSenhaError')
+    };
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+    // Função para aplicar máscara ao CPF
+    function aplicarMascaraCPF(cpf) {
+        return cpf.replace(/\D/g, '')
+                  .replace(/(\d{3})(\d)/, '$1.$2')
+                  .replace(/(\d{3})(\d)/, '$1.$2')
+                  .replace(/(\d{3})(\d{2})$/, '$1-$2');
+    }
+
+    // Função para aplicar máscara ao telefone
+    function aplicarMascaraTelefone(telefone) {
+        return telefone.replace(/\D/g, '')
+                       .replace(/(\d{2})(\d)/, '($1) $2')
+                       .replace(/(\d)(\d{4})$/, '$1-$2');
+    }
+
+    // Função de validação
+    function validarCampo(campo, errorElement, validationFn) {
+        const value = campo.value.trim();
+        errorElement.textContent = '';
+        campo.style.borderColor = '';
+
+        if (!validationFn(value)) {
+            errorElement.textContent = `Por favor, preencha o campo ${campo.name}.`;
+            campo.style.borderColor = 'red';
+            return false;
+        } else {
+            campo.style.borderColor = 'green';
+            return true;
+        }
+    }
+
+    // Funções de validação específicas
+    function validarNome(value) {
+        return value !== '';
+    }
+
+    function validarCartaoSus(value) {
+        return value !== '';
+    }
+
+    function validarCPF(value) {
+        return /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(value);
+    }
+
+    function validarDataNascimento(value) {
+        return value !== '';
+    }
+
+    function validarTelefone(value) {
+        return value !== '';
+    }
+
+    function validarBairro(value) {
+        return value !== '';
+    }
+
+    function validarRua(value) {
+        return value !== '';
+    }
+
+    function validarEmail(value) {
+        return emailRegex.test(value);
+    }
+
+    function validarSenha(value) {
+        return value.length >= 6;
+    }
+
+    function validarConfirmarSenha(value) {
+        return value === fields.senha.value;
+    }
+
+    // Validação em tempo real
+    Object.keys(fields).forEach(key => {
+        fields[key].addEventListener('input', function() {
+            switch (key) {
+                case 'cpf':
+                    fields.cpf.value = aplicarMascaraCPF(fields.cpf.value);
+                    validarCampo(fields.cpf, errorMessages.cpfError, validarCPF);
+                    break;
+                case 'telefone':
+                    fields.telefone.value = aplicarMascaraTelefone(fields.telefone.value);
+                    validarCampo(fields.telefone, errorMessages.telefoneError, validarTelefone);
+                    break;
+                case 'email':
+                    validarCampo(fields.email, errorMessages.emailError, validarEmail);
+                    break;
+                case 'senha':
+                    validarCampo(fields.senha, errorMessages.senhaError, validarSenha);
+                    break;
+                case 'confirmarSenha':
+                    validarCampo(fields.confirmarSenha, errorMessages.confirmarSenhaError, validarConfirmarSenha);
+                    break;
+                default:
+                    validarCampo(fields[key], errorMessages[`${key}Error`], eval(`validar${key.charAt(0).toUpperCase() + key.slice(1)}`));
+                    break;
+            }
+        });
+    });
+
+    // Função de validação do formulário
     function validarFormulario(event) {
         event.preventDefault();
         
-        nomeError.textContent= '';
-        cartSusError.textContent= '';
-        cpfError.textContent= '';
-        dataNascimentoError.textContent= '';
-        telefoneError.textContent= '';
-        bairroError.textContent= '';
-        ruaError.textContent= '';
-        emailError.textContent = '';
-        senhaError.textContent = '';
-        confirmarSenhaError.textContent = '';
-
         let isValid = true;
 
-        if (nome.value.trim() === '') {
-            nomeError.textContent = 'Por favor, preencha o campo Nome.';
-            isValid = false;
-        }   else {
-            nome.style.borderColor = 'green';
-        }
-
-        if (cartSus.value.trim() === ''){
-            cartSusError.textContent = 'Por favor, preencha o campo Cartão SUS.';
-            isValid = false;
-        }   else {
-            cartSus.style.borderColor = 'green';
-        }
-
-        if (!/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf.value)) {
-            cpfError.textContent = 'Por favor, insira um CPF válido (ex: 000.000.000-00.'
-            isValid = false;
-        }   else {
-            cpf.style.borderColor = 'green';
-        }
-        if (dataNascimento.value === '') {
-            dataNascimentoError.textContent = 'Por favor, preencha o campo Data de Nascimento';
-            isValid = false;
-        }   else {
-            dataNascimento.style.borderColor = 'green';
-        }
-
-        if (telefone.value.trim() === '') {
-            telefoneError.textContent = 'Por favor, preencha o campo Telefone';
-            isValid = false;
-        }   else {
-            telefone.style.borderColor = 'green';
-        }
-
-        if (bairro.value.trim() === '') {
-            bairroError.textContent = 'Por favor, preencha o campo Bairro';
-            isValid = false;
-        }   else {
-            bairro.style.borderColor = 'green';
-        }
-
-        if (rua.value.trim() === '') {
-            ruaError.textContent = 'Por favor, preencha o campo Rua';
-            isValid = false;
-        }   else {
-            rua.style.borderColor = 'green';
-        }
-
-        if (complemento.value.trim() !== '') {
-            complemento.style.borderColor = 'green';
-        }
-
-        if (grupoPrioritario.checked) {
-            grupoPrioritario.style.borderColor = 'green';
-        }
-
-        if (!emailRegex.test(email.value)) {
-            emailError.textContent= 'Por favor, insira um email válido.';
-            isValid = false;
-        }
-
-        if (senha.value.lenght < 6) {
-            senhaError.textContent = 'A senha deve ter pelo menos 6 caracteres.';
-            isValid = false;
-        }
-
-        if (senha.value !== confirmarSenha.value) {
-            confirmarSenhaError.textContent = 'As senhas não coincidem.';
-            isValid = false;
-        }
+        Object.keys(fields).forEach(key => {
+            switch (key) {
+                case 'cpf':
+                    isValid &= validarCampo(fields.cpf, errorMessages.cpfError, validarCPF);
+                    break;
+                case 'telefone':
+                    isValid &= validarCampo(fields.telefone, errorMessages.telefoneError, validarTelefone);
+                    break;
+                case 'email':
+                    isValid &= validarCampo(fields.email, errorMessages.emailError, validarEmail);
+                    break;
+                case 'senha':
+                    isValid &= validarCampo(fields.senha, errorMessages.senhaError, validarSenha);
+                    break;
+                case 'confirmarSenha':
+                    isValid &= validarCampo(fields.confirmarSenha, errorMessages.confirmarSenhaError, validarConfirmarSenha);
+                    break;
+                default:
+                    isValid &= validarCampo(fields[key], errorMessages[`${key}Error`], eval(`validar${key.charAt(0).toUpperCase() + key.slice(1)}`));
+                    break;
+            }
+        });
 
         if (isValid) {
             const usuario = {
-                nome: nome.value,
-                cartSus: cartSus.value,
-                cpf: cpf.value,
-                dataNascimento: dataNascimento.value,
-                telefone: telefone.value,
-                bairro: bairro.value,
-                rua: rua.value,
-                complemento: complemento.value,
-                grupoPrioritario: grupoPrioritario.checked,
-                email: email.value,
-                senha: senha.value
+                nome: fields.nome.value,
+                cartSus: fields.cartSus.value,
+                cpf: fields.cpf.value,
+                dataNascimento: fields.dataNascimento.value,
+                telefone: fields.telefone.value,
+                bairro: fields.bairro.value,
+                rua: fields.rua.value,
+                complemento: fields.complemento.value,
+                grupoPrioritario: fields.grupoPrioritario.checked,
+                email: fields.email.value,
+                senha: fields.senha.value
             };
 
-            localStorage.setItem('usuario', JSON.stringify(usuario));
+            // Recuperar a lista de usuários do localStorage
+            const usuarios = JSON.parse(localStorage.getItem('usuarios')) || {};
+
+            // Adicionar o novo usuário usando o CPF como chave
+            usuarios[usuario.cpf] = usuario;
+
+            // Salvar a lista atualizada de usuários no localStorage
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
 
             Swal.fire({
                 title: 'Cadastro realizado!',
                 text: 'Seus dados foram salvos com sucesso.',
                 icon: 'success',
-                time: 3000
+                timer: 3000
             });
 
-            nome.value = '';
-            cartSus.value = '';
-            cpf.value = '';
-            dataNascimento.value = '';
-            telefone.value = '';
-            bairro.value = '';
-            rua.value = '';
-            complemento.value = '';
-            grupoPrioritario.checked = false;
-            email.value = '';
-            senha.value = '';
-            confirmarSenha.value = '';
+            // Limpar campos após o cadastro
+            Object.values(fields).forEach(field => {
+                field.value = '';
+                field.style.borderColor = '';
+            });
+            fields.grupoPrioritario.checked = false;
         }
     }
 
-    var form = document.querySelector('form');
     form.addEventListener('submit', validarFormulario);
 });
-    
-
-
-// Scripts de login
