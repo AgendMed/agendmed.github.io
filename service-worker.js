@@ -13,14 +13,15 @@ const URLS_TO_CACHE = [
     "./index.html",
     "./login.css",
     "./login.html",
+    "./login.js",
     "./manifest.json",
     "./onboarding.css",
     "./onboarding.html",
     "./onboarding.js",
-    "./Pre_login.css",
+    "./Pre_Login.css",
     "./scripts.js",
-    "./style.css",
     "./service-worker.js",
+    "./style.css",
     "./user.html",
     "./user.css"
 ];
