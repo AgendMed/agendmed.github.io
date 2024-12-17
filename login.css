@@ -43,20 +43,20 @@ label {
 }
 
 /* Estilo para os inputs */
-input[type="email"], input[type="password"] {
+input[type="text"], input[type="password"] {
     width: 100%;
     padding: 10px;
     margin: 13px 0;
-    border: none; /* Remove todas as bordas */
-    border-bottom: 1px solid #cbd9ec; /* Apenas linha inferior */
-    background-color: transparent; /* Fundo transparente */
-    outline: none; /* Remove a borda azul padrão ao focar */
+    border: none;
+    border-bottom: 1px solid #9b9b9b;
+    background-color: transparent;
+    outline: none;
     font-size: 16px;
-    color: #333; /* Cor do texto */
+    color: #333;
 }
 
 /* Estilo ao focar no input */
-input[type="email"]:focus, input[type="password"]:focus {
+input[type="text"]:focus, input[type="password"]:focus {
     border-bottom: 2px solid #0d5db3; /* Altere a cor da linha ao focar */
 }
 
@@ -100,7 +100,7 @@ button {
     background-color: #E0E0E0;
 }
 
-.google-btn {
+.cadastro-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -110,11 +110,16 @@ button {
     height: 40px;
 
 }
-.google-btn img {
-    width: 18px; /* Reduz o tamanho da logo */
-    height: 18px;
-    transform: translate(-80px, 10px); /* Move para baixo e para a esquerda */
 
+.cadastro-btn a {
+    text-decoration: none; /* Remove o sublinhado */
+    color: inherit;
+    width: 100%;
+    display: block;
+}
+
+.cadastro-btn a:hover {
+    text-decoration: none;
 }
 
 /* Texto secundário */
@@ -148,3 +153,18 @@ button {
 .link a:hover {
     text-decoration: underline;
 }
+
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+input.error {
+    border-bottom: 2px solid red; /* Linha vermelha ao erro */
+}
+
+input.error:focus {
+    border-bottom: 2px solid red; /* Linha vermelha ao focar com erro */
+}
+
