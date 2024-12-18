@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Seleção de elementos
     const form = document.querySelector('form');
     const fields = {
@@ -105,8 +105,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Validação em tempo real
     Object.keys(fields).forEach(key => {
-        fields[key].addEventListener('input', function() {
+        fields[key].addEventListener('input', function () {
             switch (key) {
+                case 'complemento': // Ignore este campo
+                    break;
                 case 'cartSus':
                     validarCampo(fields.cartSus, errorMessages.cartSusError, validarCartaoSus);
                     break;
@@ -128,7 +130,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     validarCampo(fields.confirmarSenha, errorMessages.confirmarSenhaError, validarConfirmarSenha);
                     break;
                 default:
-                    validarCampo(fields[key], errorMessages[`${key}Error`], eval(`validar${key.charAt(0).toUpperCase() + key.slice(1)}`));
+                    const validateFn = window[`validar${key.charAt(0).toUpperCase() + key.slice(1)}`];
+                    if (typeof validateFn === 'function') {
+                        validarCampo(fields[key], errorMessages[`${key}Error`], validateFn);
+                    }
                     break;
             }
         });
@@ -142,6 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         Object.keys(fields).forEach(key => {
             switch (key) {
+                case 'complemento': // Ignore este campo
+                    break;
                 case 'cartSus':
                     isValid &= validarCampo(fields.cartSus, errorMessages.cartSusError, validarCartaoSus);
                     break;
@@ -161,7 +168,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     isValid &= validarCampo(fields.confirmarSenha, errorMessages.confirmarSenhaError, validarConfirmarSenha);
                     break;
                 default:
-                    isValid &= validarCampo(fields[key], errorMessages[`${key}Error`], eval(`validar${key.charAt(0).toUpperCase() + key.slice(1)}`));
+                    const validateFn = window[`validar${key.charAt(0).toUpperCase() + key.slice(1)}`];
+                    if (typeof validateFn === 'function') {
+                        isValid &= validarCampo(fields[key], errorMessages[`${key}Error`], validateFn);
+                    }
                     break;
             }
         });
@@ -207,4 +217,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     form.addEventListener('submit', validarFormulario);
-}); 
+});
