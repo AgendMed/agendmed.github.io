@@ -34,7 +34,7 @@ function atualizarBotaoSubmit() {
 
 // Formatar CPF enquanto digita
 function formatarCPF(cpf) {
-    cpf = cpf.replace(/\D/g, ""); // Remove tudo que não é número
+    cpf = cpf.replace(/\D/g, "");
     if (cpf.length <= 11) {
         cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
         cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
