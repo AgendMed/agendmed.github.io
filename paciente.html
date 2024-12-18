@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Atendimento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            color: #0056ff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .container h2 {
+            text-align: center;
+            padding: 15px 0;
+            font-size: 1.2em;
+            color: #333;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            background: #fff;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navigation a {
+            text-decoration: none;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .navigation a:hover {
+            color: #0056ff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bem-vindo, Victor</h1>
+    </header>
+
+    <div class="container">
+        <h2>Profissionais Disponíveis</h2>
+        <p style="text-align: center; padding: 20px; color: #666;">Nenhum profissional disponível no momento.</p>
+    </div>
+
+    <div class="navigation">
+        <a href="#">Home</a>
+        <a href="#">Campanhas</a>
+        <a href="#">Consultas</a>
+    </div>
+</body>
+</html>
