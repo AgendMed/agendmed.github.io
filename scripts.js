@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function validarCartaoSus(value) {
-        return value !== ''; // Você pode adicionar mais validações se necessário
+        return value !== ''; 
     }
 
     function validarCPF(value) {
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
     Object.keys(fields).forEach(key => {
         fields[key].addEventListener('input', function () {
             switch (key) {
-                case 'complemento': // Ignore este campo
+                case 'complemento': // Ignorar
                     break;
                 case 'cartSus':
                     validarCampo(fields.cartSus, errorMessages.cartSusError, validarCartaoSus);
