@@ -22,7 +22,8 @@ const URLS_TO_CACHE = [
     "./service-worker.js",
     "./style.css",
     "./user.html",
-    "./user.css"
+    "./user.css",
+    "./perfil.js"
 ];
 
 // Evento de instalação do Service Worker
