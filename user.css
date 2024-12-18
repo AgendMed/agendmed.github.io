@@ -3,23 +3,16 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
 }
 
 body {
     background-color: #f5f7fa;
     overflow: hidden;
+    width: 100vw;
+    height: 100vh;
 }
-
-.container {
-    position: relative;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    background-color: #ffffff;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
-    overflow: hidden;
+.container-fluid{
+    color: #ddd;
 }
 
 /* Header */
@@ -31,12 +24,8 @@ header {
     color: white;
     font-size: 18px;
     font-weight: bold;
-}
-
-.back-button {
-    font-size: 20px;
-    margin-right: 10px;
-    cursor: pointer;
+    width: 100%; /* Garante 100% da largura */
+    box-sizing: border-box; /* Inclui o padding na largura */
 }
 
 /* Profile Section */
@@ -65,9 +54,10 @@ header {
     font-size: 18px;
 }
 
-/* Additional Information */
 .additional-info {
-    margin: 20px;
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
     padding: 15px;
     background-color: #f9f9f9;
     border-radius: 10px;
@@ -113,7 +103,6 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
-    max-width: 400px;
     background-color: #ffffff;
     border-top: 1px solid #ddd;
 }
