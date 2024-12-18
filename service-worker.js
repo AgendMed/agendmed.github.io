@@ -1,4 +1,4 @@
-const CACHE_NAME = "agend-med-cache-v1.3";
+const CACHE_NAME = "agend-med-cache-v2.0";
 const URLS_TO_CACHE = [
     "./",
     "./img/Logo-Azul-AgendMed.png",
@@ -22,7 +22,8 @@ const URLS_TO_CACHE = [
     "./service-worker.js",
     "./style.css",
     "./user.html",
-    "./user.css"
+    "./user.css",
+    "./perfil.js"
 ];
 
 // Evento de instalação do Service Worker

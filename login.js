@@ -6,17 +6,15 @@ const submitBtn = document.getElementById("submit-btn");
 const cpfError = document.getElementById("cpf-error");
 const senhaError = document.getElementById("senha-error");
 
-// Valida CPF (formato 000.000.000-00)
 function validarCPF(cpf) {
-    return /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf) && cpf.length === 14; // Verifica se o CPF tem 14 caracteres
+    return /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf) && cpf.length === 14; 
 }
 
-// Valida Senha (mínimo 6 caracteres)
 function validarSenha(senha) {
     return senha.length >= 6;
 }
 
-// Exibir ou ocultar erro
+//mensagens de erro
 function validarCampo(input, errorMsg, isValid) {
     if (isValid) {
         input.classList.remove("error");
@@ -31,26 +29,24 @@ function validarCampo(input, errorMsg, isValid) {
 function atualizarBotaoSubmit() {
     const cpfValido = validarCPF(cpfInput.value);
     const senhaValida = validarSenha(senhaInput.value);
-
     submitBtn.disabled = !(cpfValido && senhaValida);
 }
 
-// Formatar CPF enquanto o usuário digita
+// Formatar CPF enquanto digita
 function formatarCPF(cpf) {
-    cpf = cpf.replace(/\D/g, ""); // Remove tudo o que não é número
+    cpf = cpf.replace(/\D/g, "");
     if (cpf.length <= 11) {
         cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
         cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
         cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     } else {
-        cpf = cpf.substring(0, 11); // Garante que não passe de 11 dígitos numéricos
+        cpf = cpf.substring(0, 11);
     }
     return cpf;
 }
 
-// Eventos em tempo real
 cpfInput.addEventListener("input", () => {
-    cpfInput.value = formatarCPF(cpfInput.value); // Formatar CPF enquanto digita
+    cpfInput.value = formatarCPF(cpfInput.value);
     const valido = validarCPF(cpfInput.value);
     validarCampo(cpfInput, cpfError, valido);
     cpfError.textContent = valido ? "" : "CPF inválido (formato: 000.000.000-00)";
@@ -63,3 +59,25 @@ senhaInput.addEventListener("input", () => {
     senhaError.textContent = valido ? "" : "A senha deve ter pelo menos 6 caracteres";
     atualizarBotaoSubmit();
 });
+
+// Função para realizar o login
+function realizarLogin(event) {
+    event.preventDefault();
+
+    const cpf = cpfInput.value;
+    const senha = senhaInput.value.trim();
+
+    const usuarios = JSON.parse(localStorage.getItem('usuarios')) || {}; 
+
+    // Verificar se o CPF existe e se a senha está correta
+    if (usuarios[cpf] && usuarios[cpf].senha === senha) {
+        localStorage.setItem('cpfLogado', cpf);
+        window.location.href = 'user.html';
+    } else {
+        alert('CPF ou senha inválidos!');
+    }
+}
+
+// Associar a função de login ao evento de envio do formulário
+const formLogin = document.querySelector('form');
+formLogin.addEventListener('submit', realizarLogin);
