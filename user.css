@@ -7,11 +7,15 @@
 
 body {
     background-color: #f5f7fa;
-    overflow: hidden;
+    overflow-x: hidden; /* Impede a rolagem horizontal */
+    overflow-y: auto;   /* Permite rolagem vertical */
     width: 100vw;
     height: 100vh;
+    font-family: Arial, sans-serif;
+    padding-bottom: 80px;
 }
-.container-fluid{
+
+.container-fluid {
     color: #ddd;
 }
 
@@ -24,8 +28,8 @@ header {
     color: white;
     font-size: 18px;
     font-weight: bold;
-    width: 100%; /* Garante 100% da largura */
-    box-sizing: border-box; /* Inclui o padding na largura */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Profile Section */
@@ -136,4 +140,33 @@ nav a.active {
 nav a:hover {
     color: #4a90e2;
     transform: scale(1.1);
+}
+
+#edit-btn, #save-btn {
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#edit-btn {
+    background-color: transparent;
+    border: 2px solid #4a90e2;
+    color: #4a90e2;
+}
+
+#edit-btn:hover {
+    background-color: #4a90e2;
+    color: white;
+}
+
+#save-btn {
+    background-color: #4a90e2;
+    color: white;
+    display: none;
+}
+
+#save-btn:hover {
+    background-color: #357ABD;
 }

@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <script src="perfil.js" defer></script>
-    
 </head>
 <body>
     <div class="container-fluid">
@@ -31,27 +30,35 @@
         <!-- Additional Information -->
         <section class="additional-info">
             <div class="info-field">
-                <strong>Nome Completo:</strong> <span id="user-full-name"></span>
+                <strong>Nome Completo:</strong>
+                <span id="user-full-name"></span>
+                <input type="text" id="nome-edit" style="display:none;">
             </div>
             <div class="info-field">
-                <strong>Endereço:</strong> <span id="user-address"></span>
+                <strong>Endereço:</strong>
+                <span id="user-address"></span>
+                <textarea id="endereco-edit" style="display:none;"></textarea>
             </div>
             <div class="info-field">
-                <strong>Telefone:</strong> <span id="user-phone"></span>
+                <strong>Telefone:</strong>
+                <span id="user-phone"></span>
+                <input type="text" id="telefone-edit" style="display:none;">
             </div>
             <div class="info-field">
-                <strong>Email:</strong> <span id="user-email"></span>
+                <strong>Email:</strong>
+                <span id="user-email"></span>
+                <input type="email" id="email-edit" style="display:none;">
             </div>
             <div class="info-field">
-                <strong>Cartão SUS:</strong> <span id="user-cart-sus"></span>
+                <strong>Cartão SUS:</strong>
+                <span id="user-cart-sus"></span>
+                <input type="text" id="cart-sus-edit" style="display:none;">
             </div>
+            <button id="edit-btn" class="btn">Editar Perfil</button>
+            <button id="save-btn" class="btn" style="display:none;">Salvar Alterações</button>
         </section>
-        <div class="info-field">
 
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-
-        <!-- Footer Navigation -->
+        <!-- Footer Navigation
         <footer>
             <nav>
                 <a href="#" class="active">
@@ -67,5 +74,7 @@
                     <span>Consultas</span>
                 </a>
             </nav>
-        </footer>
+        </footer> -->
     </div>
+</body>
+</html>

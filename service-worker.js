@@ -1,4 +1,4 @@
-const CACHE_NAME = "agend-med-cache-v1.3";
+const CACHE_NAME = "agend-med-cache-v2.0";
 const URLS_TO_CACHE = [
     "./",
     "./img/Logo-Azul-AgendMed.png",
