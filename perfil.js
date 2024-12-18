@@ -1,16 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
     const fields = {
-        nome: document.getElementById('nome'),
-        cartSus: document.getElementById('cartSus'),
-        cpf: document.getElementById('cpf'),
-        dataNascimento: document.getElementById('dataNascimento'),
-        telefone: document.getElementById('telefone'),
-        bairro: document.getElementById('bairro'),
-        rua: document.getElementById('rua'),
-        complemento: document.getElementById('complemento'),
-        grupoPrioritario: document.getElementById('grupoPrioritario'),
-        email: document.getElementById('email'),
-        senha: document.getElementById('senha')
+        nome: document.getElementById('user-name'),
+        nomeCompleto: document.getElementById('user-full-name'), // Campo do nome completo
+        cartSus: document.getElementById('user-cart-sus'),
+        cpf: document.getElementById('user-cpf'),
+        telefone: document.getElementById('user-phone'),
+        endereco: document.getElementById('user-address'),
+        email: document.getElementById('user-email')
     };
 
     function preencherPerfil(cpf) {
@@ -19,18 +15,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (usuarios[cpf]) {
             const usuario = usuarios[cpf];
             
-            // Preenchendo os campos com os dados do usuário
-            fields.nome.value = usuario.nome || '';
-            fields.cartSus.value = usuario.cartSus || '';
-            fields.cpf.value = usuario.cpf || '';
-            fields.dataNascimento.value = usuario.dataNascimento || '';
-            fields.telefone.value = usuario.telefone || '';
-            fields.bairro.value = usuario.bairro || '';
-            fields.rua.value = usuario.rua || '';
-            fields.complemento.value = usuario.complemento || '';
-            fields.grupoPrioritario.checked = usuario.grupoPrioritario || false;
-            fields.email.value = usuario.email || '';
-            fields.senha.value = usuario.senha || '';
+            fields.nome.textContent = usuario.nome || '';
+            fields.nomeCompleto.textContent = usuario.nome || '';
+            fields.cartSus.textContent = usuario.cartSus || '';
+            fields.cpf.textContent = usuario.cpf || '';
+            fields.telefone.textContent = usuario.telefone || '';
+            fields.endereco.textContent = `${usuario.rua}, ${usuario.bairro}` || '';
+            fields.email.textContent = usuario.email || '';
         } else {
             Swal.fire({
                 title: 'Erro!',
@@ -41,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Recuperar o CPF do usuário logado
     const cpfUsuarioLogado = localStorage.getItem('cpfLogado');
 
     if (cpfUsuarioLogado) {
