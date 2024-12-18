@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Seleção de elementos de perfil
     const fields = {
         nome: document.getElementById('nome'),
         cartSus: document.getElementById('cartSus'),
@@ -14,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
         senha: document.getElementById('senha')
     };
 
-    // Função para preencher os campos com as informações do usuário
     function preencherPerfil(cpf) {
         const usuarios = JSON.parse(localStorage.getItem('usuarios')) || {};
 
