@@ -24,18 +24,18 @@ class Paciente(models.Model):
     
 
     nomeCompleto = models.CharField(max_length=40)
-    cartaoSaude = models.IntegerField(max_length=15)
+    cartaoSaude = models.IntegerField()
     cpf = models.CharField(
         max_length=14,
         validators=[MinLengthValidator(11)],
         verbose_name="CPF",
     )
     data_nascimento = models.DateField(verbose_name="Data de nascimento")
-    idade = models.IntegerField(max_length=3)
+    idade = models.IntegerField()
     telefone = models.CharField(max_length=15)
     bairro = models.CharField(max_length=25)
     rua = models.CharField(max_length=45)
-    num_casa = models.IntegerField(max_length=6)
+    num_casa = models.IntegerField()
     complemento = models.CharField(max_length=100)
     email = models.EmailField(max_length=50, unique=True)
     senha = models.CharField(max_length=30)
