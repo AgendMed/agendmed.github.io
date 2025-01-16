@@ -4,82 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - AgendMed</title>
-    <link rel="stylesheet" href="cadastro.css">
-    <script src="scripts.js" defer></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script> -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/cadastro.css' %}">
+    <script src="{% static 'JS/scripts.js' %}" defer></script>
+
 </head>
 <body>
-    <header class="header">
-        AgendMed
-    </header>
-
+    <header class="header">AgendMed</header>
     <main class="content">
         <div class="form-container">
-            <img src="/img/Logo-branca-AgendMed.png" alt="Logo AgendMed">
-
+            <img src="{% static 'img/Logo-branca-AgendMed.png' %}" alt="Logotipo AgendMed">
             <h2>Cadastro</h2>
-            <form action="register_handler.php" method="POST">
+            <form action="{% url 'cadastro_paciente' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
                 <label for="nome">Nome Completo</label>
-                <input type="text" id="nome" name="nome" placeholder="Seu nome completo" >
-                <span class="error" id="nomeError"></span>
-
+                <input type="text" id="nome" name="nome_completo" placeholder="Seu nome completo" required>
+                
                 <label for="cartSus">Cartão Nacional de Saúde</label>
-                <input type="text" id="cartSus" name="cartSus" placeholder="exemplo: 000000000000000">
-                <span class="error" id="cartSusError"></span>
-
+                <input type="text" id="cartSus" name="cartao_saude" placeholder="000000000000000" required>
+                
                 <label for="cpf">CPF</label>
-                <input type="text" name="cpf" id="cpf" placeholder="exemplo: 000.000.000-00">
-                <span class="error" id="cpfError"></span>
-
-                <label for="dataNascimento">Data de Nascimento</label>                
-                <input type="date" id="dataNascimento" name="dataNascimento">
-                <span class="error" id="dataNascimentoError"></span>
-
+                <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" required>
+                
+                <label for="dataNascimento">Data de Nascimento</label>
+                <input type="date" id="dataNascimento" name="data_nascimento" required>
+                
                 <label for="telefone">Telefone</label>
-                <input type="tel" name="telefone" id="telefone" placeholder="exemplo: (00) 00000-0000">
-                <span class="error" id="telefoneError"></span>
-
-                <h4>Endereço</h4>
-                <hr>
-
+                <input type="tel" name="telefone" id="telefone" placeholder="(00) 00000-0000" required>
+                
+                <h4>Endereço</h4><hr>
                 <label for="bairro">Bairro</label>
-                <input type="text" name="bairro" id="bairro" placeholder="exemplo: Bela Vista">
-                <span class="error" id="bairroError"></span>
-
+                <input type="text" name="bairro" id="bairro" placeholder="Bela Vista" required>
+                
                 <label for="rua">Rua</label>
-                <input type="text" name="rua" id="rua" placeholder="exemplo: Rua do Bairro">
-                <span class="error" id="ruaError"></span>
-
+                <input type="text" name="rua" id="rua" placeholder="Rua do Bairro" required>
+                
                 <label for="complemento">Complemento</label>
                 <input type="text" name="complemento" id="complemento" placeholder="Ponto de referência">
-
-                <h4>Condição Médica</h4>
-                <hr>
-
-                <label for="grupoPrioritario">Você faz parte de algum grupo prioritário?</label>
-                <input type="checkbox" id="grupoPrioritario" name="grupoPrioritario" value="Sim">
-
-                <label for="compCondicao">Adicione um documento que comprove sua condição</label>
-                <input type="file" id="compCondicao" name="compCondicao" accept="image/*">
-
- 
+                
+                <h4>Condição Médica</h4><hr>
+                <label for="grupoPrioritario">Faz parte de grupo prioritário?</label>
+                <input type="checkbox" id="grupoPrioritario" name="condicao_prioritaria" value="Sim">
+                
+                <label for="compCondicao">Documento Comprobatório</label>
+                <input type="file" id="compCondicao" name="comprovante" accept="image/*">
+                
                 <label for="emailCadastro">E-mail</label>
-                <input type="email" id="emailCadastro" name="email" placeholder="exemplo@123.com">
-                <span class="error" id="emailError"></span>
-
+                <input type="email" id="emailCadastro" name="email" placeholder="exemplo@123.com" required>
+                
                 <label for="senhaCadastro">Senha</label>
-                <input type="password" id="senhaCadastro" name="senha" placeholder="Digite pelo menos 6 caracteres">
-                <span class="error" id="senhaError"></span>
-
-                <label for="confirmarSenha">Confirmar Senha</label>
-                <input type="password" id="confirmarSenha" name="confirmar-senha" placeholder="Repita sua senha">
-                <span class="error" id="confirmarSenhaError"></span>
-
+                <input type="password" id="senhaCadastro" name="senha" placeholder="Digite pelo menos 6 caracteres" required>
+                
                 <button type="submit">Cadastrar</button>
             </form>
-
             <div class="link">
-                <a href="login.html">Já tem conta? Faça login</a>
+                <a href="{% url 'login' %}">Já tem conta? Faça login</a>
             </div>
         </div>
     </main>

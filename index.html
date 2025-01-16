@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/css/Pre_Login.css">
-    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="static/css/cadastro.css">
+    <link rel="manifest" href="static/manifest.json">
     <title>AgendMed</title>
 </head>
 <body>
     <div class="form-container">
-        <img src="static/img/Logo-branca-AgendMed.png" alt="Logo AgendMed">
+        <img src="{% static 'img/Logo-branca-AgendMed.png' %}" alt="Logo AgendMed">
     </div>
     <button type="submit" class="btn-primary">Sou profissional de saúde</button>
     <a href="templates/Login/login.html">
         <button type="submit" class="btn-primary" id="button_Paciente">Sou Paciente</button>
     </a>
 
-    <script>
+    <!--<script>
         if (!localStorage.getItem("onboardingComplete")) {
             window.location.href = "onboarding.html";
         }
-    </script>
+    </script> -->
     
 
-    <script src="app.js"></script>
+    <script src="/static/JS/app.js"></script>
 </body>
 </html>
