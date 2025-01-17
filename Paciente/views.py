@@ -14,16 +14,21 @@ from .forms import PacienteForm
 from .models import Paciente
 def cadastro_paciente(request):
     if request.method == 'POST':
+        print(request.POST)  # Verifica os dados que estão sendo enviados no POST
+        print(request.FILES)  # Verifica os arquivos (caso existam)
+        
         form = PacienteForm(request.POST, request.FILES)
         if form.is_valid():
+            print(form.cleaned_data)  # Imprime os dados limpos do formulário
             form.save()
-            return redirect('Paciente:sucesso')  # Redireciona após o sucesso do cadastro
+            return redirect('Paciente:sucesso')
         else:
-            # Aqui você pode tratar os erros de validação e renderizar o formulário com os erros
+            print(form.errors)  # Exibe os erros de validação, caso existam
             return render(request, 'usuarios/cadastro.html', {'form': form})
+    else:
+        form = PacienteForm()
+        return render(request, 'usuarios/cadastro.html', {'form': form})
 
-    form = PacienteForm()  # Cria uma instância vazia do formulário
-    return render(request, 'usuarios/cadastro.html', {'form': form})  # Passa o formulário vazio para o template
 
 def sucesso(request):
     return render(request, 'sucesso.html')  # Renderiza a página de sucesso

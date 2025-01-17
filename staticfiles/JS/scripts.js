@@ -1,5 +1,5 @@
-// Scripts de cadastro
-document.addEventListener('DOMContentLoaded', function() {
+//Scripts de cadastro
+/* document.addEventListener('DOMContentLoaded', function() {
     var nome = document.getElementById('nome');
     var cartSus = document.getElementById('cartSus');
     var cpf = document.getElementById('cpf');
@@ -155,5 +155,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
     
 
-
-// Scripts de login
+*/

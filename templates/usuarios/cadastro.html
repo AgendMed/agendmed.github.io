@@ -49,11 +49,13 @@
 
         <!-- Campo Email -->
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" value="{{ form.email.value }}" required>
+        <input type="email" id="email" name="email" value="{{ form.email.value }}" autocomplete="email" required>
+
 
         <!-- Campo Senha -->
         <label for="senha">Senha</label>
-        <input type="password" id="senha" name="senha" value="{{ form.senha.value }}" required>
+        <input type="password" id="senha" name="senha" value="{{ form.senha.value }}" autocomplete="current-password" required>
+
 
         <!-- Campo Condição Prioritária -->
         <label for="condicao_prioritaria">Condição Prioritária</label>
