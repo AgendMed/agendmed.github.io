@@ -29,10 +29,16 @@ class Paciente(models.Model):
     complemento = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(max_length=50, unique=True)
     senha = models.CharField(max_length=30)
-    condicao_prioritaria = models.CharField(max_length=50, choices=CONDMEDICA_CHOICES, default='nenhuma')
+    condicao_prioritaria = models.CharField(
+        max_length=50, 
+        choices=CONDMEDICA_CHOICES, 
+        default='nenhuma',
+        null=True,  # Tornando esse campo opcional
+        blank=True  # Tornando esse campo opcional
+    )
     comprovante = models.FileField(upload_to='comprovantes/', null=True, blank=True)
 
     campanhas = models.ManyToManyField('Campanha.Campanha', blank=True)
 
     def __str__(self):
-        return self.cp
+        return self.cpf

@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('Paciente/', include('Paciente.urls')),
-
+    
     # Servir o index.html diretamente
     re_path(r'^$', serve, {'path': 'index.html', 'document_root': BASE_DIR}),
 ]

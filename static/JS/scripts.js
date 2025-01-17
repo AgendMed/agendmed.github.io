@@ -156,4 +156,28 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
 
-// Scripts de login
+// Scripts cadastro teste
+
+
+document.querySelector('form').addEventListener('submit', function(event) {
+event.preventDefault();
+
+const formData = new FormData(event.target);
+
+    fetch('/api/paciente/cadastro/', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            alert(data.message);  // Exibe a mensagem de sucesso
+            window.location.href = '/sucesso';  // Redireciona para a página de sucesso
+        } else {
+            alert('Erro ao cadastrar paciente');
+        }
+    })
+    .catch(error => {
+        alert('Erro ao enviar dados');
+    });
+});
