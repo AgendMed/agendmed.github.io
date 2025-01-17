@@ -14,8 +14,8 @@ from .forms import PacienteForm
 from .models import Paciente
 def cadastro_paciente(request):
     if request.method == 'POST':
-        print(request.POST)  # Verifica os dados que estão sendo enviados no POST
-        print(request.FILES)  # Verifica os arquivos (caso existam)
+        print(request.POST)
+        print(request.FILES)  
         
         form = PacienteForm(request.POST, request.FILES)
         if form.is_valid():
@@ -23,7 +23,7 @@ def cadastro_paciente(request):
             form.save()
             return redirect('Paciente:sucesso')
         else:
-            print(form.errors)  # Exibe os erros de validação, caso existam
+            print(form.errors)
             return render(request, 'usuarios/cadastro.html', {'form': form})
     else:
         form = PacienteForm()
@@ -31,7 +31,10 @@ def cadastro_paciente(request):
 
 
 def sucesso(request):
-    return render(request, 'sucesso.html')  # Renderiza a página de sucesso
-
+    return render(request, 'sucesso.html')
 def login_view(request):
     return render(request, 'Login/login.html')
+
+def Index_view(request):
+    return render(request, 'Login/index.html')
+

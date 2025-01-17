@@ -33,8 +33,8 @@ class Paciente(models.Model):
         max_length=50, 
         choices=CONDMEDICA_CHOICES, 
         default='nenhuma',
-        null=True,  # Tornando esse campo opcional
-        blank=True  # Tornando esse campo opcional
+        null=True,
+        blank=True
     )
     comprovante = models.FileField(upload_to='comprovantes/', null=True, blank=True)
 

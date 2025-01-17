@@ -8,23 +8,23 @@
     margin-right: auto;
 }
 
-button {
+button, #button_Paciente {
     width: 100%;
     max-width: 400px;
-    padding: 12px;
+    padding: 1px 12px;
     margin-top: 10px;
-    border: none;
+    border: 1px solid #0056b3;
     border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    height: 50px;
+    height: 50px;  /* Mantém a altura do botão */
     display: block;
-    margin-left: auto; 
+    margin-left: auto;
     margin-right: auto;
-
 }
+
 a {
     text-decoration: none; /* Remove sublinhado de todos os links */
 }
@@ -36,10 +36,22 @@ a:focus, a:hover {
 #button_Paciente {
     border: 2px solid #007BFF;
     background-color: transparent;
-    font-size: 16px;
     color: #007BFF;
     text-decoration: none; /* Remove o sublinhado */
+    width: 100%;  /* Garante que o link ocupe toda a largura disponível */
+    max-width: 375px;  /* Mesmo tamanho que o botão principal */
+    height: 50px;  /* Mantém a altura consistente */
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;  /* Usa flexbox para centralizar o conteúdo */
+    justify-content: center; 
+    align-items: center;
+    border-radius: 8px;
+}
 
+#button_Paciente:hover {
+    background-color: #cde5ff;
+    width: 100%;  /* Mantém o tamanho em 100% no hover */
 }
 
 /* Botão principal */
@@ -53,11 +65,6 @@ a:focus, a:hover {
     background-color: #0056b3;
 }
 
-#button_Paciente:hover{
-    background-color: #cde5ff;
-
-}
-
 /* Botão secundário */
 .btn-secondary {
     background-color: #F5F5F5;
@@ -67,4 +74,12 @@ a:focus, a:hover {
 
 .btn-secondary:hover {
     background-color: #E0E0E0;
+}
+
+/* Responsividade: Ajustes para telas menores */
+@media (max-width: 600px) {
+    button, #button_Paciente {
+        width: 90%;  /* Ajusta a largura em telas menores */
+        max-width: none;  /* Remove o limite de max-width */
+    }
 }
