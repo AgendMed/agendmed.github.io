@@ -14,8 +14,9 @@
         <div class="form-container">
             <img src="{% static 'img/Logo-branca-AgendMed.png' %}" alt="Logo AgendMed">
 
-            <!-- <h2>Login</h2>-->
-            <form action="login_handler.php" method="POST">
+            <h2>Login</h2>
+            <form method="POST">
+                {% csrf_token %}
                 <label for="cpf-login">CPF</label>
                 <input type="text" id="cpf-login" name="cpf" placeholder="000.000.000-00" required>
                 <small id="cpf-error" class="error-message"></small> 
@@ -28,9 +29,8 @@
             </form>
 
             <button class="btn-secondary cadastro-btn" id="cadastro_paciente">
-                <a href="{% url 'Paciente:cadastro_paciente' %}" >Quero me cadastrar</a>
+                <a href="{% url 'Paciente:cadastro_paciente' %}">Quero me cadastrar</a>
             </button>
-            
 
             <p class="secondary-text">Fazer login como <a href="#">Profissional</a></p>
         </div>

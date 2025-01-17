@@ -48,7 +48,7 @@ function formatarCPF(cpf) {
     return cpf;
 }
 
-// Eventos em tempo real
+
 cpfInput.addEventListener("input", () => {
     cpfInput.value = formatarCPF(cpfInput.value); // Formatar CPF enquanto digita
     const valido = validarCPF(cpfInput.value);
@@ -63,3 +63,21 @@ senhaInput.addEventListener("input", () => {
     senhaError.textContent = valido ? "" : "A senha deve ter pelo menos 6 caracteres";
     atualizarBotaoSubmit();
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const cpfInput = document.getElementById("cpf-login");
+    const senhaInput = document.getElementById("senha-login");
+    const submitBtn = document.getElementById("submit-btn");
+
+    function validateForm() {
+        if (cpfInput.value && senhaInput.value.length >= 6) {
+            submitBtn.disabled = false;
+        } else {
+            submitBtn.disabled = true;
+        }
+    }
+
+    cpfInput.addEventListener("input", validateForm);
+    senhaInput.addEventListener("input", validateForm);
+});
+

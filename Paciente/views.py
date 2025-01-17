@@ -1,17 +1,14 @@
 #views.py
 
 from django.shortcuts import render, redirect
-from rest_framework.permissions import AllowAny
 from Paciente.forms import PacienteForm
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import PacienteSerializer
-
 from django.shortcuts import render, redirect
 from .forms import PacienteForm
-from .models import Paciente
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
+
 def cadastro_paciente(request):
     if request.method == 'POST':
         print(request.POST)
@@ -32,9 +29,21 @@ def cadastro_paciente(request):
 
 def sucesso(request):
     return render(request, 'sucesso.html')
-def login_view(request):
-    return render(request, 'Login/login.html')
 
 def Index_view(request):
     return render(request, 'Login/index.html')
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('Paciente:sucesso')
+        else:
+            messages.error(request, "Usuário ou senha inválidos.")
+    else:
+        form = AuthenticationForm()
+    
+    return render(request, 'Login/login.html', {'form': form})
 
