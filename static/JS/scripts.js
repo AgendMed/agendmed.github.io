@@ -1,4 +1,3 @@
-// Scripts de cadastro
 document.addEventListener('DOMContentLoaded', function() {
     var nome = document.getElementById('nome');
     var cartSus = document.getElementById('cartSus');
@@ -27,81 +26,76 @@ document.addEventListener('DOMContentLoaded', function() {
     function validarFormulario(event) {
         event.preventDefault();
         
-        nomeError.textContent= '';
-        cartSusError.textContent= '';
-        cpfError.textContent= '';
-        dataNascimentoError.textContent= '';
-        telefoneError.textContent= '';
-        bairroError.textContent= '';
-        ruaError.textContent= '';
+        // Limpar erros anteriores
+        nomeError.textContent = '';
+        cartSusError.textContent = '';
+        cpfError.textContent = '';
+        dataNascimentoError.textContent = '';
+        telefoneError.textContent = '';
+        bairroError.textContent = '';
+        ruaError.textContent = '';
         emailError.textContent = '';
         senhaError.textContent = '';
         confirmarSenhaError.textContent = '';
 
         let isValid = true;
 
+        // Validações dos campos
         if (nome.value.trim() === '') {
             nomeError.textContent = 'Por favor, preencha o campo Nome.';
             isValid = false;
-        }   else {
+        } else {
             nome.style.borderColor = 'green';
         }
 
-        if (cartSus.value.trim() === ''){
+        if (cartSus.value.trim() === '') {
             cartSusError.textContent = 'Por favor, preencha o campo Cartão SUS.';
             isValid = false;
-        }   else {
+        } else {
             cartSus.style.borderColor = 'green';
         }
 
         if (!/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf.value)) {
-            cpfError.textContent = 'Por favor, insira um CPF válido (ex: 000.000.000-00.'
+            cpfError.textContent = 'Por favor, insira um CPF válido (ex: 000.000.000-00).';
             isValid = false;
-        }   else {
+        } else {
             cpf.style.borderColor = 'green';
         }
+
         if (dataNascimento.value === '') {
-            dataNascimentoError.textContent = 'Por favor, preencha o campo Data de Nascimento';
+            dataNascimentoError.textContent = 'Por favor, preencha o campo Data de Nascimento.';
             isValid = false;
-        }   else {
+        } else {
             dataNascimento.style.borderColor = 'green';
         }
 
         if (telefone.value.trim() === '') {
-            telefoneError.textContent = 'Por favor, preencha o campo Telefone';
+            telefoneError.textContent = 'Por favor, preencha o campo Telefone.';
             isValid = false;
-        }   else {
+        } else {
             telefone.style.borderColor = 'green';
         }
 
         if (bairro.value.trim() === '') {
-            bairroError.textContent = 'Por favor, preencha o campo Bairro';
+            bairroError.textContent = 'Por favor, preencha o campo Bairro.';
             isValid = false;
-        }   else {
+        } else {
             bairro.style.borderColor = 'green';
         }
 
         if (rua.value.trim() === '') {
-            ruaError.textContent = 'Por favor, preencha o campo Rua';
+            ruaError.textContent = 'Por favor, preencha o campo Rua.';
             isValid = false;
-        }   else {
+        } else {
             rua.style.borderColor = 'green';
         }
 
-        if (complemento.value.trim() !== '') {
-            complemento.style.borderColor = 'green';
-        }
-
-        if (grupoPrioritario.checked) {
-            grupoPrioritario.style.borderColor = 'green';
-        }
-
         if (!emailRegex.test(email.value)) {
-            emailError.textContent= 'Por favor, insira um email válido.';
+            emailError.textContent = 'Por favor, insira um email válido.';
             isValid = false;
         }
 
-        if (senha.value.lenght < 6) {
+        if (senha.value.length < 6) {
             senhaError.textContent = 'A senha deve ter pelo menos 6 caracteres.';
             isValid = false;
         }
@@ -112,29 +106,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (isValid) {
-            const usuario = {
-                nome: nome.value,
-                cartSus: cartSus.value,
-                cpf: cpf.value,
-                dataNascimento: dataNascimento.value,
-                telefone: telefone.value,
-                bairro: bairro.value,
-                rua: rua.value,
-                complemento: complemento.value,
-                grupoPrioritario: grupoPrioritario.checked,
-                email: email.value,
-                senha: senha.value
-            };
-
-            localStorage.setItem('usuario', JSON.stringify(usuario));
-
+            // Aqui você pode salvar os dados ou realizar outras ações
             Swal.fire({
                 title: 'Cadastro realizado!',
                 text: 'Seus dados foram salvos com sucesso.',
                 icon: 'success',
-                time: 3000
+                timer: 3000
             });
 
+            // Limpar campos após o envio
             nome.value = '';
             cartSus.value = '';
             cpf.value = '';
@@ -142,8 +122,6 @@ document.addEventListener('DOMContentLoaded', function() {
             telefone.value = '';
             bairro.value = '';
             rua.value = '';
-            complemento.value = '';
-            grupoPrioritario.checked = false;
             email.value = '';
             senha.value = '';
             confirmarSenha.value = '';
@@ -152,32 +130,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var form = document.querySelector('form');
     form.addEventListener('submit', validarFormulario);
-});
-    
-
-
-// Scripts cadastro teste
-
-
-document.querySelector('form').addEventListener('submit', function(event) {
-event.preventDefault();
-
-const formData = new FormData(event.target);
-
-    fetch('/api/paciente/cadastro/', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message) {
-            alert(data.message);  // Exibe a mensagem de sucesso
-            window.location.href = '/sucesso';  // Redireciona para a página de sucesso
-        } else {
-            alert('Erro ao cadastrar paciente');
-        }
-    })
-    .catch(error => {
-        alert('Erro ao enviar dados');
-    });
 });
