@@ -122,8 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (isValid) {
-            // Aqui você pode enviar o formulário para o servidor
-            // Formulário válido, você pode fazer o envio via AJAX ou enviar normalmente com o formulário.
+        
             Swal.fire({
                 title: 'Cadastro realizado!',
                 text: 'Seus dados foram salvos com sucesso.',
