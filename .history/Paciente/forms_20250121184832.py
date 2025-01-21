@@ -15,7 +15,6 @@ class CadastroPacienteForm(forms.ModelForm):
     condicao_prioritaria = forms.ChoiceField(choices=Paciente._meta.get_field('condicao_prioritaria').choices, required=False)
     comprovante = forms.FileField(required=False)
 
-
     class Meta:
         model = Paciente
         fields = ['cartao_saude', 'data_nascimento', 'condicao_prioritaria', 'comprovante']
@@ -44,7 +43,6 @@ class CadastroPacienteForm(forms.ModelForm):
         paciente = Paciente.objects.create(**paciente_data)
 
         return paciente
-
 
 
 

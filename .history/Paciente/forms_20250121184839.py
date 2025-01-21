@@ -13,8 +13,8 @@ class CadastroPacienteForm(forms.ModelForm):
     cartao_saude = forms.CharField(max_length=15, required=True)
     data_nascimento = forms.DateField(required=True)
     condicao_prioritaria = forms.ChoiceField(choices=Paciente._meta.get_field('condicao_prioritaria').choices, required=False)
-    comprovante = forms.FileField(required=False)
 
+    comprovante = forms.FileField(required=False)
 
     class Meta:
         model = Paciente
@@ -44,7 +44,3 @@ class CadastroPacienteForm(forms.ModelForm):
         paciente = Paciente.objects.create(**paciente_data)
 
         return paciente
-
-
-
-

@@ -15,7 +15,6 @@ class CadastroPacienteForm(forms.ModelForm):
     condicao_prioritaria = forms.ChoiceField(choices=Paciente._meta.get_field('condicao_prioritaria').choices, required=False)
     comprovante = forms.FileField(required=False)
 
-
     class Meta:
         model = Paciente
         fields = ['cartao_saude', 'data_nascimento', 'condicao_prioritaria', 'comprovante']
@@ -48,3 +47,28 @@ class CadastroPacienteForm(forms.ModelForm):
 
 
 
+
+def save(self, commit=True):
+    # Salva o usuário primeiro
+    usuario_data = {
+        'username': self.cleaned_data['cpf'],  # Usando o CPF como username por exemplo
+        'nomeCompleto': self.cleaned_data['nome_completo'],
+        'cpf': self.cleaned_data['cpf'],
+        'telefone': self.cleaned_data['telefone'],
+        'endereco': self.cleaned_data['endereco'],
+    }
+
+    usuario = Usuario.objects.create(**usuario_data)
+
+    # Cria o paciente associado ao usuário
+    paciente_data = {
+        'usuario': usuario,  # Certifique-se que 'usuario' é um objeto Usuario válido
+        'cartao_saude': self.cleaned_data['cartao_saude'],
+        'data_nascimento': self.cleaned_data['data_nascimento'],
+        'condicao_prioritaria': self.cleaned_data['condicao_prioritaria'],
+        'comprovante': self.cleaned_data['comprovante'],
+    }
+
+    paciente = Paciente.objects.create(**paciente_data)
+
+    return paciente

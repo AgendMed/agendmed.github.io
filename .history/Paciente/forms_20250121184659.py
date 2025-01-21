@@ -16,6 +16,9 @@ class CadastroPacienteForm(forms.ModelForm):
     comprovante = forms.FileField(required=False)
 
 
+
+
+
     class Meta:
         model = Paciente
         fields = ['cartao_saude', 'data_nascimento', 'condicao_prioritaria', 'comprovante']
