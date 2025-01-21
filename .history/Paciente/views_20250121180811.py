@@ -13,7 +13,7 @@ def cadastro_paciente(request):
         form = CadastroPacienteForm(request.POST, request.FILES)  # Captura os dados e arquivos
         if form.is_valid():  # Valida o formulário
             form.save()  # Salva os dados no banco de dados
-            return redirect('template/sucesso.html')  # Redireciona para a página de sucesso
+            return redirect('template/sucesso')  # Redireciona para a página de sucesso
         else:
             # Formulário inválido, renderiza com os erros
             return render(request, 'usuarios/cadastro.html', {'form': form})

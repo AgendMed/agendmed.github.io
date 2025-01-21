@@ -1,25 +1,29 @@
 #views.py
 
 from django.shortcuts import render, redirect
+from Paciente.forms import PacienteForm
 from django.shortcuts import render, redirect
-from .forms import CadastroPacienteForm
+from .forms import PacienteForm
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+
 def cadastro_paciente(request):
     if request.method == 'POST':
-        # Formulário enviado pelo cliente
-        form = CadastroPacienteForm(request.POST, request.FILES)  # Captura os dados e arquivos
-        if form.is_valid():  # Valida o formulário
-            form.save()  # Salva os dados no banco de dados
-            return redirect('template/sucesso.html')  # Redireciona para a página de sucesso
+        print(request.POST)
+        print(request.FILES)  
+        
+        form = CadastroPacienteForm(request.POST, request.FILES)
+        if form.is_valid():
+            print(form.cleaned_data)  # Imprime os dados limpos do formulário
+            form.save()
+            return redirect('Paciente:sucesso')
         else:
-            # Formulário inválido, renderiza com os erros
+            print(form.errors)
             return render(request, 'usuarios/cadastro.html', {'form': form})
     else:
-        # Requisição GET: exibe o formulário vazio
-        form = CadastroPacienteForm()
+        form = PacienteForm()
         return render(request, 'usuarios/cadastro.html', {'form': form})
 
 

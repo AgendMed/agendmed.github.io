@@ -14,7 +14,7 @@
 
             <h2>Formulário de Cadastro</h2>
             
-            <form method="POST" enctype="multipart/form-data" action="{% url 'Paciente:cadastro_paciente' %}">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 
                 <!-- Campo Nome Completo -->
@@ -79,8 +79,11 @@
                 <input type="file" id="comprovante" name="comprovante" value="{{ form.comprovante.value|default:'' }}">
 
                 <!-- Botão de Envio -->
-                <button type="submit">Cadastrar</button>
-            </form>
+                <form method="POST" enctype="multipart/form-data" action="{% url 'usuarios:cadastro_paciente' %}">
+                    {% csrf_token %}
+                    <!-- Restante dos campos -->
+                    <button type="submit">Cadastrar</button>
+                </form>
 
             <!-- Exibição de erros -->
             {% if form.errors %}
@@ -94,5 +97,6 @@
             {% endif %}
         </div>
     </div>
+
 </body>
 </html>

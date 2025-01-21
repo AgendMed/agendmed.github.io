@@ -14,7 +14,7 @@
 
             <h2>Formulário de Cadastro</h2>
             
-            <form method="POST" enctype="multipart/form-data" action="{% url 'Paciente:cadastro_paciente' %}">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 
                 <!-- Campo Nome Completo -->
@@ -94,5 +94,6 @@
             {% endif %}
         </div>
     </div>
+
 </body>
 </html>
