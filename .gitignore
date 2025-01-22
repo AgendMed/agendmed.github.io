@@ -5,7 +5,7 @@
 .vscode/
 .idea/
 .history/
-
+venv/
 # Ignorar arquivos gerados pelo Python
 __pycache__/
 *.pyc
