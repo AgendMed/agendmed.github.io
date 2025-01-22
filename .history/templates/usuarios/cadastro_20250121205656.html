@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Paciente</title>
+    <link rel="stylesheet" href="{% static 'css/cadastro.css' %}">
+</head>
+<body>
+    <div class="content">
+        <div class="form-container">
+            <img src="{% static 'img/Logo-branca-AgendMed.png' %}" alt="Logo AgendMed" id="imagem">
+
+            <h2>Formulário de Cadastro</h2>
+            
+            <form method="POST" enctype="multipart/form-data" action="{% url 'Paciente:cadastro_paciente' %}">
+                {% csrf_token %}
+                
+                <!-- Campo Nome Completo -->
+                <label for="nome_completo">Nome Completo</label>
+                <input type="text" id="nome_completo" name="nome_completo" value="{{ form.nome_completo.value|default:'' }}" placeholder="ex: João Araújo" required>
+
+                <!-- Campo Cartão de Saúde -->
+                <label for="cartao_saude">Cartão de Saúde</label>
+                <input type="text" id="cartao_saude" name="cartao_saude" value="{{ form.cartao_saude.value|default:'' }}" placeholder="ex: 0000000000" required>
+
+                <!-- Campo CPF -->
+                <label for="cpf">CPF</label>
+                <input type="text" id="cpf" name="cpf" value="{{ form.cpf.value|default:'' }}" placeholder="000.000.000-00" required>
+
+                <!-- Campo Data de Nascimento -->
+
+                <label for="data_nascimento">Data de Nascimento</label>
+                
+                <input type="date" id="data_nascimento" name="data_nascimento" value="{{ form.data_nascimento.value|default:'' }}" required>
+                <label for="data_nascimento">Data de Nascimento</label>
+                <input type="date" id="data_nascimento" name="data_nascimento" value="{{ form.data_nascimento.value|default:'' }}" required>
+
+                <!-- Campo Telefone -->
+                <label for="telefone">Telefone</label>
+                <input type="tel" id="telefone" name="telefone" value="{{ form.telefone.value|default:'' }}" placeholder="(00) 00000-0000" required>
+
+                <!-- Campo Bairro -->
+                <label for="bairro">Bairro</label>
+                <input type="text" id="bairro" name="bairro" value="{{ form.Bairro.value|default:'' }}" required>
+
+                <!-- Campo Rua -->
+                <label for="rua">Rua</label>
+                <input type="text" id="rua" name="rua" value="{{ form.Rua.value|default:'' }}" required>
+
+                <!-- Campo Número da Casa -->
+                <label for="num_casa">Número da Casa</label>
+                <input type="text" id="num_casa" name="num_casa" value="{{ form.NumeroCasa.value|default:'' }}" required>
+
+                <!-- Campo Complemento -->
+                <label for="complemento">Complemento</label>
+                <input type="text" id="complemento" name="complemento" value="{{ form.complemento.value|default:'' }}">
+
+                <!-- Campo Email -->
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="{{ form.email.value|default:'' }}" autocomplete="email" placeholder="exemplo@gmail.com">
+
+                <!-- Campo Senha -->
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" value="{{ form.senha.value|default:'' }}" autocomplete="current-password" required>
+
+                <!-- Campo Condição Prioritária -->
+                <label for="condicao_prioritaria">Condição Prioritária</label>
+                <select id="condicao_prioritaria" name="condicao_prioritaria">
+                    <option value="nenhuma" {% if form.condicao_prioritaria.value == 'nenhuma' %}selected{% endif %}>Não possui condição</option>
+                    <option value="gravidez" {% if form.condicao_prioritaria.value == 'gravidez' %}selected{% endif %}>Gravidez (Gestante)</option>
+                    <option value="idoso" {% if form.condicao_prioritaria.value == 'idoso' %}selected{% endif %}>Idoso (60 anos ou mais)</option>
+                    <option value="doencas_cronicas" {% if form.condicao_prioritaria.value == 'doencas_cronicas' %}selected{% endif %}>Doenças Crônicas Graves</option>
+                    <option value="urgencia" {% if form.condicao_prioritaria.value == 'urgencia' %}selected{% endif %}>Urgências e Emergências</option>
+                    <option value="deficiencia" {% if form.condicao_prioritaria.value == 'deficiencia' %}selected{% endif %}>Deficiências Físicas ou Mentais</option>
+                    <option value="imunossupresso" {% if form.condicao_prioritaria.value == 'imunossupresso' %}selected{% endif %}>Pacientes Imunossuprimidos</option>
+                    <option value="doencas_infectocontagiosas" {% if form.condicao_prioritaria.value == 'doencas_infectocontagiosas' %}selected{% endif %}>Doenças Infectocontagiosas</option>
+                </select>
+
+                <!-- Campo Comprovante (Arquivo) -->
+                <label for="comprovante">Comprovante</label>
+                <input type="file" id="comprovante" name="comprovante" value="{{ form.comprovante.value|default:'' }}">
+
+                <!-- Botão de Envio -->
+                <button type="submit">Cadastrar</button>
+            </form>
+
+            <!-- Exibição de erros -->
+            {% if form.errors %}
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
