@@ -1,4 +1,5 @@
 #views.py
+<<<<<<< HEAD
 from rest_framework.permissions import AllowAny
 from Paciente.forms import PacienteForm
 from rest_framework.decorators import api_view, permission_classes
@@ -29,10 +30,35 @@ def cadastro_paciente(request):
             return render(request, 'usuarios/cadastro.html', {'form': form})
     else:
         form = PacienteForm()
+=======
+
+from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect
+from .forms import CadastroPacienteForm
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
+
+def cadastro_paciente(request):
+    if request.method == 'POST':
+        # Formulário enviado pelo cliente
+        form = CadastroPacienteForm(request.POST, request.FILES)  # Captura os dados e arquivos
+        if form.is_valid():  # Valida o formulário
+            form.save()  # Salva os dados no banco de dados
+            return redirect('template/sucesso.html')  # Redireciona para a página de sucesso
+        else:
+            # Formulário inválido, renderiza com os erros
+            return render(request, 'usuarios/cadastro.html', {'form': form})
+    else:
+        # Requisição GET: exibe o formulário vazio
+        form = CadastroPacienteForm()
+>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
         return render(request, 'usuarios/cadastro.html', {'form': form})
 
 
 def sucesso(request):
+<<<<<<< HEAD
     return render(request, 'sucesso.html')  # Renderiza a página de sucesso
 
 def login_view(request):
@@ -52,3 +78,24 @@ def login_view(request):
             return render(request, 'usuarios/login.html', {'error': 'CPF ou senha inválidos.'})
 
     return render(request, 'usuarios/login.html')
+=======
+    return render(request, 'sucesso.html')
+
+def Index_view(request):
+    return render(request, 'Login/index.html')
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('Paciente:sucesso')
+        else:
+            messages.error(request, "Usuário ou senha inválidos.")
+    else:
+        form = AuthenticationForm()
+    
+    return render(request, 'Login/login.html', {'form': form})
+
+>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54

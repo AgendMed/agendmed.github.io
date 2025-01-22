@@ -1,3 +1,7 @@
+<<<<<<< HEAD:index.html
+=======
+<!--Index teste dentro do template-->
+>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54:templates/Login/index.html
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -5,15 +9,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/Pre_Login.css' %}">
+<<<<<<< HEAD:index.html
+=======
+
+>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54:templates/Login/index.html
         <title>AgendMed</title>
 </head>
 <body>
     <div class="form-container">
+<<<<<<< HEAD:index.html
         <img src="static/img/Logo-branca-AgendMed.png" alt="Logo AgendMed">
     </div>
     <button type="submit" class="btn-primary">Sou profissional de saúde</button>
     <a href="{% url 'Paciente:login' %}">
         <button type="submit" class="btn-primary" id="button_Paciente">Sou Paciente</button>
+=======
+
+    <img src="{% static 'img/Logo-branca-AgendMed.png' %}" alt="Logo AgendMed">
+    </div>
+    <button type="submit" class="btn-primary">Sou profissional de saúde</button>
+
+    <a href="{% url 'Paciente:login' %}" class="btn-primary" id="button_Paciente">
+        Sou Paciente
+>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54:templates/Login/index.html
     </a>
 
     <!-- <script>
@@ -23,6 +41,6 @@
     </script> -->
     
 
-    <script src="app.js"></script>
+    <script src="{% static 'JS/app.js' %}"></script>
 </body>
 </html>

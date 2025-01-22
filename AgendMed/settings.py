@@ -30,6 +30,10 @@ INSTALLED_APPS = [
     'Unidade_Saude',
     'AgendaConsulta',
     'rest_framework',
+<<<<<<< HEAD
+=======
+    'users',
+>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 
 ]
 
@@ -78,6 +82,10 @@ DATABASES = {
     }
 }
 
+<<<<<<< HEAD
+=======
+AUTH_USER_MODEL = 'users.Usuario'
+>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 
 
 # Password validation
@@ -98,6 +106,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+<<<<<<< HEAD
+=======
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -110,10 +124,13 @@ REST_FRAMEWORK = {
 }
 
 
+<<<<<<< HEAD
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
+=======
+>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
@@ -123,6 +140,7 @@ USE_I18N = True
 USE_TZ = True
 
 
+<<<<<<< HEAD
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
@@ -133,6 +151,12 @@ STATICFILES_DIRS = [
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+=======
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
