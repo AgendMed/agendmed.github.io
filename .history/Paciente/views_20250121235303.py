@@ -12,11 +12,11 @@ def cadastro_paciente(request):
     if request.method == 'POST':
         # Formulário enviado pelo cliente
         form = CadastroPacienteForm(request.POST, request.FILES)  # Captura os dados e arquivos
-        if form.is_valid():
-            form.save()
-            return redirect('Paciente:sucesso')
+        if form.is_valid():  # Valida o formulário
+            form.save()  # Salva os dados no banco de dados
+            return redirect('template/sucesso.html')  # Redireciona para a página de sucesso
         else:
-            
+            # Formulário inválido, renderiza com os erros
             return render(request, 'usuarios/cadastro.html', {'form': form})
     else:
         # Requisição GET: exibe o formulário vazio
@@ -25,7 +25,7 @@ def cadastro_paciente(request):
 
 
 def sucesso(request):
-    return render(request, 'sucesso.html')
+    return render(request, '/sucesso.html')
 
 def Index_view(request):
     return render(request, 'Login/index.html')

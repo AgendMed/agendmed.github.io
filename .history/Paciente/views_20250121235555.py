@@ -14,18 +14,18 @@ def cadastro_paciente(request):
         form = CadastroPacienteForm(request.POST, request.FILES)  # Captura os dados e arquivos
         if form.is_valid():
             form.save()
-            return redirect('Paciente:sucesso')
+            return redirect('template/sucesso.html')
         else:
             
             return render(request, 'usuarios/cadastro.html', {'form': form})
     else:
         # Requisição GET: exibe o formulário vazio
         form = CadastroPacienteForm()
-        return render(request, 'usuarios/cadastro.html', {'form': form})
+        return render(request, 'sucesso.html', {'form': form})
 
 
 def sucesso(request):
-    return render(request, 'sucesso.html')
+    return render(request, 'templates/sucesso.html')
 
 def Index_view(request):
     return render(request, 'Login/index.html')

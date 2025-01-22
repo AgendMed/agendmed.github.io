@@ -1,8 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'Paciente'
-
+app_name = 'Paciente'  # Adicione este namespace para evitar conflitos
 urlpatterns = [
     path('sucesso/', views.sucesso, name='sucesso'),
     path('cadastro/', views.cadastro_paciente, name='cadastro_paciente'),

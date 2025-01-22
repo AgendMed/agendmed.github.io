@@ -2,7 +2,6 @@ from django import forms
 from .models import Usuario, Paciente
 
 
-
 class CadastroPacienteForm(forms.ModelForm):
     # Campos do modelo Usuario
     nome_completo = forms.CharField(max_length=150, required=True)
