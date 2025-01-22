@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 from Unidade_Saude.models import UnidadeSaude
 from users.models import Usuario
 
@@ -14,4 +13,4 @@ class ProfissionalSaude(models.Model):
     )
 
     def __str__(self):
-        return f"{self.usuario.nomeCompleto} - {self.especialidade}"
+        return f"{self.usuario.nome_completo} - {self.especialidade}"
