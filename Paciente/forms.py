@@ -1,30 +1,6 @@
 from django import forms
-<<<<<<< HEAD
 from .models import Paciente
-
-class PacienteForm(forms.ModelForm):
-    class Meta:
-        model = Paciente
-        fields = [
-            'nome_completo',
-            'cartao_saude',
-            'cpf',
-            'data_nascimento',
-            'telefone',
-            'bairro',
-            'rua',
-            'num_casa',
-            'complemento',
-            'email',
-            'senha',
-            'condicao_prioritaria',
-            'comprovante',
-        ]
-=======
-from .models import Usuario, Paciente
-
-
-
+from users.models import Usuario
 
 class CadastroPacienteForm(forms.ModelForm):
     # Campos do modelo Usuario
@@ -44,7 +20,6 @@ class CadastroPacienteForm(forms.ModelForm):
     condicao_prioritaria = forms.ChoiceField(
         choices=Paciente._meta.get_field('condicao_prioritaria').choices, required=False)
     comprovante = forms.FileField(required=False)
-
 
     class Meta:
         model = Paciente
@@ -90,4 +65,3 @@ class CadastroPacienteForm(forms.ModelForm):
         paciente = Paciente.objects.create(**paciente_data)
 
         return paciente
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54

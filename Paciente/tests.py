@@ -1,8 +1,4 @@
 from django.test import TestCase
-<<<<<<< HEAD
-
-# Create your tests here.
-=======
 from .models import Paciente
 from users.models import Usuario
 
@@ -34,4 +30,3 @@ class PacienteTestCase(TestCase):
 
     def test_paciente_criado(self):
         self.assertEqual(self.paciente.usuario.nome_completo, "Paciente Teste")
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54

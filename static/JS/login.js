@@ -1,9 +1,6 @@
 const cpfInput = document.getElementById("cpf-login");
 const senhaInput = document.getElementById("senha-login");
-<<<<<<< HEAD
-=======
 const submitBtn = document.getElementById("submit-btn");
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 
 // Mensagens de erro
 const cpfError = document.getElementById("cpf-error");
@@ -19,15 +16,7 @@ function validarSenha(senha) {
     return senha.length >= 6;
 }
 
-<<<<<<< HEAD
-<<<<<<<< HEAD:static/JS/login.js
-// Mensagens de erro
-========
 // Exibir ou ocultar erro
->>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54:staticfiles/JS/login.js
-=======
-// Exibir ou ocultar erro
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 function validarCampo(input, errorMsg, isValid) {
     if (isValid) {
         input.classList.remove("error");
@@ -42,15 +31,7 @@ function validarCampo(input, errorMsg, isValid) {
 function atualizarBotaoSubmit() {
     const cpfValido = validarCPF(cpfInput.value);
     const senhaValida = validarSenha(senhaInput.value);
-<<<<<<< HEAD
-<<<<<<<< HEAD:static/JS/login.js
-    const submitBtn = document.querySelector('button[type="submit"]');
-========
 
->>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54:staticfiles/JS/login.js
-=======
-
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
     submitBtn.disabled = !(cpfValido && senhaValida);
 }
 
@@ -67,11 +48,7 @@ function formatarCPF(cpf) {
     return cpf;
 }
 
-<<<<<<< HEAD
-// Eventos em tempo real
-=======
 
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 cpfInput.addEventListener("input", () => {
     cpfInput.value = formatarCPF(cpfInput.value); // Formatar CPF enquanto digita
     const valido = validarCPF(cpfInput.value);
@@ -85,13 +62,6 @@ senhaInput.addEventListener("input", () => {
     validarCampo(senhaInput, senhaError, valido);
     senhaError.textContent = valido ? "" : "A senha deve ter pelo menos 6 caracteres";
     atualizarBotaoSubmit();
-<<<<<<< HEAD
-<<<<<<<< HEAD:static/JS/login.js
-});
-========
-});
->>>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54:staticfiles/JS/login.js
-=======
 });
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -111,4 +81,3 @@ document.addEventListener("DOMContentLoaded", function() {
     senhaInput.addEventListener("input", validateForm);
 });
 
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54

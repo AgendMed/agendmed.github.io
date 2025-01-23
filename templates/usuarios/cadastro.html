@@ -14,20 +14,12 @@
 
             <h2>Formulário de Cadastro</h2>
             
-<<<<<<< HEAD
-            <form method="POST" enctype="multipart/form-data">
-=======
             <form method="POST" enctype="multipart/form-data" action="{% url 'Paciente:cadastro_paciente' %}">
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
                 {% csrf_token %}
                 
                 <!-- Campo Nome Completo -->
                 <label for="nome_completo">Nome Completo</label>
-<<<<<<< HEAD
-                <input type="text" id="nome_completo" name="nome_completo" value="{{ form.nome_completo.value|default:'' }}" placeholder="ex: João Araújo" required>
-=======
                 <input type="text" id="nome_completo" name="nome_completo" value="{{ form.nome_completo.value|default:'' }}"  placeholder="ex: João Araújo" required>
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 
                 <!-- Campo Cartão de Saúde -->
                 <label for="cartao_saude">Cartão de Saúde</label>
@@ -38,33 +30,16 @@
                 <input type="text" id="cpf" name="cpf" value="{{ form.cpf.value|default:'' }}" placeholder="000.000.000-00" required>
 
                 <!-- Campo Data de Nascimento -->
-<<<<<<< HEAD
-                <label for="data_nascimento">Data de Nascimento</label>
-                <input type="date" id="data_nascimento" name="data_nascimento" value="{{ form.data_nascimento.value|default:'' }}" required>
-
-=======
 
                 <label for="data_nascimento">Data de Nascimento</label>
                 <input type="date" id="data_nascimento" name="data_nascimento" value="{{ form.data_nascimento.value|default:'' }}" required>
                 
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
                 <!-- Campo Telefone -->
                 <label for="telefone">Telefone</label>
                 <input type="tel" id="telefone" name="telefone" value="{{ form.telefone.value|default:'' }}" placeholder="(00) 00000-0000" required>
 
                 <!-- Campo Bairro -->
                 <label for="bairro">Bairro</label>
-<<<<<<< HEAD
-                <input type="text" id="bairro" name="bairro" value="{{ form.bairro.value|default:'' }}" required>
-
-                <!-- Campo Rua -->
-                <label for="rua">Rua</label>
-                <input type="text" id="rua" name="rua" value="{{ form.rua.value|default:'' }}" required>
-
-                <!-- Campo Número da Casa -->
-                <label for="num_casa">Número da Casa</label>
-                <input type="text" id="num_casa" name="num_casa" value="{{ form.num_casa.value|default:'' }}" required>
-=======
                 <input type="text" id="bairro" name="bairro" value="{{ form.Bairro.value|default:'' }}" required>
 
                 <!-- Campo Rua -->
@@ -74,7 +49,6 @@
                 <!-- Campo Número da Casa -->
                 <label for="num_casa">Número da Casa</label>
                 <input type="text" id="num_casa" name="num_casa" value="{{ form.NumeroCasa.value|default:'' }}" required>
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 
                 <!-- Campo Complemento -->
                 <label for="complemento">Complemento</label>
@@ -121,9 +95,5 @@
             {% endif %}
         </div>
     </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 </body>
 </html>

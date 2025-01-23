@@ -100,28 +100,6 @@ button {
     background-color: #E0E0E0;
 }
 
-<<<<<<< HEAD
-.cadastro-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 15px auto 10px;
-    font-weight: 500px;
-    margin-right: 10px;
-    height: 40px;
-
-}
-
-.cadastro-btn a {
-    text-decoration: none; /* Remove o sublinhado */
-    color: inherit;
-    width: 100%;
-    display: block;
-}
-
-.cadastro-btn a:hover {
-    text-decoration: none;
-=======
 /* Ajuste do botão de cadastro */
 .cadastro-btn {
     width: 100%; 
@@ -144,7 +122,6 @@ button {
 .btn-secondary:hover {
     background-color: #E0E0E0;
     border-color: #0056b3;
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 }
 
 /* Texto secundário */

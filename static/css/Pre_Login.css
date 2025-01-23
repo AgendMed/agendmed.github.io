@@ -8,41 +8,23 @@
     margin-right: auto;
 }
 
-<<<<<<< HEAD
-button {
-    width: 100%;
-    max-width: 400px;
-    padding: 12px;
-    margin-top: 10px;
-    border: none;
-=======
 button, #button_Paciente {
     width: 100%;
     max-width: 400px;
     padding: 1px 12px;
     margin-top: 10px;
     border: 1px solid #0056b3;
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
     border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
-<<<<<<< HEAD
-    height: 50px;
-    display: block;
-    margin-left: auto; 
-    margin-right: auto;
-
-}
-=======
     height: 50px;  /* Mantém a altura do botão */
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
 
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 a {
     text-decoration: none; /* Remove sublinhado de todos os links */
 }
@@ -54,12 +36,6 @@ a:focus, a:hover {
 #button_Paciente {
     border: 2px solid #007BFF;
     background-color: transparent;
-<<<<<<< HEAD
-    font-size: 16px;
-    color: #007BFF;
-    text-decoration: none; /* Remove o sublinhado */
-
-=======
     color: #007BFF;
     text-decoration: none; /* Remove o sublinhado */
     width: 100%;  /* Garante que o link ocupe toda a largura disponível */
@@ -76,7 +52,6 @@ a:focus, a:hover {
 #button_Paciente:hover {
     background-color: #cde5ff;
     width: 100%;  /* Mantém o tamanho em 100% no hover */
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 }
 
 /* Botão principal */
@@ -90,14 +65,6 @@ a:focus, a:hover {
     background-color: #0056b3;
 }
 
-<<<<<<< HEAD
-#button_Paciente:hover{
-    background-color: #cde5ff;
-
-}
-
-=======
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
 /* Botão secundário */
 .btn-secondary {
     background-color: #F5F5F5;
@@ -108,8 +75,6 @@ a:focus, a:hover {
 .btn-secondary:hover {
     background-color: #E0E0E0;
 }
-<<<<<<< HEAD
-=======
 
 /* Responsividade: Ajustes para telas menores */
 @media (max-width: 600px) {
@@ -118,4 +83,3 @@ a:focus, a:hover {
         max-width: none;  /* Remove o limite de max-width */
     }
 }
->>>>>>> 3051aee9c0858b89d2513a603c47cd992e1a3a54
