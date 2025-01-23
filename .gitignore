@@ -7,7 +7,7 @@
 .history/
 .git/
 .venv/
-venv/
+
 
 # Ignorar arquivos gerados pelo Python
 __pycache__/
