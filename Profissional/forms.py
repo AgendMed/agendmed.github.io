@@ -1,7 +1,9 @@
+# forms.py
 from django import forms
 from .models import ProfissionalSaude
 from Unidade_Saude.models import UnidadeSaude
 from users.models import Usuario
+from especialidades.models import Especialidade  # Importando o modelo Especialidade
 
 class CadastroProfissionalForm(forms.ModelForm):
     # Campos do modelo Usuario
@@ -17,7 +19,7 @@ class CadastroProfissionalForm(forms.ModelForm):
     senha = forms.CharField(widget=forms.PasswordInput, required=True)
 
     # Campos do modelo ProfissionalSaude
-    especialidade = forms.CharField(max_length=100, required=True)
+    especialidade = forms.ModelChoiceField(queryset=Especialidade.objects.all(), required=True)
     unidade_saude = forms.ModelChoiceField(queryset=UnidadeSaude.objects.all(), empty_label="Selecione uma Unidade de Saúde", required=True)
 
     class Meta:

@@ -1,4 +1,5 @@
 from django.db import models
+from especialidades.models import Especialidade
 
 class UnidadeSaude(models.Model):
     nome = models.CharField(max_length=100)
@@ -7,6 +8,7 @@ class UnidadeSaude(models.Model):
     email = models.EmailField(unique=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
+    especialidades = models.ManyToManyField(Especialidade, blank=True)
 
     def __str__(self):
         return self.nome
