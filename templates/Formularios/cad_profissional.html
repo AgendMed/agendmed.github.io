@@ -1,54 +1,65 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Profissional de Saúde</title>
-</head>
-<body>
-    <h1>Cadastro de Profissional de Saúde</h1>
-    <form method="post">
-        {% csrf_token %}
-        
-        <!-- Campos do usuário -->
-        <label for="id_nome_completo">Nome:</label>
-        {{ form.nome_completo }}
+<form method="POST">
+    {% csrf_token %}
     
-        <label for="id_cpf">CPF:</label>
+    <div>
+        <label for="{{ form.nome.id_for_label }}">Nome:</label>
+        {{ form.nome }}
+    </div>
+
+    <div>
+        <label for="{{ form.cpf.id_for_label }}">CPF:</label>
         {{ form.cpf }}
-    
-        <label for="id_telefone">Telefone:</label>
+    </div>
+
+    <div>
+        <label for="{{ form.telefone.id_for_label }}">Telefone:</label>
         {{ form.telefone }}
-    
-        <label for="id_bairro">Bairro:</label>
+    </div>
+
+    <div>
+        <label for="{{ form.bairro.id_for_label }}">Bairro:</label>
         {{ form.bairro }}
-    
-        <label for="id_rua">Rua:</label>
+    </div>
+
+    <div>
+        <label for="{{ form.rua.id_for_label }}">Rua:</label>
         {{ form.rua }}
-    
-        <label for="id_complemento">Complemento:</label>
+    </div>
+
+    <div>
+        <label for="{{ form.complemento.id_for_label }}">Complemento:</label>
         {{ form.complemento }}
-    
-        <label for="id_numerocasa">Número da Casa:</label>
-        {{ form.numerocasa }}
-    
-        <label for="id_data_nascimento">Data de Nascimento:</label>
+    </div>
+
+    <div>
+        <label for="{{ form.numero_casa.id_for_label }}">Número da Casa:</label>
+        {{ form.numero_casa }}
+    </div>
+
+    <div>
+        <label for="{{ form.data_nascimento.id_for_label }}">Data de Nascimento:</label>
         {{ form.data_nascimento }}
-    
-        <label for="id_email">Email:</label>
+    </div>
+
+    <div>
+        <label for="{{ form.email.id_for_label }}">Email:</label>
         {{ form.email }}
-    
-        <label for="id_senha">Senha:</label>
+    </div>
+
+    <div>
+        <label for="{{ form.senha.id_for_label }}">Senha:</label>
         {{ form.senha }}
-        
-        <!-- Campos do profissional de saúde -->
-        <label for="id_especialidade">Especialidade:</label>
+    </div>
+
+    <div>
+        <label for="{{ form.especialidade.id_for_label }}">Especialidade:</label>
         {{ form.especialidade }}
-    
-        <label for="id_unidade_saude">Unidade de Saúde:</label>
+    </div>
+
+    <div>
+        <label for="{{ form.unidade_saude.id_for_label }}">Unidade de Saúde:</label>
         {{ form.unidade_saude }}
-    
-        <button type="submit">Cadastrar</button>
-    </form>
-</body>
-</html>
+    </div>
+
+    <button type="submit">Cadastrar</button>
+</form>

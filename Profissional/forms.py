@@ -1,67 +1,48 @@
-# forms.py
 from django import forms
-from .models import ProfissionalSaude
+from django.contrib.auth import get_user_model
+from Profissional.models import ProfissionalSaude
 from Unidade_Saude.models import UnidadeSaude
-from users.models import Usuario
-from especialidades.models import Especialidade  # Importando o modelo Especialidade
+from especialidades.models import Especialidade
 
-class CadastroProfissionalForm(forms.ModelForm):
-    # Campos do modelo Usuario
-    nome_completo = forms.CharField(max_length=150, required=True)
-    cpf = forms.CharField(max_length=14, required=True)
-    telefone = forms.CharField(max_length=15, required=False)
-    bairro = forms.CharField(max_length=255, required=False)
-    rua = forms.CharField(max_length=255, required=False)
-    complemento = forms.CharField(max_length=255, required=False)
-    numerocasa = forms.CharField(max_length=30, required=False)
-    data_nascimento = forms.DateField(required=True)
-    email = forms.EmailField(required=True)
-    senha = forms.CharField(widget=forms.PasswordInput, required=True)
-
-    # Campos do modelo ProfissionalSaude
-    especialidade = forms.ModelChoiceField(queryset=Especialidade.objects.all(), required=True)
-    unidade_saude = forms.ModelChoiceField(queryset=UnidadeSaude.objects.all(), empty_label="Selecione uma Unidade de Saúde", required=True)
-
+class ProfissionalSaudeForm(forms.ModelForm):
     class Meta:
         model = ProfissionalSaude
-        fields = ['especialidade', 'unidade_saude']
+        fields = ['nome', 'cpf', 'telefone', 'bairro', 'rua', 'complemento', 'numero_casa', 'data_nascimento', 'email', 'senha', 'especialidade', 'unidade_saude']
 
-    def clean(self):
-        cleaned_data = super().clean()
-        nome_completo = cleaned_data.get('nome_completo')
-
-        if not nome_completo:
-            raise forms.ValidationError('O campo nome completo é obrigatório.')
-
-        # Retorna os dados limpos
-        return cleaned_data
+    nome = forms.CharField(max_length=100, required=True)
+    cpf = forms.CharField(max_length=14, required=True)
+    telefone = forms.CharField(max_length=15, required=True)
+    bairro = forms.CharField(max_length=100, required=True)
+    rua = forms.CharField(max_length=100, required=True)
+    complemento = forms.CharField(max_length=100, required=False)
+    numero_casa = forms.IntegerField(required=True)
+    data_nascimento = forms.DateField(required=True)
+    email = forms.EmailField(required=True)
+    senha = forms.CharField(widget=forms.PasswordInput(), required=True)
+    especialidade = forms.ModelChoiceField(queryset=Especialidade.objects.all(), required=True)
+    unidade_saude = forms.ModelChoiceField(queryset=UnidadeSaude.objects.all(), required=True)
 
     def save(self, commit=True):
-        # Cria o usuário primeiro
-        usuario_data = {
-            'username': self.cleaned_data['cpf'],  # Usando o CPF como username
-            'nome_completo': self.cleaned_data['nome_completo'],
-            'cpf': self.cleaned_data['cpf'],
-            'telefone': self.cleaned_data['telefone'],
-            'bairro': self.cleaned_data['bairro'],
-            'rua': self.cleaned_data['rua'],
-            'complemento': self.cleaned_data['complemento'],
-            'numerocasa': self.cleaned_data['numerocasa'],
-            'data_nascimento': self.cleaned_data['data_nascimento'],
-            'email': self.cleaned_data['email'],
-        }
+        # Criação do usuário
+        usuario = get_user_model().objects.create_user(
+            username=self.cleaned_data['cpf'],
+            email=self.cleaned_data['email'],
+            password=self.cleaned_data['senha'],
+            nome_completo=self.cleaned_data['nome'],
+            cpf=self.cleaned_data['cpf'],
+            telefone=self.cleaned_data['telefone'],
+            bairro=self.cleaned_data['bairro'],
+            rua=self.cleaned_data['rua'],
+            complemento=self.cleaned_data['complemento'],
+            numerocasa=self.cleaned_data['numero_casa'],
+            data_nascimento=self.cleaned_data['data_nascimento']
+        )
 
-        usuario = Usuario.objects.create(**usuario_data)
-        usuario.set_password(self.cleaned_data['senha'])  # Criptografando a senha
-        usuario.save()
+        # Criando o profissional de saúde associado ao usuário
+        profissional = super().save(commit=False)
+        profissional.usuario = usuario
 
-        # Cria o profissional de saúde associado ao usuário
-        profissional_data = {
-            'usuario': usuario,
-            'especialidade': self.cleaned_data['especialidade'],
-            'unidade_saude': self.cleaned_data['unidade_saude'],
-        }
-
-        profissional = ProfissionalSaude.objects.create(**profissional_data)
+        if commit:
+            profissional.save()
 
         return profissional
