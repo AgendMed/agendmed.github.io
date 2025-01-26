@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Profissional de Saúde</title>
+</head>
+<body>
+    <h1>Cadastro de Profissional de Saúde</h1>
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Campos do usuário -->
+        <label for="id_nome_completo">Nome:</label>
+        {{ form.nome_completo }}
+    
+        <label for="id_cpf">CPF:</label>
+        {{ form.cpf }}
+    
+        <label for="id_telefone">Telefone:</label>
+        {{ form.telefone }}
+    
+        <label for="id_bairro">Bairro:</label>
+        {{ form.bairro }}
+    
+        <label for="id_rua">Rua:</label>
+        {{ form.rua }}
+    
+        <label for="id_complemento">Complemento:</label>
+        {{ form.complemento }}
+    
+        <label for="id_numerocasa">Número da Casa:</label>
+        {{ form.numerocasa }}
+    
+        <label for="id_data_nascimento">Data de Nascimento:</label>
+        {{ form.data_nascimento }}
+    
+        <label for="id_email">Email:</label>
+        {{ form.email }}
+    
+        <label for="id_senha">Senha:</label>
+        {{ form.senha }}
+        
+        <!-- Campos do profissional de saúde -->
+        <label for="id_especialidade">Especialidade:</label>
+        {{ form.especialidade }}
+    
+        <label for="id_unidade_saude">Unidade de Saúde:</label>
+        {{ form.unidade_saude }}
+    
+        <button type="submit">Cadastrar</button>
+    </form>
+</body>
+</html>

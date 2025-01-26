@@ -14,6 +14,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('Paciente/', include('Paciente.urls')),
     path('unidade-saude/', include('Unidade_Saude.urls')),
+    path('cadastro_profissional/', include('Profissional.urls')),
     
     # Servir o index.html diretamente
     re_path(r'^$', serve, {'path': 'index.html', 'document_root': BASE_DIR}),

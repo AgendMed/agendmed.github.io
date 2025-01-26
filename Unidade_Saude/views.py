@@ -19,4 +19,4 @@ def cadastro_unidade_saude(request):
     return render(request, 'formularios/cad_UnidadeSaude.html', {'form': form})
 
 def sucesso(request):
-    return render(request, 'sucesso_unidadesaude.html')
+    return render(request, 'sucesso.html')

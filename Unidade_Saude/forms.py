@@ -22,7 +22,7 @@ class UnidadeSaudeForm(forms.ModelForm):
 
     def get_coordinates(self, address):
         """Consulta a API para obter latitude e longitude a partir do endereço."""
-        API_KEY = "j7EFwWOjGiFXvA6bZDH6iNdbuCkuzB1K5caRlJ6jpnwRynXsW9fUY8mNCkyvYYk6"  # Substitua pela sua chave
+        API_KEY = "j7EFwWOjGiFXvA6bZDH6iNdbuCkuzB1K5caRlJ6jpnwRynXsW9fUY8mNCkyvYYk6"  # chave da API
         GEOCODING_API_URL = "https://api.distancematrix.ai/maps/api/geocode/json"
         params = {
             "address": address,
@@ -36,7 +36,6 @@ class UnidadeSaudeForm(forms.ModelForm):
             response.raise_for_status()
             data = response.json()
 
-            # Debug: Imprimir resposta para verificar os dados retornados
             print("Resposta da API:", data)
 
             # Verifique o que a API retorna
@@ -46,8 +45,8 @@ class UnidadeSaudeForm(forms.ModelForm):
 
             # Verifique se 'results' contém dados válidos
             if 'result' in data and data["result"]:
-                result = data["result"][0]  # Corrigido para 'result'
-                # Exibir detalhes da resposta
+                result = data["result"][0]
+                
                 print("Resultado da API:", result)
 
                 location = result.get("geometry", {}).get("location", {})
@@ -73,7 +72,6 @@ class UnidadeSaudeForm(forms.ModelForm):
     def save(self, commit=True):
         unidade = super().save(commit=False)
 
-        # Concatenar o endereço completo
         cep = self.cleaned_data.get('cep')
         rua = self.cleaned_data.get('rua')
         numero = self.cleaned_data.get('numero')

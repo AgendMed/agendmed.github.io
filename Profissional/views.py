@@ -1,13 +1,17 @@
 from django.shortcuts import render, redirect
-from .forms import ProfissionalSaudeForm
+from .forms import CadastroProfissionalForm
 
-def cadastrar_profissional(request):
+def cadastro_profissional(request):
     if request.method == 'POST':
-        form = ProfissionalSaudeForm(request.POST)
+        form = CadastroProfissionalForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('sucesso')  # Redireciona para uma página de sucesso/ fazer pagina estatica
+            try:
+                form.save()
+                return redirect('sucesso')  # Alterar para o caminho que você desejar após sucesso
+            except Exception as e:
+                print("Erro:", e)
+        else:
+            print("Erros de formulário:", form.errors)
     else:
-        form = ProfissionalSaudeForm()
-
-    return render(request, 'Formularios/cad_ProfissionalSaude.html', {'form': form})
+        form = CadastroProfissionalForm()
+    return render(request, 'Formularios/cad_profissional.html', {'form': form})
