@@ -6,6 +6,8 @@ class ConsultaForm(forms.ModelForm):
         model = Consulta
         fields = ['unidade_saude', 'profissional', 'data', 'horario', 'qtd_fichas_prioritarias', 'qtd_fichas_normais']
 
+    data = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))  # Adiciona o tipo 'date'
+
     def clean(self):
         cleaned_data = super().clean()
         unidade_saude = cleaned_data.get('unidade_saude')
