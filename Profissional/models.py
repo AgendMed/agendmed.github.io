@@ -1,11 +1,12 @@
 from django.db import models
 from Unidade_Saude.models import UnidadeSaude
+from especialidades.models import Especialidade
 from users.models import Usuario
 
 
 class ProfissionalSaude(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, default=2)
-    especialidade = models.CharField(max_length=50)
+    especialidade = models.ForeignKey(Especialidade, on_delete=models.CASCADE)
     unidade_saude = models.ForeignKey(
         UnidadeSaude,
         on_delete=models.CASCADE,

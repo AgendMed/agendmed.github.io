@@ -1,16 +1,17 @@
 from django import forms
-from .models import Paciente
-from users.models import Usuario
+from .models import Usuario, Paciente
+
+
 
 class CadastroPacienteForm(forms.ModelForm):
     # Campos do modelo Usuario
     nome_completo = forms.CharField(max_length=150, required=True)
     cpf = forms.CharField(max_length=14, required=True)
     telefone = forms.CharField(max_length=15, required=False)
-    Bairro = forms.CharField(max_length=255, required=False)
-    Rua = forms.CharField(max_length=255, required=False)
+    bairro = forms.CharField(max_length=255, required=False)
+    rua = forms.CharField(max_length=255, required=False)
     complemento = forms.CharField(max_length=255, required=False)
-    NumeroCasa = forms.CharField(max_length=30, required=False)
+    numerocasa = forms.CharField(max_length=30, required=False)
     data_nascimento = forms.DateField(required=True)
     email = forms.EmailField(required=True)
     senha = forms.CharField(widget=forms.PasswordInput, required=True)
@@ -20,6 +21,7 @@ class CadastroPacienteForm(forms.ModelForm):
     condicao_prioritaria = forms.ChoiceField(
         choices=Paciente._meta.get_field('condicao_prioritaria').choices, required=False)
     comprovante = forms.FileField(required=False)
+
 
     class Meta:
         model = Paciente
@@ -42,10 +44,10 @@ class CadastroPacienteForm(forms.ModelForm):
             'nome_completo': self.cleaned_data['nome_completo'],
             'cpf': self.cleaned_data['cpf'],
             'telefone': self.cleaned_data['telefone'],
-            'Bairro': self.cleaned_data['Bairro'],
-            'Rua': self.cleaned_data['Rua'],
+            'bairro': self.cleaned_data['bairro'],
+            'rua': self.cleaned_data['rua'],
             'complemento': self.cleaned_data['complemento'],
-            'NumeroCasa': self.cleaned_data['NumeroCasa'],
+            'numerocasa': self.cleaned_data['numerocasa'],
             'data_nascimento': self.cleaned_data['data_nascimento'],
             'email': self.cleaned_data['email'],
         }

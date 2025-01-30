@@ -5,16 +5,20 @@
 .vscode/
 .idea/
 .history/
+.git/
+.venv/
+
 
 # Ignorar arquivos gerados pelo Python
-__pycache__/
+.__pycache__/
 *.pyc
 
 # Ignorar migrações antigas
 migrations/
 
-# Ignorar arquivos de banco de dados locais
-*.sqlite3
+# Ignorar backups de banco de dados PostgreSQL
+*.sql
+*.dump
 
 # Ignorar arquivos de log
 *.log

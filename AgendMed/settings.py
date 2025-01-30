@@ -1,3 +1,4 @@
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -30,6 +31,7 @@ INSTALLED_APPS = [
     'AgendaConsulta',
     'rest_framework',
     'users',
+    'especialidades',
 
 ]
 
@@ -70,11 +72,11 @@ WSGI_APPLICATION = 'AgendMed.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'AgendMed',
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('PASSWORD'),
+        'HOST': os.getenv('HOST'),
+        'PORT': os.getenv('PORT'),
     }
 }
 
@@ -100,7 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'users.backends.CPFBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
