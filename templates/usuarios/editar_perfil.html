@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Editar Perfil</h2>
+<form method="POST">
+    {% csrf_token %}
+    <h3>Informações do Usuário</h3>
+    {{ usuario_form.as_p }}
+
+    <h3>Informações do Paciente</h3>
+    {{ paciente_form.as_p }}
+
+    <button type="submit">Salvar</button>
+</form>
+{% endblock %}

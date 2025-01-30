@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', function() {
     var email = document.getElementById('emailCadastro');
     var senha = document.getElementById('senhaCadastro');
     var confirmarSenha = document.getElementById('confirmarSenha');
+    
+    var condicaoPrioritaria = document.getElementById('condicao_prioritaria');
+    var comprovanteField = document.getElementById('comprovante');
 
     var nomeError = document.getElementById('nomeError');
     var cartSusError = document.getElementById('cartSusError');
@@ -127,6 +130,18 @@ document.addEventListener('DOMContentLoaded', function() {
             confirmarSenha.value = '';
         }
     }
+
+    function toggleComprovanteField() {
+        if (condicaoPrioritaria.value !== 'nenhuma') {
+            comprovanteField.style.display = 'block';
+        } else {
+            comprovanteField.style.display = 'none';
+        }
+    }
+
+    // Adiciona o evento de mudança para o campo de condição prioritária
+    condicaoPrioritaria.addEventListener('change', toggleComprovanteField);
+    toggleComprovanteField(); // Chama a função ao carregar a página
 
     var form = document.querySelector('form');
     form.addEventListener('submit', validarFormulario);
