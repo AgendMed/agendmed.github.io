@@ -8,11 +8,11 @@ def cadastro_unidade_saude(request):
         if form.is_valid():
             try:
                 form.save()
-                return redirect('UnidadeSaude:sucesso')  # Redireciona após sucesso
+                return redirect('UnidadeSaude:sucesso')  # Redireciona após sucesso(criar template)
             except forms.ValidationError as e:
-                form.add_error(None, e.message)  # Exibe a mensagem de erro no formulário
+                form.add_error(None, e.message)
         else:
-            print("Erros de formulário:", form.errors)  # Exibe os erros do formulário
+            print("Erros de formulário:", form.errors)
         return render(request, 'formularios/cad_UnidadeSaude.html', {'form': form})
     else:
         form = UnidadeSaudeForm()
