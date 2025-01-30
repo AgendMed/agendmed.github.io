@@ -1,0 +1,24 @@
+# Ignorar arquivos de configuração e ambientes sensíveis
+.env
+
+# Ignorar configurações de IDEs
+.vscode/
+.idea/
+.history/
+.git/
+.venv/
+
+
+# Ignorar arquivos gerados pelo Python
+.__pycache__/
+*.pyc
+
+# Ignorar migrações antigas
+migrations/
+
+# Ignorar backups de banco de dados PostgreSQL
+*.sql
+*.dump
+
+# Ignorar arquivos de log
+*.log
