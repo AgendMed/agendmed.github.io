@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Bem-vindo, {{ usuario.nome_completo }}!</h2>
+<p><strong>CPF:</strong> {{ usuario.cpf }}</p>
+<p><strong>Email:</strong> {{ usuario.email }}</p>
+<p><strong>Telefone:</strong> {{ usuario.telefone }}</p>
+<p><strong>Data de Nascimento:</strong> {{ usuario.data_nascimento }}</p>
+<p><strong>Bairro:</strong> {{ usuario.bairro }}</p>
+<p><strong>Rua:</strong> {{ usuario.rua }}</p>
+<p><strong>Número da Casa:</strong> {{ usuario.numerocasa }}</p>
+<p><strong>Complemento:</strong> {{ usuario.complemento }}</p>
+<p><strong>Cartão de Saúde:</strong> {{ paciente.cartao_saude }}</p>
+<p><strong>Condição Prioritária:</strong> {{ paciente.condicao_prioritaria }}</p>
+
+<a href="{% url 'Paciente:editar_perfil' %}">Editar Perfil</a>
+{% endblock %}
