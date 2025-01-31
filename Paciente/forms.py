@@ -1,6 +1,6 @@
 from django import forms
 from .models import Usuario, Paciente
-
+from users.models import Usuario
 
 
 class CadastroPacienteForm(forms.ModelForm):
@@ -67,3 +67,13 @@ class CadastroPacienteForm(forms.ModelForm):
         paciente = Paciente.objects.create(**paciente_data)
 
         return paciente
+
+class UsuarioForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = ['nome_completo', 'telefone', 'data_nascimento', 'bairro', 'rua', 'complemento', 'numerocasa']  # Excluindo CPF
+
+class PacienteForm(forms.ModelForm):
+    class Meta:
+        model = Paciente
+        fields = ['cartao_saude', 'condicao_prioritaria']  # Campos que podem ser editados

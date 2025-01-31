@@ -9,9 +9,15 @@ class Usuario(AbstractUser):
     cpf = models.CharField(max_length=14, unique=True)
     telefone = models.CharField(max_length=30, blank=True, null=False, default='Telefone não informado')
     data_nascimento = models.DateField(verbose_name="Data de nascimento", default=date(2000, 1, 1), null=False)
+<<<<<<< HEAD
     bairro = models.TextField(max_length=255, blank=True, null=False, default='Bairro não informado')
     rua = models.TextField(max_length=255, blank=True, null=False, default='Rua não informada')
     complemento = models.TextField(max_length=255, blank=True, null=False, default='complemento não informado')
+=======
+    bairro = models.CharField(max_length=255, blank=True, null=False, default='Bairro não informado')
+    rua = models.CharField(max_length=255, blank=True, null=False, default='Rua não informada')
+    complemento = models.CharField(max_length=255, blank=True, null=False, default='complemento não informado')
+>>>>>>> 3484c7deaab19140dc8b4125039a15ac978c5937
     numerocasa = models.CharField(max_length=20, null=False, default='Numero da Casa não informado')
 
 
