@@ -3,14 +3,22 @@ from Paciente.models import Paciente
 from Profissional.models import ProfissionalSaude
 from Unidade_Saude.models import UnidadeSaude
 
-class Agendamento(models.Model):
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='agendamentos')
-    profissional = models.ForeignKey(ProfissionalSaude, on_delete=models.CASCADE, related_name='agendamentos')
-    unidade_saude = models.ForeignKey(UnidadeSaude, on_delete=models.CASCADE, related_name='agendamentos')
+class Consulta(models.Model):
+    unidade_saude = models.ForeignKey(UnidadeSaude, on_delete=models.CASCADE, related_name='consultas')
+    profissional = models.ForeignKey(ProfissionalSaude, on_delete=models.CASCADE, related_name='consultas')
     data = models.DateField()
     horario = models.TimeField()
-    fichas_normais = models.IntegerField(default=0)
-    fichas_prioridade = models.IntegerField(default=0)
+    qtd_fichas_prioritarias = models.PositiveIntegerField(default=0)
+    qtd_fichas_normais = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f"Agendamento de {self.paciente.nome_completo} com {self.profissional.nome} em {self.data}"
+        return f"Consulta com {self.profissional.usuario.nome_completo} em {self.data} às {self.horario}"
+
+
+class Agendamento(models.Model):
+    consulta = models.ForeignKey(Consulta, on_delete=models.CASCADE, related_name='agendamentos')
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='agendamentos')
+    data_agendamento = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Agendamento de {self.paciente.usuario.nome_completo} para a consulta {self.consulta}"

@@ -7,10 +7,10 @@
 .history/
 .git/
 .venv/
-venv/
+
 
 # Ignorar arquivos gerados pelo Python
-*.__pycache__/
+.__pycache__/
 *.pyc
 
 # Ignorar migrações antigas

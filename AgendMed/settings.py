@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'AgendaConsulta',
     'rest_framework',
     'users',
+    'especialidades',
 
 ]
 
