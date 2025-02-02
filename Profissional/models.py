@@ -12,6 +12,11 @@ class ProfissionalSaude(models.Model):
         on_delete=models.CASCADE,
         related_name='profissionais'
     )
+    ativo = models.BooleanField(
+        default=True,
+        verbose_name='Ativo',
+        help_text='Indica se o profissional está ativo no sistema'
+    )
 
     def __str__(self):
         return f"{self.usuario.nome_completo} - {self.especialidade}"
