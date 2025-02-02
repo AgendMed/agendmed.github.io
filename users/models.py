@@ -11,7 +11,7 @@ from django.shortcuts import render
 
 class Usuario(AbstractUser):
     nome_completo = models.CharField(max_length=150, null=False, default='Nome não informado')
-    cpf = models.CharField(max_length=14, unique=True)
+    cpf = models.CharField(max_length=30, unique=True)
     telefone = models.CharField(max_length=30, blank=True, null=False, default='Telefone não informado')
     data_nascimento = models.DateField(verbose_name="Data de nascimento", default=date(2000, 1, 1), null=False)
     bairro = models.TextField(max_length=255, blank=True, null=False, default='Bairro não informado')
@@ -27,7 +27,7 @@ class Usuario(AbstractUser):
         verbose_name_plural = "Usuários"
 
     def __str__(self):
-        return self.cpf
+        return self.nome_completo
 
     @staticmethod
     @receiver(post_migrate)
