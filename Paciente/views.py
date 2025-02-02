@@ -10,18 +10,16 @@ from django.contrib.auth.models import Group, Permission
 
 def cadastro_paciente(request):
     if request.method == 'POST':
-        # Formulário enviado pelo cliente
-        form = CadastroPacienteForm(request.POST, request.FILES)  # Captura os dados e arquivos
+        form = CadastroPacienteForm(request.POST, request.FILES)
         if form.is_valid():
-            paciente = form.save()  # Salva o paciente
+            paciente = form.save() 
 
             # Adiciona o usuário ao grupo "Paciente"
             grupo_paciente = Group.objects.get(name='Paciente')
             paciente.usuario.groups.add(grupo_paciente)  # Associa o paciente ao grupo
 
-            # Opcional: Adiciona permissões específicas ao paciente (se necessário)
-            # Aqui você pode adicionar permissões personalizadas se quiser
-            # Exemplo: Permissão para consultar
+            #Adiciona permissões ao paciente (se necessário)
+
             permissao_consultar = Permission.objects.get(codename='pode_consultar')
             paciente.usuario.user_permissions.add(permissao_consultar)
 

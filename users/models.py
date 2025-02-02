@@ -30,7 +30,8 @@ class Usuario(AbstractUser):
         return self.cpf
 
     @staticmethod
-    def criar_grupos_permissoes():
+    @receiver(post_migrate)
+    def criar_grupos_permissoes(sender, **kwargs):
         """
         Método estático para criar grupos e permissões automaticamente no banco de dados.
         """
@@ -39,8 +40,8 @@ class Usuario(AbstractUser):
         grupo_paciente, _ = Group.objects.get_or_create(name='Paciente')
         grupo_unidade_saude, _ = Group.objects.get_or_create(name='Unidade_Saude')
         grupo_admin, _ = Group.objects.get_or_create(name='Admin')
+        grupo_agente_saude, _ = Group.objects.get_or_create(name='Agente_Saude')
 
-        # Adicionar permissões ao modelo customizado Usuario
         content_type = ContentType.objects.get_for_model(Usuario)
 
         # Criar permissões para médicos e pacientes
@@ -80,36 +81,36 @@ class Usuario(AbstractUser):
         )
 
         permissao_consultar, _ = Permission.objects.get_or_create(
-        codename='pode_consultar',
-        name='Pode consultar dados de pacientes',
-        content_type=content_type,
-    )
+            codename='pode_consultar',
+            name='Pode consultar dados de pacientes',
+            content_type=content_type,
+        )
+        
         grupo_paciente.permissions.add(permissao_consultar)
 
-        # Atribuir permissões aos grupos
+        # Criar permissões para o agente de saúde
+        permissao_cadastrar_campanha, _ = Permission.objects.get_or_create(
+            codename='pode_cadastrar_campanha',
+            name='Pode cadastrar campanhas',
+            content_type=content_type,
+        )
+
+        permissao_cadastrar_paciente, _ = Permission.objects.get_or_create(
+            codename='pode_cadastrar_paciente',
+            name='Pode cadastrar pacientes',
+            content_type=content_type,
+        )
+
+        permissao_cadastrar_consulta, _ = Permission.objects.get_or_create(
+            codename='pode_cadastrar_consulta',
+            name='Pode cadastrar consultas',
+            content_type=content_type,
+        )
+
+        grupo_agente_saude.permissions.add(permissao_cadastrar_campanha, permissao_cadastrar_paciente, permissao_cadastrar_consulta)
         grupo_medico.permissions.add(permissao_atender, permissao_visualizar)
         grupo_paciente.permissions.add(permissao_visualizar)
         grupo_unidade_saude.permissions.add(permissao_gerenciar_pacientes, permissao_gerenciar_consultas)
         grupo_admin.permissions.add(permissao_gerenciar_usuarios, permissao_gerenciar_unidades)
 
         print("Grupos e permissões criados com sucesso!")
-
-
-@receiver(post_migrate)
-def criar_grupos_permissoes_automaticamente(sender, **kwargs):
-    """
-    Executa o método criar_grupos_permissoes após a migração do banco.
-    """
-    if sender.name == 'users':
-        Usuario.criar_grupos_permissoes()
-
-
-# Para garantir que o usuário tem a permissão 'pode_gerenciar_usuarios'
-@permission_required('users.pode_gerenciar_usuarios', raise_exception=True)
-def gerenciar_usuarios(request):
-    # Lógica para gerenciar usuários
-    return render(request, 'gerenciar_usuarios.html')
-
-
-
-
