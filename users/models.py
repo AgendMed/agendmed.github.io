@@ -18,6 +18,8 @@ class Usuario(AbstractUser):
     rua = models.TextField(max_length=255, blank=True, null=False, default='Rua não informada')
     complemento = models.TextField(max_length=255, blank=True, null=False, default='complemento não informado')
     numerocasa = models.CharField(max_length=20, null=False, default='Numero da Casa não informado')
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
 
     class Meta:
@@ -25,7 +27,7 @@ class Usuario(AbstractUser):
         verbose_name_plural = "Usuários"
 
     def __str__(self):
-        return self.username
+        return self.cpf
 
     @staticmethod
     def criar_grupos_permissoes():
@@ -77,6 +79,13 @@ class Usuario(AbstractUser):
             content_type=content_type,
         )
 
+        permissao_consultar, _ = Permission.objects.get_or_create(
+        codename='pode_consultar',
+        name='Pode consultar dados de pacientes',
+        content_type=content_type,
+    )
+        grupo_paciente.permissions.add(permissao_consultar)
+
         # Atribuir permissões aos grupos
         grupo_medico.permissions.add(permissao_atender, permissao_visualizar)
         grupo_paciente.permissions.add(permissao_visualizar)
@@ -100,4 +109,7 @@ def criar_grupos_permissoes_automaticamente(sender, **kwargs):
 def gerenciar_usuarios(request):
     # Lógica para gerenciar usuários
     return render(request, 'gerenciar_usuarios.html')
+
+
+
 

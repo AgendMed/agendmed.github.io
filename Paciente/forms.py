@@ -1,6 +1,7 @@
 from django import forms
 from .models import Usuario, Paciente
-
+from django.core.exceptions import ValidationError
+from django.contrib.auth.models import Group, Permission
 
 
 class CadastroPacienteForm(forms.ModelForm):
@@ -22,7 +23,6 @@ class CadastroPacienteForm(forms.ModelForm):
         choices=Paciente._meta.get_field('condicao_prioritaria').choices, required=False)
     comprovante = forms.FileField(required=False)
 
-
     class Meta:
         model = Paciente
         fields = ['cartao_saude', 'condicao_prioritaria', 'comprovante']
@@ -34,29 +34,37 @@ class CadastroPacienteForm(forms.ModelForm):
         if not nome_completo:
             raise forms.ValidationError('O campo nome completo é obrigatório.')
 
-        # Retorna os dados limpos
+        # Validação adicional para CPF e E-mail
+        if not cleaned_data.get('cpf'):
+            raise forms.ValidationError('O CPF é obrigatório.')
+
+        if not cleaned_data.get('email'):
+            raise forms.ValidationError('O E-mail é obrigatório.')
+
+        # Validação do comprovante, se presente
+        comprovante = cleaned_data.get('comprovante')
+        if comprovante and not comprovante.name.endswith(('.pdf', '.jpg', '.png')):
+            raise ValidationError('O arquivo de comprovante deve ser PDF, JPG ou PNG.')
+
         return cleaned_data
 
     def save(self, commit=True):
-        # Cria o usuário primeiro
-        usuario_data = {
-            'username': self.cleaned_data['cpf'],  # Usando o CPF como username
-            'nome_completo': self.cleaned_data['nome_completo'],
-            'cpf': self.cleaned_data['cpf'],
-            'telefone': self.cleaned_data['telefone'],
-            'bairro': self.cleaned_data['bairro'],
-            'rua': self.cleaned_data['rua'],
-            'complemento': self.cleaned_data['complemento'],
-            'numerocasa': self.cleaned_data['numerocasa'],
-            'data_nascimento': self.cleaned_data['data_nascimento'],
-            'email': self.cleaned_data['email'],
-        }
+        # Criação do usuário de forma segura
+        usuario = Usuario.objects.create_user(
+            username=self.cleaned_data['cpf'],  # Usando o CPF como username
+            nome_completo=self.cleaned_data['nome_completo'],
+            cpf=self.cleaned_data['cpf'],
+            telefone=self.cleaned_data['telefone'],
+            bairro=self.cleaned_data['bairro'],
+            rua=self.cleaned_data['rua'],
+            complemento=self.cleaned_data['complemento'],
+            numerocasa=self.cleaned_data['numerocasa'],
+            data_nascimento=self.cleaned_data['data_nascimento'],
+            email=self.cleaned_data['email'],
+            password=self.cleaned_data['senha']
+        )
 
-        usuario = Usuario.objects.create(**usuario_data)
-        usuario.set_password(self.cleaned_data['senha'])  # Criptografando a senha
-        usuario.save()
-
-        # Cria o paciente associado ao usuário
+        # Criação do paciente associado ao usuário
         paciente_data = {
             'usuario': usuario,
             'cartao_saude': self.cleaned_data['cartao_saude'],
@@ -65,5 +73,9 @@ class CadastroPacienteForm(forms.ModelForm):
         }
 
         paciente = Paciente.objects.create(**paciente_data)
+
+        # Adiciona o paciente ao grupo de Paciente, se existir
+        grupo_paciente = Group.objects.get(name='Paciente')
+        paciente.usuario.groups.add(grupo_paciente)
 
         return paciente
