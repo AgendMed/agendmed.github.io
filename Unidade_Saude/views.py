@@ -8,7 +8,7 @@ def cadastro_unidade_saude(request):
         if form.is_valid():
             try:
                 form.save()
-                return redirect('UnidadeSaude:sucesso')  # Redireciona após sucesso(criar template)
+                return redirect('UnidadeSaude:sucesso')
             except forms.ValidationError as e:
                 form.add_error(None, e.message)
         else:

@@ -38,6 +38,12 @@
                 <label for="telefone">Telefone</label>
                 <input type="tel" id="telefone" name="telefone" value="{{ form.telefone.value|default:'' }}" placeholder="(00) 00000-0000" required>
 
+
+                <!-- Campo CEP -->
+                <label for="cep">CEP</label>
+                <input type="text" id="cep" name="cep" value="{{ form.cep.value|default:'' }}" placeholder="00000-000" required>
+
+
                 <!-- Campo Bairro -->
                 <label for="bairro">Bairro</label>
                 <input type="text" id="bairro" name="bairro" value="{{ form.bairro.value|default:'' }}" required>
@@ -53,6 +59,7 @@
                 <!-- Campo Complemento -->
                 <label for="complemento">Complemento</label>
                 <input type="text" id="complemento" name="complemento" value="{{ form.complemento.value|default:'' }}">
+
 
                 <!-- Campo Email -->
                 <label for="email">Email</label>
