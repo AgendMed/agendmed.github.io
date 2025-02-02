@@ -23,7 +23,7 @@ class CadastroPacienteForm(forms.ModelForm):
 
     class Meta:
         model = Paciente
-        fields = ['cartao_saude', 'condicao_prioritaria', 'comprovante']
+        fields = ['cartao_saude', 'condicao_prioritaria', 'comprovante', 'status']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -90,7 +90,8 @@ class CadastroPacienteForm(forms.ModelForm):
             usuario=usuario,
             cartao_saude=self.cleaned_data['cartao_saude'],
             condicao_prioritaria=self.cleaned_data['condicao_prioritaria'],
-            comprovante=self.cleaned_data['comprovante']
+            comprovante=self.cleaned_data['comprovante'],
+            status='comum'
         )
         endereco_completo = f"{self.cleaned_data['rua']}, {self.cleaned_data['numerocasa']}, {self.cleaned_data['bairro']}, {self.cleaned_data['cep']}"
         latitude, longitude = self.get_coordinates(endereco_completo)
