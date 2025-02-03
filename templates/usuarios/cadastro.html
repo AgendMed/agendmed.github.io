@@ -19,55 +19,68 @@
                 
                 <!-- Campo Nome Completo -->
                 <label for="nome_completo">Nome Completo</label>
-                <input type="text" id="nome_completo" name="nome_completo" value="{{ form.nome_completo.value|default:'' }}"  placeholder="ex: João Araújo" required>
+                <input type="text" id="nome_completo" name="nome_completo" value="{{ form.nome_completo.value|default:'' }}" placeholder="ex: João Araújo" required>
+                <div id="nomeError" class="error-message"></div>
 
                 <!-- Campo Cartão de Saúde -->
                 <label for="cartao_saude">Cartão de Saúde</label>
                 <input type="text" id="cartao_saude" name="cartao_saude" value="{{ form.cartao_saude.value|default:'' }}" placeholder="ex: 0000000000" required>
+                <div id="cartaoSaudeError" class="error-message"></div>
 
                 <!-- Campo CPF -->
                 <label for="cpf">CPF</label>
                 <input type="text" id="cpf" name="cpf" value="{{ form.cpf.value|default:'' }}" placeholder="000.000.000-00" required>
+                <div id="cpfError" class="error-message"></div>
 
                 <!-- Campo Data de Nascimento -->
-
                 <label for="data_nascimento">Data de Nascimento</label>
                 <input type="date" id="data_nascimento" name="data_nascimento" value="{{ form.data_nascimento.value|default:'' }}" required>
+                <div id="dataNascimentoError" class="error-message"></div>
                 
                 <!-- Campo Telefone -->
                 <label for="telefone">Telefone</label>
                 <input type="tel" id="telefone" name="telefone" value="{{ form.telefone.value|default:'' }}" placeholder="(00) 00000-0000" required>
-
+                <div id="telefoneError" class="error-message"></div>
 
                 <!-- Campo CEP -->
                 <label for="cep">CEP</label>
                 <input type="text" id="cep" name="cep" value="{{ form.cep.value|default:'' }}" placeholder="00000-000" required>
-
+                <div id="cepError" class="error-message"></div>
 
                 <!-- Campo Bairro -->
                 <label for="bairro">Bairro</label>
                 <input type="text" id="bairro" name="bairro" value="{{ form.bairro.value|default:'' }}" required>
+                <div id="bairroError" class="error-message"></div>
 
                 <!-- Campo Rua -->
                 <label for="rua">Rua</label>
                 <input type="text" id="rua" name="rua" value="{{ form.rua.value|default:'' }}" required>
+                <div id="ruaError" class="error-message"></div>
 
                 <!-- Campo Número da Casa -->
                 <label for="numerocasa">Número da Casa</label>
                 <input type="text" id="numerocasa" name="numerocasa" value="{{ form.numerocasa.value|default:'' }}" required>
+                <div id="numeroCasaError" class="error-message"></div>
 
                 <!-- Campo Complemento -->
                 <label for="complemento">Complemento</label>
                 <input type="text" id="complemento" name="complemento" value="{{ form.complemento.value|default:'' }}">
-
+                <div id="complementoError" class="error-message"></div>
 
                 <!-- Campo Email -->
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" value="{{ form.email.value|default:'' }}" autocomplete="email" placeholder="exemplo@gmail.com">
+                <div id="emailError" class="error-message"></div>
 
                 <!-- Campo Senha -->
                 <label for="senha">Senha</label>
                 <input type="password" id="senha" name="senha" value="{{ form.senha.value|default:'' }}" autocomplete="current-password" required>
+                <div id="senhaError" class="error-message"></div>
+
+                <!-- Campo Confirmar Senha -->
+                <label for="confirmar_senha">Confirmar Senha</label>
+                <input type="password" id="confirmar_senha" name="confirmar_senha" required>
+                <div id="confirmarSenhaError" class="error-message"></div>
 
                 <!-- Campo Condição Prioritária -->
                 <label for="condicao_prioritaria">Condição Prioritária</label>
@@ -91,6 +104,9 @@
             </form>
 
             <!-- Exibição de erros -->
+
+            
+
             {% if form.errors %}
                 <ul>
                     {% for field in form %}
@@ -102,5 +118,7 @@
             {% endif %}
         </div>
     </div>
+    <script src="{% static 'JS/scripts.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

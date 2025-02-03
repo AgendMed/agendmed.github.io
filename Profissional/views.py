@@ -1,19 +1,5 @@
 from django.shortcuts import render, redirect
 from .forms import ProfissionalSaudeForm
-<<<<<<< HEAD
-
-def cadastro_profissional(request):
-    if request.method == 'POST':
-        form = ProfissionalSaudeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('sucesso')  # Redireciona para uma página de sucesso (ainda nao funciona)
-    else:
-        form = ProfissionalSaudeForm()
-
-    return render(request, 'Formularios/cad_profissional.html', {'form': form})
-
-=======
 from django.contrib.auth.models import Group, Permission
 
 def cadastro_profissional(request):
@@ -48,4 +34,3 @@ def cadastro_profissional(request):
         form = ProfissionalSaudeForm()
 
     return render(request, 'Formularios/cad_profissional.html', {'form': form})
->>>>>>> ed0684d553c3c83e57c0610639323e0c1eedf970

@@ -3,29 +3,19 @@ from django.contrib.auth import get_user_model
 from Profissional.models import ProfissionalSaude
 from Unidade_Saude.models import UnidadeSaude
 from especialidades.models import Especialidade
-<<<<<<< HEAD
-=======
 import requests
 from django.core.exceptions import ValidationError
->>>>>>> ed0684d553c3c83e57c0610639323e0c1eedf970
 
 class ProfissionalSaudeForm(forms.ModelForm):
     class Meta:
         model = ProfissionalSaude
-<<<<<<< HEAD
-        fields = ['nome', 'cpf', 'telefone', 'bairro', 'rua', 'complemento', 'numero_casa', 'data_nascimento', 'email', 'senha', 'especialidade', 'unidade_saude']
-=======
         fields = ['nome', 'cpf', 'telefone', 'bairro', 'rua', 'complemento', 'numero_casa', 
                  'data_nascimento', 'email', 'senha', 'especialidade', 'unidade_saude']
->>>>>>> ed0684d553c3c83e57c0610639323e0c1eedf970
 
     nome = forms.CharField(max_length=100, required=True)
     cpf = forms.CharField(max_length=14, required=True)
     telefone = forms.CharField(max_length=15, required=True)
-<<<<<<< HEAD
-=======
     cep = forms.CharField(max_length=9, required=True)
->>>>>>> ed0684d553c3c83e57c0610639323e0c1eedf970
     bairro = forms.CharField(max_length=100, required=True)
     rua = forms.CharField(max_length=100, required=True)
     complemento = forms.CharField(max_length=100, required=False)
@@ -36,10 +26,6 @@ class ProfissionalSaudeForm(forms.ModelForm):
     especialidade = forms.ModelChoiceField(queryset=Especialidade.objects.all(), required=True)
     unidade_saude = forms.ModelChoiceField(queryset=UnidadeSaude.objects.all(), required=True)
 
-<<<<<<< HEAD
-    def save(self, commit=True):
-        # Criação do usuário
-=======
     def get_coordinates(self, address):
         API_KEY = "j7EFwWOjGiFXvA6bZDH6iNdbuCkuzB1K5caRlJ6jpnwRynXsW9fUY8mNCkyvYYk6"
         GEOCODING_API_URL = "https://api.distancematrix.ai/maps/api/geocode/json"
@@ -73,7 +59,6 @@ class ProfissionalSaudeForm(forms.ModelForm):
             return None, None
 
     def save(self, commit=True):
->>>>>>> ed0684d553c3c83e57c0610639323e0c1eedf970
         usuario = get_user_model().objects.create_user(
             username=self.cleaned_data['cpf'],
             email=self.cleaned_data['email'],
@@ -88,9 +73,6 @@ class ProfissionalSaudeForm(forms.ModelForm):
             data_nascimento=self.cleaned_data['data_nascimento']
         )
 
-<<<<<<< HEAD
-        # Criando o profissional de saúde associado ao usuário
-=======
         endereco_completo = f"{self.cleaned_data['rua']}, {self.cleaned_data['numero_casa']}, " \
                             f"{self.cleaned_data['bairro']}, {self.cleaned_data['cep']}"
         latitude, longitude = self.get_coordinates(endereco_completo)
@@ -103,15 +85,10 @@ class ProfissionalSaudeForm(forms.ModelForm):
         usuario.longitude = longitude
         usuario.save()
 
->>>>>>> ed0684d553c3c83e57c0610639323e0c1eedf970
         profissional = super().save(commit=False)
         profissional.usuario = usuario
 
         if commit:
             profissional.save()
 
-<<<<<<< HEAD
         return profissional
-=======
-        return profissional
->>>>>>> ed0684d553c3c83e57c0610639323e0c1eedf970
