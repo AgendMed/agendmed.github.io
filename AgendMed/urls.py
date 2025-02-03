@@ -18,6 +18,7 @@ urlpatterns = [
     path('especialidades/', include('especialidades.urls')),
     path('cadastrar/', include('AgendaConsulta.urls')),
     
+    
     # Servir o index.html diretamente
     re_path(r'^$', serve, {'path': 'index.html', 'document_root': BASE_DIR}),
 ]

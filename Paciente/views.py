@@ -8,6 +8,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Paciente
 from django.contrib.auth import logout as auth_logout  # Renomeando a importação para evitar conflito
+from users.models import Usuario
+
+
 
 
 def cadastro_paciente(request):
@@ -47,7 +50,11 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('Paciente:pagina_paciente')
+            
+            if user.groups.filter(name="Profissional").exists():
+                return redirect('profissional:home')  # Redireciona para a home do profissional
+            else:
+                return redirect('paciente:home')  # Redireciona para a home do paciente
         else:
             messages.error(request, "Usuário ou senha inválidos.")
     else:
@@ -87,3 +94,6 @@ def editar_perfil(request):
 def logout_view(request):
     auth_logout(request)  # Faz o logout do usuário
     return redirect('Paciente:login')  # Redireciona para a página de login
+
+def paciente_home(request):
+    return render(request, 'home.html')
