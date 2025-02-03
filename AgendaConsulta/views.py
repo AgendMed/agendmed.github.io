@@ -26,13 +26,12 @@ def agendar_consulta(request):
         if form.is_valid():
             try:
                 with transaction.atomic():
-                    # Bloqueia o registro para evitar condições de corrida
                     consulta = Consulta.objects.select_for_update().get(
                         pk=form.cleaned_data['consulta'].id
                     )
                     paciente = form.cleaned_data['paciente']
                     
-                    # Verifica e atualiza as fichas
+                    # Verifica e atualiza as fichas 
                     if paciente.status == 'prioritario':
                         if consulta.qtd_fichas_prioritarias < 1:
                             raise ValueError("Não há fichas prioritárias disponíveis")
