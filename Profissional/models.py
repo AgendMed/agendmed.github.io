@@ -13,7 +13,7 @@ class ProfissionalSaude(models.Model):
         related_name='profissionais'
     )
     ativo = models.BooleanField(
-        default=True,
+        default=False,
         verbose_name='Ativo',
         help_text='Indica se o profissional está ativo no sistema'
     )

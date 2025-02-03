@@ -18,4 +18,4 @@ class ProfissionalSaudeAdmin(admin.ModelAdmin):
             'fields': ('ativo',),
             'classes': ('collapse',)
         }),
-    )
+    )   
