@@ -6,7 +6,7 @@
 .idea/
 .history/
 .git/
-.venv/
+*.venv/
 
 
 # Ignorar arquivos gerados pelo Python
