@@ -23,7 +23,7 @@ class CadastroPacienteForm(forms.ModelForm):
 
     class Meta:
         model = Paciente
-        fields = ['cartao_saude', 'condicao_prioritaria', 'comprovante', 'status']
+        fields = ['cartao_saude', 'condicao_prioritaria', 'comprovante']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -54,7 +54,7 @@ class CadastroPacienteForm(forms.ModelForm):
 
             results = data.get("result", [])
             if not results:
-                print("Nenhum resultado encontrado:", data)  # Para depuração
+                print("Nenhum resultado encontrado:", data)
                 return None, None
 
             location = results[0].get("geometry", {}).get("location", {})
