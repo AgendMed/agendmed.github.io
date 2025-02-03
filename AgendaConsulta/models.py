@@ -7,9 +7,18 @@ class Consulta(models.Model):
     unidade_saude = models.ForeignKey(UnidadeSaude, on_delete=models.CASCADE, related_name='consultas')
     profissional = models.ForeignKey(ProfissionalSaude, on_delete=models.CASCADE, related_name='consultas')
     data = models.DateField()
+<<<<<<< HEAD
     horario = models.TimeField()
     qtd_fichas_prioritarias = models.PositiveIntegerField(default=0)
     qtd_fichas_normais = models.PositiveIntegerField(default=0)
+=======
+    horario_inicio = models.TimeField()
+    horario_fim = models.TimeField()
+    qtd_fichas_prioritarias = models.PositiveIntegerField(default=0)
+    qtd_fichas_normais = models.PositiveIntegerField(default=0)
+    lista_espera_prioritaria = models.ManyToManyField(Paciente, related_name='espera_prioritaria', blank=True)
+    lista_espera_comum = models.ManyToManyField(Paciente, related_name='espera_comum', blank=True)
+>>>>>>> ed0684d553c3c83e57c0610639323e0c1eedf970
 
     def __str__(self):
         return f"Consulta com {self.profissional.usuario.nome_completo} em {self.data} às {self.horario}"
