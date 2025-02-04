@@ -12,7 +12,6 @@ def cadastro_paciente(request):
         if form.is_valid():
             paciente = form.save() 
 
-            # Adiciona o usuário ao grupo "Paciente"
             grupo_paciente = Group.objects.get(name='Paciente')
             paciente.usuario.groups.add(grupo_paciente)
             permissao_consultar = Permission.objects.get(codename='pode_consultar')

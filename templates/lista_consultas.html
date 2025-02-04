@@ -1,0 +1,43 @@
+<!-- templates/lista_consultas.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Consultas</title>
+</head>
+<body>
+    <h1>Lista de Consultas</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Unidade de Saúde</th>
+                <th>Profissional</th>
+                <th>Data</th>
+                <th>Horário Início</th>
+                <th>Horário Fim</th>
+                <th>Fichas Prioritárias</th>
+                <th>Fichas Normais</th>
+                <th>Total de Fichas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for consulta in consultas %}
+                <tr>
+                    <td>{{ consulta.unidade_saude }}</td>
+                    <td>{{ consulta.profissional }}</td>
+                    <td>{{ consulta.data }}</td>
+                    <td>{{ consulta.horario_inicio }}</td>
+                    <td>{{ consulta.horario_fim }}</td>
+                    <td>{{ consulta.qtd_fichas_prioritarias }}</td>
+                    <td>{{ consulta.qtd_fichas_normais }}</td>
+                    <td>{{ consulta.total_fichas }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Link para agendar consulta -->
+    <a href="{% url 'agendar_consulta' %}">Agendar Nova Consulta</a>
+</body>
+</html>
