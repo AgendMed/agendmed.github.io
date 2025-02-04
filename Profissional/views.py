@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import ProfissionalSaudeForm
 from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.decorators import login_required
 
 def cadastro_profissional(request):
     if request.method == 'POST':
@@ -34,3 +35,8 @@ def cadastro_profissional(request):
         form = ProfissionalSaudeForm()
 
     return render(request, 'Formularios/cad_profissional.html', {'form': form})
+
+
+@login_required
+def profissional_home(request):
+    return render(request, 'profissional/profissional_home.html')

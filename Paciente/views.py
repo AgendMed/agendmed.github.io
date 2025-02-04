@@ -56,7 +56,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('Paciente:pagina_paciente')
+            return redirect('Paciente:paciente_home')
         else:
             messages.error(request, "Usuário ou senha inválidos.")
     else:
@@ -104,3 +104,7 @@ def editar_perfil(request):
 def logout_view(request):
     auth_logout(request)  # Faz o logout do usuário
     return redirect('Paciente:login')  # Redireciona para a página de login
+
+@login_required
+def paciente_home(request):
+    return render(request, 'paciente/home.html', {})
