@@ -45,7 +45,7 @@ def agendar_consulta(request):
                     form.save()
                     
                     messages.success(request, 'Agendamento realizado com sucesso!')
-                    return redirect('lista_consultas')
+                    return redirect('listar_consultas')
             
             except Exception as e:
                 messages.error(request, str(e))
@@ -55,4 +55,15 @@ def agendar_consulta(request):
     else:
         form = AgendamentoForm()
     
-    return render(request, 'agenda_consulta/agendar.html', {'form': form})
+    return render(request, 'Paciente/AgendarConsulta.html', {'form': form})
+
+
+
+#teste de listar consultas (incompleta)
+
+
+def listar_consultas(request):
+    consultas = Consulta.objects.all().annotate(
+        total_fichas=F('qtd_fichas_prioritarias') + F('qtd_fichas_normais')
+    )
+    return render(request, 'lista_consultas.html', {'consultas': consultas})
