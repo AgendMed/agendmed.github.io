@@ -76,7 +76,6 @@ body {
     font-size: 14px;
     background-color: #f9fafc;
     transition: border-color 0.3s ease, background-color 0.3s ease;
-    width: 90%;
 }
 
 /* Borda cinza */
@@ -150,17 +149,17 @@ body {
     padding: 5px;
     border-left: 3px solid #f44336; /* Borda fina */
     background-color: #ffe6e6; /* Fundo suave */
-    display: none;
-    margin-bottom: 10px;
-    border-radius: 5px;
+    display: none; /* Inicialmente oculto */
+    margin-bottom: 10px; /* Margem inferior */
+    border-radius: 5px; /* Bordas arredondadas */
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Sombras sutis */
 }
 
 /* Mostrar erro para campos inválidos */
 input:invalid + .error-message {
-    display: block;
+    display: block; /* Exibir mensagem de erro se o campo for inválido */
 }
 
-#imagem{
+#imagem {
     width: 50%;
 }

@@ -11,4 +11,5 @@ urlpatterns = [
     path('pagina/', views.pagina_paciente, name='pagina_paciente'),
     path('editar_perfil/', views.editar_perfil, name='editar_perfil'),
     path('logout/', views.logout_view, name='logout'),  # Atualizando para usar a nova função
+    path('paciente_home/', views.paciente_home, name='paciente_home'),
 ]

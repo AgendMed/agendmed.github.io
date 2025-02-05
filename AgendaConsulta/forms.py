@@ -4,7 +4,7 @@ from .models import Consulta
 class ConsultaForm(forms.ModelForm):
     class Meta:
         model = Consulta
-        fields = ['unidade_saude', 'profissional', 'data', 'horario', 'qtd_fichas_prioritarias', 'qtd_fichas_normais']
+        fields = ['unidade_saude', 'profissional', 'data', 'horario_fim', 'qtd_fichas_prioritarias', 'qtd_fichas_normais','horario_inicio']
 
     data = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))  # Adiciona o tipo 'date'
 

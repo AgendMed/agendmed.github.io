@@ -1,5 +1,4 @@
-#views.py
-
+from django.shortcuts import render, redirect
 from .forms import CadastroPacienteForm
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
@@ -8,20 +7,30 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Paciente
 from django.contrib.auth import logout as auth_logout  # Renomeando a importação para evitar conflito
+from django.contrib.auth.models import Group, Permission
+from django.contrib.auth import update_session_auth_hash
 
+            
 
 def cadastro_paciente(request):
     if request.method == 'POST':
-        # Formulário enviado pelo cliente
-        form = CadastroPacienteForm(request.POST, request.FILES)  # Captura os dados e arquivos
+        form = CadastroPacienteForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('Paciente:sucesso')
+            paciente = form.save() 
+
+            # Adiciona o usuário ao grupo "Paciente"
+            grupo_paciente = Group.objects.get(name='Paciente')
+            paciente.usuario.groups.add(grupo_paciente)
+            permissao_consultar = Permission.objects.get(codename='pode_consultar')
+            paciente.usuario.user_permissions.add(permissao_consultar)
+            # Adiciona uma mensagem de sucesso
+            messages.success(request, 'Cadastro realizado com sucesso! Você pode fazer login agora.')
+
+            return redirect('Paciente:login')  # Redireciona para a página de login
+
         else:
-            
             return render(request, 'usuarios/cadastro.html', {'form': form})
     else:
-        # Requisição GET: exibe o formulário vazio
         form = CadastroPacienteForm()
         return render(request, 'usuarios/cadastro.html', {'form': form})
 
@@ -47,7 +56,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('Paciente:pagina_paciente')
+            return redirect('Paciente:paciente_home')
         else:
             messages.error(request, "Usuário ou senha inválidos.")
     else:
@@ -73,6 +82,14 @@ def editar_perfil(request):
         if usuario_form.is_valid() and paciente_form.is_valid():
             usuario_form.save()
             paciente_form.save()
+
+            # Verifica se a nova senha foi fornecida
+            nova_senha = usuario_form.cleaned_data.get('nova_senha')
+            if nova_senha:
+                usuario.set_password(nova_senha)
+                usuario.save()
+                update_session_auth_hash(request, usuario)  # Mantém o usuário logado após a mudança de senha
+
             messages.success(request, "Perfil atualizado com sucesso!")
             return redirect('Paciente:pagina_paciente')  # Redireciona para a página do paciente
     else:
@@ -87,3 +104,7 @@ def editar_perfil(request):
 def logout_view(request):
     auth_logout(request)  # Faz o logout do usuário
     return redirect('Paciente:login')  # Redireciona para a página de login
+
+@login_required
+def paciente_home(request):
+    return render(request, 'paciente/home.html', {})
