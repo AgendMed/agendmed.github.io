@@ -105,6 +105,6 @@ def logout_view(request):
     auth_logout(request)  # Faz o logout do usuário
     return redirect('Paciente:login')  # Redireciona para a página de login
 
-@login_required
+
 def paciente_home(request):
     return render(request, 'paciente/home.html', {})
