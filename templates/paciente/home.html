@@ -5,56 +5,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
     <title>Home Paciente</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
         }
+        
         header {
-            background-color: #f8f9fa;
-            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
             text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+        
         nav {
-            margin: 10px 0;
-        }
-        nav a {
-            margin: 0 15px;
-            text-decoration: none;
-            color: #007bff;
-        }
-        .sidebar {
-            width: 200px;
-            position: fixed;
-            top: 60px; /* Altura do header */
-            left: 0;
-            background-color: #f8f9fa;
-            padding: 15px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
-        .content {
-            margin-left: 220px; /* Largura da sidebar */
-            padding: 20px;
-        }
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            overflow: hidden;
             display: flex;
-        }
-        .card img {
-            width: 100px; /* Largura da imagem */
-            height: auto;
-        }
-        .card-body {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
             padding: 10px;
         }
+        
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .content {
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+        }
+        
+        .card {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: scale(1.03);
+        }
+        
+        .card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        
+        .card-body {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .card-body h5 {
+            margin: 0;
+            font-size: 1.1em;
+            color: #333;
+        }
+        
+        .card-body p {
+            margin: 5px 0;
+            color: #666;
+        }
+        
+        .card-body a {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .card-body a:hover {
+            background-color: #0056b3;
+        }
+        
         footer {
-            background-color: #f8f9fa;
+            background-color: #007bff;
             padding: 10px;
             text-align: center;
             position: fixed;
@@ -62,15 +125,16 @@
             width: 100%;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
         }
+        
         footer a {
-            margin: 0 15px;
             text-decoration: none;
-            color: #007bff;
+            color: white;
+            font-weight: bold;
+            margin: 0 15px;
         }
     </style>
 </head>
 <body>
-    <!-- Barra de Navegação -->
     <header>
         <h1>Bem-vindo</h1>
         <nav>
@@ -81,23 +145,10 @@
         </nav>
     </header>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h5>Menu</h5>
-        <ul>
-            <li><a href="{% url 'Paciente:pagina_paciente' %}">Editar Perfil</a></li>
-            <li><a href="#">Minha Unidade de Saúde</a></li>
-            <li><a href="#">Notificações</a></li>
-            <li><a href="#">Ajuda</a></li>
-        </ul>
-    </div>
-
-    <!-- Conteúdo Principal -->
     <div class="content">
         <h3>Em busca de Atendimento?</h3>
-        <input type="text" placeholder="Busque um profissional..." style="width: 100%; padding: 10px; margin-bottom: 20px;">
-
-        <!-- Lista de Profissionais -->
+        <input type="text" placeholder="Busque um profissional...">
+        
         <div>
             {% for profissional in profissionais %}
             <div class="card">
@@ -105,14 +156,13 @@
                 <div class="card-body">
                     <h5>{{ profissional.nome }}</h5>
                     <p>{{ profissional.especialidade }}</p>
-                    <a href="#" style="background-color: #007bff; color: white; padding: 10px; text-decoration: none; border-radius: 5px;">Agendar Consulta</a>
+                    <a href="#">Agendar Consulta</a>
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- Rodapé de Navegação -->
     <footer>
         <a href="#">Home</a>
         <a href="#">Campanhas</a>
