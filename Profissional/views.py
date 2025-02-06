@@ -37,6 +37,5 @@ def cadastro_profissional(request):
     return render(request, 'Formularios/cad_profissional.html', {'form': form})
 
 
-@login_required
 def profissional_home(request):
     return render(request, 'profissional/profissional_home.html')
