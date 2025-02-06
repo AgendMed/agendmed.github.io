@@ -18,7 +18,7 @@ class Paciente(models.Model):
         max_length=50,
         choices=[
             ('nenhuma', 'Não possui condição'),
-            ('gravidez', 'Gravizzação (Gestante)'),
+            ('gravidez', 'Gravidez (Gestante)'),
             ('idoso', 'Idoso (60 anos ou mais)'),
             ('doencas_cronicas', 'Doenças Crônicas Graves'),
             ('urgencia', 'Urgências e Emergências'),

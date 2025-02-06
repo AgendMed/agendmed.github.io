@@ -4,8 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
-from django.contrib.auth.decorators import permission_required
-from django.shortcuts import render
+from django.apps import apps
 
 
 
@@ -28,88 +27,120 @@ class Usuario(AbstractUser):
     def __str__(self):
         return self.nome_completo
 
-    @staticmethod
-    @receiver(post_migrate)
-    def criar_grupos_permissoes(sender, **kwargs):
-        """
-        Método estático para criar grupos e permissões automaticamente no banco de dados.
-        """
-        # Criar grupos
-        grupo_medico, _ = Group.objects.get_or_create(name='Medico')
-        grupo_paciente, _ = Group.objects.get_or_create(name='Paciente')
-        grupo_unidade_saude, _ = Group.objects.get_or_create(name='Unidade_Saude')
-        grupo_admin, _ = Group.objects.get_or_create(name='Admin')
-        grupo_agente_saude, _ = Group.objects.get_or_create(name='Agente_Saude')
+@receiver(post_migrate)
+def criar_grupos_permissoes(sender, **kwargs):
+    # Obter modelos dinamicamente
+    Paciente = apps.get_model('Paciente', 'Paciente')
+    Consulta = apps.get_model('AgendaConsulta', 'Consulta')
+    Campanha = apps.get_model('Campanha', 'Campanha')
+    UnidadeSaude = apps.get_model('Unidade_Saude', 'UnidadeSaude')
 
-        content_type = ContentType.objects.get_for_model(Usuario)
+    # Criar grupos
+    grupo_medico, _ = Group.objects.get_or_create(name='Medico')
+    grupo_paciente, _ = Group.objects.get_or_create(name='Paciente')
+    grupo_unidade_saude, _ = Group.objects.get_or_create(name='Unidade_Saude')
+    grupo_admin, _ = Group.objects.get_or_create(name='Admin')
+    grupo_agente_saude, _ = Group.objects.get_or_create(name='Agente_Saude')
 
-        # Criar permissões para médicos e pacientes
-        permissao_atender, _ = Permission.objects.get_or_create(
-            codename='pode_atender',
-            name='Pode atender consultas',
-            content_type=content_type,
-        )
-        permissao_visualizar, _ = Permission.objects.get_or_create(
-            codename='pode_visualizar_pacientes',
-            name='Pode visualizar pacientes',
-            content_type=content_type,
-        )
+    content_type_usuario = ContentType.objects.get_for_model(Usuario)
+    content_type_consulta = ContentType.objects.get_for_model(Consulta)
+    content_type_campanha = ContentType.objects.get_for_model(Campanha)
+    content_type_paciente = ContentType.objects.get_for_model(Paciente) 
 
-        # Criar permissões para a Unidade de Saúde
-        permissao_gerenciar_pacientes, _ = Permission.objects.get_or_create(
-            codename='pode_gerenciar_pacientes',
-            name='Pode gerenciar pacientes',
-            content_type=content_type,
-        )
-        permissao_gerenciar_consultas, _ = Permission.objects.get_or_create(
-            codename='pode_gerenciar_consultas',
-            name='Pode gerenciar consultas',
-            content_type=content_type,
-        )
 
-        # Criar permissões para administradores
-        permissao_gerenciar_usuarios, _ = Permission.objects.get_or_create(
-            codename='pode_gerenciar_usuarios',
-            name='Pode gerenciar usuários',
-            content_type=content_type,
-        )
-        permissao_gerenciar_unidades, _ = Permission.objects.get_or_create(
-            codename='pode_gerenciar_unidades',
-            name='Pode gerenciar unidades de saúde',
-            content_type=content_type,
-        )
+    # Permissões para Agente de Saúde
+    permissao_cadastrar_campanha, _ = Permission.objects.get_or_create(
+        codename='pode_cadastrar_campanha',
+        name='Pode cadastrar campanhas',
+        content_type=content_type_campanha,
+    )
 
-        permissao_consultar, _ = Permission.objects.get_or_create(
-            codename='pode_consultar',
-            name='Pode consultar dados de pacientes',
-            content_type=content_type,
-        )
-        
-        grupo_paciente.permissions.add(permissao_consultar)
+    permissao_cadastrar_paciente, _ = Permission.objects.get_or_create(
+        codename='pode_cadastrar_paciente',
+        name='Pode cadastrar pacientes',
+        content_type=content_type_paciente,
+    )
 
-        # Criar permissões para o agente de saúde
-        permissao_cadastrar_campanha, _ = Permission.objects.get_or_create(
-            codename='pode_cadastrar_campanha',
-            name='Pode cadastrar campanhas',
-            content_type=content_type,
-        )
+    permissao_cadastrar_consulta, _ = Permission.objects.get_or_create(
+        codename='pode_cadastrar_consulta',
+        name='Pode cadastrar consultas',
+        content_type=content_type_consulta,
+    )
 
-        permissao_cadastrar_paciente, _ = Permission.objects.get_or_create(
-            codename='pode_cadastrar_paciente',
-            name='Pode cadastrar pacientes',
-            content_type=content_type,
-        )
+    grupo_agente_saude.permissions.add(
+        permissao_cadastrar_campanha,
+        permissao_cadastrar_paciente,
+        permissao_cadastrar_consulta
+    )
 
-        permissao_cadastrar_consulta, _ = Permission.objects.get_or_create(
-            codename='pode_cadastrar_consulta',
-            name='Pode cadastrar consultas',
-            content_type=content_type,
-        )
+    # Permissões para Médico
+    permissao_atender, _ = Permission.objects.get_or_create(
+        codename='pode_atender',
+        name='Pode atender pacientes',
+        content_type=content_type_consulta,
+    )
 
-        grupo_agente_saude.permissions.add(permissao_cadastrar_campanha, permissao_cadastrar_paciente, permissao_cadastrar_consulta)
-        grupo_medico.permissions.add(permissao_atender, permissao_visualizar)
-        grupo_paciente.permissions.add(permissao_visualizar)
-        grupo_unidade_saude.permissions.add(permissao_gerenciar_pacientes, permissao_gerenciar_consultas)
-        grupo_admin.permissions.add(permissao_gerenciar_usuarios, permissao_gerenciar_unidades)
+    permissao_visualizar_consultas, _ = Permission.objects.get_or_create(
+        codename='pode_visualizar_consultas',
+        name='Pode visualizar consultas',
+        content_type=content_type_consulta,
+    )
 
-        print("Grupos e permissões criados com sucesso!")
+    permissao_visualizar_pacientes, _ = Permission.objects.get_or_create(
+        codename='pode_visualizar_pacientes',
+        name='Pode visualizar pacientes',
+        content_type=content_type_paciente,
+    )
+
+    grupo_medico.permissions.add(
+        permissao_atender,
+        permissao_visualizar_consultas,
+        permissao_visualizar_pacientes
+    )
+
+    # Permissões para Unidade de Saúde
+    permissao_gerenciar_pacientes, _ = Permission.objects.get_or_create(
+        codename='pode_gerenciar_pacientes',
+        name='Pode gerenciar pacientes',
+        content_type=content_type_paciente,
+    )
+
+    permissao_gerenciar_consultas, _ = Permission.objects.get_or_create(
+        codename='pode_gerenciar_consultas',
+        name='Pode gerenciar consultas',
+        content_type=content_type_consulta,
+    )
+
+    grupo_unidade_saude.permissions.add(
+        permissao_gerenciar_pacientes,
+        permissao_gerenciar_consultas
+    )
+
+    # Permissões para Admin
+    permissao_gerenciar_usuarios, _ = Permission.objects.get_or_create(
+        codename='pode_gerenciar_usuarios',
+        name='Pode gerenciar usuários',
+        content_type=content_type_usuario,
+    )
+
+    permissao_gerenciar_unidades, _ = Permission.objects.get_or_create(
+        codename='pode_gerenciar_unidades',
+        name='Pode gerenciar unidades de saúde',
+        content_type=ContentType.objects.get_for_model(UnidadeSaude),
+    )
+
+    grupo_admin.permissions.add(
+        permissao_gerenciar_usuarios,
+        permissao_gerenciar_unidades
+    )
+
+    # Permissões para Paciente
+    permissao_agendar_consulta, _ = Permission.objects.get_or_create(
+        codename='pode_agendar_consulta',
+        name='Pode agendar consulta',
+        content_type=content_type_consulta,
+    )
+
+    grupo_paciente.permissions.add(permissao_agendar_consulta)
+
+    print("Grupos e permissões criados com sucesso!")

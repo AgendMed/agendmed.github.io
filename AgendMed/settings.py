@@ -14,6 +14,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'users.Usuario'
+
 
 # Application definition
 
@@ -80,7 +82,6 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'users.Usuario'
 
 
 # Password validation

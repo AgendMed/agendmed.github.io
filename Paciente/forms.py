@@ -70,7 +70,7 @@ class CadastroPacienteForm(forms.ModelForm):
 
             results = data.get("result", [])
             if not results:
-                print("Nenhum resultado encontrado:", data)  # Para depuração
+                print("Nenhum resultado encontrado:", data)
                 return None, None
 
             location = results[0].get("geometry", {}).get("location", {})
