@@ -1,43 +1,49 @@
-<!-- templates/lista_consultas.html -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Consultas</title>
+    <title>Consultas Disponíveis</title>
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: 300px;
+            display: inline-block;
+            vertical-align: top;
+        }
+        .card h3 {
+            margin-top: 0;
+        }
+        .card a {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .card a:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Lista de Consultas</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Unidade de Saúde</th>
-                <th>Profissional</th>
-                <th>Data</th>
-                <th>Horário Início</th>
-                <th>Horário Fim</th>
-                <th>Fichas Prioritárias</th>
-                <th>Fichas Normais</th>
-                <th>Total de Fichas</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for consulta in consultas %}
-                <tr>
-                    <td>{{ consulta.unidade_saude }}</td>
-                    <td>{{ consulta.profissional }}</td>
-                    <td>{{ consulta.data }}</td>
-                    <td>{{ consulta.horario_inicio }}</td>
-                    <td>{{ consulta.horario_fim }}</td>
-                    <td>{{ consulta.qtd_fichas_prioritarias }}</td>
-                    <td>{{ consulta.qtd_fichas_normais }}</td>
-                    <td>{{ consulta.total_fichas }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <!-- Link para agendar consulta -->
-    <a href="{% url 'agendar_consulta' %}">Agendar Nova Consulta</a>
+    <h1>Consultas Disponíveis</h1>
+    {% for consulta in consultas %}
+        <div class="card">
+            <h3>{{ consulta.unidade_saude.nome }}</h3>
+            <p><strong>Profissional:</strong> {{ consulta.profissional.nome }}</p>
+            <p><strong>Data:</strong> {{ consulta.data }}</p>
+            <p><strong>Horário:</strong> {{ consulta.horario_formatado }}</p>
+            <p><strong>Fichas Prioritárias Disponíveis:</strong> {{ consulta.qtd_fichas_prioritarias }}</p>
+            <p><strong>Fichas Normais Disponíveis:</strong> {{ consulta.qtd_fichas_normais }}</p>
+            <a href="{% url 'agendar_consulta' %}">Agendar Consulta</a>
+        </div>
+    {% endfor %}
 </body>
 </html>

@@ -8,13 +8,17 @@
 </head>
 <body>
     <h1>Agendar Consulta</h1>
+    <h2>{{ consulta.unidade_saude.nome }}</h2>
+    <p><strong>Profissional:</strong> {{ consulta.profissional.nome }}</p>
+    <p><strong>Data:</strong> {{ consulta.data }}</p>
+    <p><strong>Horário:</strong> {{ consulta.horario_formatado }}</p>
+    
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Agendar</button>
     </form>
 
-    <!-- Exibir mensagens de erro ou sucesso -->
     {% if messages %}
         <div>
             {% for message in messages %}
@@ -24,3 +28,5 @@
     {% endif %}
 </body>
 </html>
+
+
