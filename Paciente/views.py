@@ -1,16 +1,18 @@
-from django.shortcuts import render, redirect
+from AgendaConsulta.models import Consulta
 from .forms import CadastroPacienteForm
-from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from .models import Paciente
 from django.contrib.auth import logout as auth_logout  # Renomeando a importação para evitar conflito
 from django.contrib.auth.models import Group, Permission
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import update_session_auth_hash            
+from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.decorators import login_required
+from django.db.models import F
+from AgendaConsulta.views import agendar_consulta
 
-            
+
 
 def cadastro_paciente(request):
     if request.method == 'POST':
@@ -107,3 +109,19 @@ def logout_view(request):
 @login_required
 def paciente_home(request):
     return render(request, 'paciente/home.html', {})
+
+@login_required
+def agendar_consulta(request):
+    return render(request, agendar_consulta)
+
+
+@login_required
+def listar_consultas(request):
+    consultas = Consulta.objects.annotate(
+        total_fichas=F('qtd_fichas_prioritarias') + F('qtd_fichas_normais')
+    ).filter(total_fichas__gt=0)
+
+    return render(request, 'lista_consultas.html', {'consultas': consultas})
+
+
+

@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db import transaction
-from .models import Consulta, Agendamento
 from .forms import ConsultaForm, AgendamentoForm
 from django.db.models import F
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Consulta
+from django.contrib.auth.decorators import login_required
+
+
 
 
 def cadastrar_consulta(request):
@@ -20,50 +23,54 @@ def cadastrar_consulta(request):
     
     return render(request, 'Formularios/cad_Consulta.html', {'form': form})
 
-def agendar_consulta(request):
+
+@login_required
+def agendar_consulta(request, consulta_id):
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+    
     if request.method == 'POST':
         form = AgendamentoForm(request.POST)
         if form.is_valid():
             try:
                 with transaction.atomic():
-                    consulta = Consulta.objects.select_for_update().get(
-                        pk=form.cleaned_data['consulta'].id
-                    )
                     paciente = form.cleaned_data['paciente']
                     
-                    # Verifica e atualiza as fichas 
                     if paciente.status == 'prioritario':
                         if consulta.qtd_fichas_prioritarias < 1:
                             raise ValueError("Não há fichas prioritárias disponíveis")
-                        consulta.qtd_fichas_prioritarias = F('qtd_fichas_prioritarias') - 1
+                        consulta.qtd_fichas_prioritarias -= 1
                     else:
                         if consulta.qtd_fichas_normais < 1:
                             raise ValueError("Não há fichas normais disponíveis")
-                        consulta.qtd_fichas_normais = F('qtd_fichas_normais') - 1
+                        consulta.qtd_fichas_normais -= 1
                     
-                    consulta.save(update_fields=['qtd_fichas_prioritarias', 'qtd_fichas_normais'])
-                    form.save()
+                    consulta.save()
+                    agendamento = form.save(commit=False)
+                    agendamento.consulta = consulta
+                    agendamento.save()
                     
                     messages.success(request, 'Agendamento realizado com sucesso!')
                     return redirect('listar_consultas')
             
             except Exception as e:
                 messages.error(request, str(e))
-                return redirect('agendar_consulta')
+                return redirect('agendar_consulta', consulta_id=consulta_id)
         else:
             messages.error(request, 'Por favor corrija os erros no formulário')
     else:
-        form = AgendamentoForm()
+        form = AgendamentoForm(initial={'consulta': consulta})
     
-    return render(request, 'Paciente/AgendarConsulta.html', {'form': form})
+    return render(request, 'Paciente/AgendarConsulta.html', {'form': form, 'consulta': consulta})
+
+
 
 
 
 #teste de listar consultas (incompleta)
 
-
 def listar_consultas(request):
-    consultas = Consulta.objects.all().annotate(
+    consultas = Consulta.objects.annotate(
         total_fichas=F('qtd_fichas_prioritarias') + F('qtd_fichas_normais')
-    )
+    ).filter(total_fichas__gt=0)
+
     return render(request, 'lista_consultas.html', {'consultas': consultas})
