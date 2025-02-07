@@ -23,7 +23,7 @@ def login_view(request):
                 return redirect('profissional:paginainicial')
             elif user.groups.filter(name='Paciente').exists(): #redirecionar para lista_consultas.html
                 print("Redirecionando para Paciente:agendar_consulta")
-                return redirect('Paciente:listar_consultas')
+                return redirect('Paciente:paciente_home')
             else:
                 print("Redirecionando para página padrão")
                 return redirect('pagina_padrao')
