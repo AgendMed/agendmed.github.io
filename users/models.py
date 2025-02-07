@@ -7,7 +7,6 @@ from django.dispatch import receiver
 from django.apps import apps
 
 
-
 class Usuario(AbstractUser):
     username = models.CharField(max_length=150, unique=True, verbose_name='CPF', help_text='Obrigatório. 14 caracteres no formato XXX.XXX.XXX-XX')
     nome_completo = models.CharField(max_length=150, null=False, default='Nome não informado')
@@ -31,7 +30,6 @@ class Usuario(AbstractUser):
 
 @receiver(post_migrate)
 def criar_grupos_permissoes(sender, **kwargs):
-    # Obter modelos dinamicamente
     Paciente = apps.get_model('Paciente', 'Paciente')
     Consulta = apps.get_model('AgendaConsulta', 'Consulta')
     Campanha = apps.get_model('Campanha', 'Campanha')

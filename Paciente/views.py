@@ -1,10 +1,9 @@
-from django.shortcuts import render, redirect
 from .forms import CadastroPacienteForm
-from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib import messages
 from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.decorators import login_required
+
+
 
 def cadastro_paciente(request):
     if request.method == 'POST':
@@ -30,16 +29,7 @@ def sucesso(request):
 def Index_view(request):
     return render(request, 'Login/index.html')
 
-def login_view(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('Paciente:sucesso')
-        else:
-            messages.error(request, "Usuário ou senha inválidos.")
-    else:
-        form = AuthenticationForm()
-    
-    return render(request, 'Login/login.html', {'form': form})
+
+@login_required
+def agendar_consulta(request):
+    return render(request, 'Paciente/AgendarConsulta.html')

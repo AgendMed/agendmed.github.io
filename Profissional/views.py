@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from .forms import ProfissionalSaudeForm
 from django.contrib.auth.models import Group, Permission
-from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
 from AgendaConsulta.models import Consulta
 from Campanha.models import Campanha
 from Paciente.models import Paciente
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+
 
 def cadastro_profissional(request):
     if request.method == 'POST':
@@ -64,8 +67,32 @@ def cadastro_profissional(request):
 
     return render(request, 'Formularios/cad_profissional.html', {'form': form})
 
+def sucesso(request):
+    return render(request, 'Profissional/sucesso.html')
 
 
-@permission_required('consulta.pode_atender')
-def atender_paciente(request):
-    return None
+@login_required
+def pagina_inicial(request):
+    return render(request, 'Profissional/Paginainicial.html')
+
+
+
+
+'''
+@login_required
+def editar_perfil(request):
+    if request.method == 'POST':
+        form = EditarPerfilForm(request.POST, instance=request.user)
+        if form.is_valid():
+            # Garante que o CPF não será alterado
+            instance = form.save(commit=False)
+            instance.cpf = request.user.cpf  # Mantém o CPF original
+            instance.save()
+            messages.success(request, "Perfil atualizado com sucesso!")
+            return redirect('profissional:paginainicial')
+    else:
+        form = EditarPerfilForm(instance=request.user)
+    
+    return render(request, 'Profissional/editar_perfil.html', {'form': form})
+
+'''''
