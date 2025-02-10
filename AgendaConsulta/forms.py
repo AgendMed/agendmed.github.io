@@ -1,26 +1,44 @@
 from django import forms
-from .models import Consulta
+from django.core.exceptions import ValidationError
+from .models import Consulta, Agendamento
 
 class ConsultaForm(forms.ModelForm):
+    data = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    
     class Meta:
         model = Consulta
-        fields = ['unidade_saude', 'profissional', 'data', 'horario', 'qtd_fichas_prioritarias', 'qtd_fichas_normais']
-
-    data = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))  # Adiciona o tipo 'date'
+        fields = ['unidade_saude', 'profissional', 'data', 'horario_inicio', 'horario_fim', 
+                 'qtd_fichas_prioritarias', 'qtd_fichas_normais']
 
     def clean(self):
         cleaned_data = super().clean()
-        unidade_saude = cleaned_data.get('unidade_saude')
+        unidade = cleaned_data.get('unidade_saude')
         profissional = cleaned_data.get('profissional')
-        qtd_prioritarias = cleaned_data.get('qtd_fichas_prioritarias', 0)
-        qtd_normais = cleaned_data.get('qtd_fichas_normais', 0)
+        
+        if unidade and profissional and profissional.unidade_saude != unidade:
+            self.add_error('profissional', "Profissional não pertence à unidade selecionada")
+        
+        if cleaned_data.get('qtd_fichas_prioritarias', 0) + cleaned_data.get('qtd_fichas_normais', 0) <= 0:
+            self.add_error(None, "Deve haver pelo menos uma ficha disponível")
 
-        # Valida se o profissional está vinculado à unidade de saúde
-        if profissional and unidade_saude and profissional.unidade_saude != unidade_saude:
-            self.add_error('profissional', "O profissional não está vinculado à unidade de saúde selecionada.")
+class AgendamentoForm(forms.ModelForm):
+    class Meta:
+        model = Agendamento
+        fields = '__all__'
 
-        # Valida se há pelo menos uma ficha (normal ou prioritária)
-        if qtd_prioritarias + qtd_normais <= 0:
-            self.add_error(None, "A consulta deve ter pelo menos uma ficha disponível (normal ou prioritária).")
-
-        return cleaned_data
+    def clean(self):
+        cleaned_data = super().clean()
+        consulta = cleaned_data.get('consulta')
+        paciente = cleaned_data.get('paciente')
+        
+        if consulta and paciente:
+            # Verifica agendamentos duplicados
+            if Agendamento.objects.filter(consulta=consulta, paciente=paciente).exists():
+                raise ValidationError("Paciente já possui agendamento para esta consulta")
+            
+            # Verifica disponibilidade
+            if paciente.status == 'prioritario' and consulta.qtd_fichas_prioritarias < 1:
+                raise ValidationError("Fichas prioritárias esgotadas")
+            
+            if paciente.status == 'comum' and consulta.qtd_fichas_normais < 1:
+                raise ValidationError("Fichas normais esgotadas")

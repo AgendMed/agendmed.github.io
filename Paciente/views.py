@@ -1,30 +1,37 @@
-#views.py
-
+from AgendaConsulta.models import Consulta
 from .forms import CadastroPacienteForm
-from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from .models import Paciente
 from django.contrib.auth import logout as auth_logout  # Renomeando a importação para evitar conflito
-from users.models import Usuario
-
+from django.contrib.auth.models import Group, Permission
+from django.contrib.auth import update_session_auth_hash            
+from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.decorators import login_required
+from django.db.models import F
+from AgendaConsulta.views import agendar_consulta
 
 
 
 def cadastro_paciente(request):
     if request.method == 'POST':
-        # Formulário enviado pelo cliente
-        form = CadastroPacienteForm(request.POST, request.FILES)  # Captura os dados e arquivos
+        form = CadastroPacienteForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('Paciente:sucesso')
+            paciente = form.save() 
+
+            grupo_paciente = Group.objects.get(name='Paciente')
+            paciente.usuario.groups.add(grupo_paciente)
+            permissao_consultar = Permission.objects.get(codename='pode_consultar')
+            paciente.usuario.user_permissions.add(permissao_consultar)
+            # Adiciona uma mensagem de sucesso
+            messages.success(request, 'Cadastro realizado com sucesso! Você pode fazer login agora.')
+
+            return redirect('Paciente:login')  # Redireciona para a página de login
+
         else:
-            
             return render(request, 'usuarios/cadastro.html', {'form': form})
     else:
-        # Requisição GET: exibe o formulário vazio
         form = CadastroPacienteForm()
         return render(request, 'usuarios/cadastro.html', {'form': form})
 
@@ -50,11 +57,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            
-            if user.groups.filter(name="Profissional").exists():
-                return redirect('profissional:home')  # Redireciona para a home do profissional
-            else:
-                return redirect('paciente:home')  # Redireciona para a home do paciente
+            return redirect('Paciente:paciente_home')
         else:
             messages.error(request, "Usuário ou senha inválidos.")
     else:
@@ -80,6 +83,14 @@ def editar_perfil(request):
         if usuario_form.is_valid() and paciente_form.is_valid():
             usuario_form.save()
             paciente_form.save()
+
+            # Verifica se a nova senha foi fornecida
+            nova_senha = usuario_form.cleaned_data.get('nova_senha')
+            if nova_senha:
+                usuario.set_password(nova_senha)
+                usuario.save()
+                update_session_auth_hash(request, usuario)  # Mantém o usuário logado após a mudança de senha
+
             messages.success(request, "Perfil atualizado com sucesso!")
             return redirect('Paciente:pagina_paciente')  # Redireciona para a página do paciente
     else:
@@ -95,5 +106,22 @@ def logout_view(request):
     auth_logout(request)  # Faz o logout do usuário
     return redirect('Paciente:login')  # Redireciona para a página de login
 
+@login_required
 def paciente_home(request):
-    return render(request, 'home.html')
+    return render(request, 'paciente/home.html', {})
+
+@login_required
+def agendar_consulta(request):
+    return render(request, agendar_consulta)
+
+
+@login_required
+def listar_consultas(request):
+    consultas = Consulta.objects.annotate(
+        total_fichas=F('qtd_fichas_prioritarias') + F('qtd_fichas_normais')
+    ).filter(total_fichas__gt=0)
+
+    return render(request, 'lista_consultas.html', {'consultas': consultas})
+
+
+

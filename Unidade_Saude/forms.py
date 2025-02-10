@@ -22,7 +22,7 @@ class UnidadeSaudeForm(forms.ModelForm):
 
     def get_coordinates(self, address):
         """Consulta a API para obter latitude e longitude a partir do endereço."""
-        API_KEY = "j7EFwWOjGiFXvA6bZDH6iNdbuCkuzB1K5caRlJ6jpnwRynXsW9fUY8mNCkyvYYk6"  # chave da API
+        API_KEY = "j7EFwWOjGiFXvA6bZDH6iNdbuCkuzB1K5caRlJ6jpnwRynXsW9fUY8mNCkyvYYk6" 
         GEOCODING_API_URL = "https://api.distancematrix.ai/maps/api/geocode/json"
         params = {
             "address": address,
@@ -53,7 +53,6 @@ class UnidadeSaudeForm(forms.ModelForm):
                 latitude = location.get("lat")
                 longitude = location.get("lng")
                 
-                # Garantir que as coordenadas sejam extraídas corretamente
                 if latitude is not None and longitude is not None:
                     return latitude, longitude
                 else:
