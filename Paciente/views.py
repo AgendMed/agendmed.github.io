@@ -97,7 +97,7 @@ def editar_perfil(request):
         usuario_form = UsuarioForm(instance=usuario)
         paciente_form = PacienteForm(instance=paciente)
 
-    return render(request, 'usuarios/editar_perfil.html', {
+    return render(request, 'usuarios/editar_perfil_paciente.html', {
         'usuario_form': usuario_form,
         'paciente_form': paciente_form
     })
@@ -106,9 +106,17 @@ def logout_view(request):
     auth_logout(request)  # Faz o logout do usuário
     return redirect('Paciente:login')  # Redireciona para a página de login
 
+# @login_required
+# def paciente_home(request):
+#     return render(request, 'paciente/home.html', {})
+
 @login_required
 def paciente_home(request):
-    return render(request, 'paciente/home.html', {})
+    consultas = Consulta.objects.annotate(
+        total_fichas=F('qtd_fichas_prioritarias') + F('qtd_fichas_normais')
+    ).filter(total_fichas__gt=0)
+
+    return render(request, 'paciente/home.html', {'consultas': consultas})
 
 @login_required
 def agendar_consulta(request):

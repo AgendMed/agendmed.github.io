@@ -110,3 +110,55 @@ def editar_perfil(request):
     return render(request, 'Profissional/editar_perfil.html', {'form': form})
 
 '''''
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from .forms import ProfissionalSaudeForm, UsuarioForm
+from .models import ProfissionalSaude
+
+
+@login_required
+def editar_perfil_profissional(request):
+    usuario = request.user
+    profissional = get_object_or_404(ProfissionalSaude, usuario=usuario)
+
+    if request.method == 'POST':
+        user_form = UsuarioForm(request.POST, instance=usuario)
+        profissional_form = ProfissionalSaudeForm(request.POST, instance=profissional)
+
+        if user_form.is_valid() and profissional_form.is_valid():
+            # Salva as informações do usuário
+            user_form.save()
+
+            # Salva as informações do profissional
+            profissional_form.save()
+
+            # Verifica se a nova senha foi fornecida
+            nova_senha = profissional_form.cleaned_data.get('nova_senha')
+            if nova_senha:
+                usuario.set_password(nova_senha)
+                usuario.save()
+                update_session_auth_hash(request, usuario)  # Mantém o usuário logado após a mudança de senha
+
+            messages.success(request, "Perfil atualizado com sucesso!")
+            return redirect('profissional:perfil_profissional')  # Redireciona para a página de perfil ou outra página desejada
+    else:
+        user_form = UsuarioForm(instance=usuario)
+        profissional_form = ProfissionalSaudeForm(instance=profissional)
+
+    return render(request, 'usuarios/editar_perfil_profissional.html', {
+        'user_form': user_form,
+        'profissional_form': profissional_form,
+    })
+@login_required
+def perfil_profissional(request):
+    usuario = request.user
+    profissional = get_object_or_404(ProfissionalSaude, usuario=usuario)
+
+    return render(request, 'usuarios/perfil_profissional.html', {
+        'usuario': usuario,
+        'profissional': profissional
+    })

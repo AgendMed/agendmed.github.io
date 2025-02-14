@@ -9,10 +9,10 @@
 <p><strong>Rua:</strong> {{ usuario.rua }}</p>
 <p><strong>Número da Casa:</strong> {{ usuario.numerocasa }}</p>
 <p><strong>Complemento:</strong> {{ usuario.complemento }}</p>
-<p><strong>Cartão de Saúde:</strong> {{ paciente.cartao_saude }}</p>
-<p><strong>Condição Prioritária:</strong> {{ paciente.condicao_prioritaria }}</p>
+<p><strong>Especialidade:</strong> {{ profissional.especialidade }}</p>
+<p><strong>Unidade de Saúde:</strong> {{ profissional.unidade_saude }}</p>
 
-<a href="{% url 'Paciente:editar_perfil' %}">Editar Perfil</a>
+<a href="{% url 'profissional:editar_perfil_profissional' %}">Editar Perfil</a>
 <script>
     // Verifica se há mensagens de sucesso na sessão
     {% if messages %}

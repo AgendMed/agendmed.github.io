@@ -1,24 +1,4 @@
-{% comment %} <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}AgendMed{% endblock %}</title>
-</head>
-<body>
-    <nav>
-        <a href="{% url 'Paciente:index' %}">Início</a>
-        {% if user.is_authenticated %}
-            <a href="{% url 'Paciente:logout' %}">Logout</a>
-        {% else %}
-            <a href="{% url 'Paciente:login' %}">Login</a>
-        {% endif %}
-    </nav>
-    <div class="container">
-        {% block content %}{% endblock %}
-    </div>
-</body>
-</html> {% endcomment %}
+{% comment %} {% load custom_filters %} {% endcomment %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -189,17 +169,16 @@
                 </div>
                 <ul role="menu">
                     {% if user.is_authenticated %}
-                        <li><a href="{% url 'Paciente:paciente_home' %}" role="menuitem"><i class="fas fa-qrcode" aria-hidden="true"></i>Início</a></li>
+                        {% if user.groups.all.0.name == 'Medico' or user.groups.all.0.name == 'Agente_Saude' %}
+                            <li><a href="{% url 'profissional:paginainicial' %}" role="menuitem"><i class="fas fa-qrcode" aria-hidden="true"></i>Início</a></li>
+                        {% elif user.groups.all.0.name == 'Paciente' %}
+                            <li><a href="{% url 'Paciente:paciente_home' %}" role="menuitem"><i class="fas fa-qrcode" aria-hidden="true"></i>Início</a></li>
+                        {% endif %}
                         <li><a href="{% url 'users:logout' %}" role="menuitem"><i class="fas fa-link" aria-hidden="true"></i>Logout</a></li>
                     {% else %}
                         <li><a href="{% url 'Paciente:index' %}" role="menuitem"><i class="fas fa-qrcode" aria-hidden="true"></i>Início</a></li>
                         <li><a href="{% url 'users:login' %}" role="menuitem"><i class="fas fa-stream" aria-hidden="true"></i>Login</a></li>
                     {% endif %}
-                    {% comment %} <li><a href="#" role="menuitem"><i class="fas fa-calendar-week" aria-hidden="true"></i>Events</a></li>
-                    <li><a href="#" role="menuitem"><i class="fas fa-question-circle" aria-hidden="true"></i>About</a></li>
-                    <li><a href="#" role="menuitem"><i class="fas fa-sliders-h" aria-hidden="true"></i>Services</a></li>
-                    <li><a href="#" role="menuitem"><i class="fas fa-phone-volume" aria-hidden="true"></i>Contact</a></li>
-                    <li><a href="#" role="menuitem"><i class="fas fa-comments" aria-hidden="true"></i>Feedback</a></li> {% endcomment %}
                 </ul>
                 <div class="media_icons">
                     <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
