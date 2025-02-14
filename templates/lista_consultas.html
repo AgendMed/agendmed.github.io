@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -47,10 +49,30 @@
         form {
             margin: 0;
         }
+
+        .btn-cadastrar {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.btn-cadastrar:hover {
+    background-color: #218838;
+}
+
     </style>
 </head>
 <body>
     <h1>Consultas Disponíveis</h1>
+    <div>
+        <a href="{% url 'AgendaConsulta:cadastrar_consulta' %}" class="btn btn-cadastrar">
+            <i class="fas fa-plus"></i> Cadastrar Consulta
+        </a>
+    </div>
     {% for consulta in consultas %}
         <div class="card">
             <h3>{{ consulta.unidade_saude.nome }}</h3>
