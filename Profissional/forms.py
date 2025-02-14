@@ -1,28 +1,16 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from Profissional.models import ProfissionalSaude
-from Unidade_Saude.models import UnidadeSaude
-from especialidades.models import Especialidade
-import requests
 from django.core.exceptions import ValidationError
-
-from django import forms
 from .models import ProfissionalSaude
 from Unidade_Saude.models import UnidadeSaude
 from especialidades.models import Especialidade
-from django.core.exceptions import ValidationError
-
-from django import forms
-from django.contrib.auth import get_user_model
-from Profissional.models import ProfissionalSaude
-from Unidade_Saude.models import UnidadeSaude
-from especialidades.models import Especialidade
 import requests
-from django.core.exceptions import ValidationError
+from users.models import Usuario  # Certifique-se de que o caminho está correto
 
 class ProfissionalSaudeForm(forms.ModelForm):
-    nova_senha = forms.CharField(widget=forms.PasswordInput(), required=False, label="Nova Senha")
-    confirmar_senha = forms.CharField(widget=forms.PasswordInput(), required=False, label="Confirmar Nova Senha")
+    senha_atual = forms.CharField(widget=forms.PasswordInput, required=False)
+    nova_senha = forms.CharField(widget=forms.PasswordInput, required=False)
 
     class Meta:
         model = ProfissionalSaude
@@ -30,11 +18,15 @@ class ProfissionalSaudeForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        nova_senha = cleaned_data.get("nova_senha")
-        confirmar_senha = cleaned_data.get("confirmar_senha")
+        senha_atual = cleaned_data.get("senha_atual")
+        nova_senha = cleaned_data.get("confirmar_senha")
 
-        if nova_senha and nova_senha != confirmar_senha:
-            raise ValidationError("As senhas não coincidem.")
+        if senha_atual:
+            if not self.instance.usuario.check_password(senha_atual):  # Acessa o usuário associado
+                raise ValidationError("A senha atual está incorreta.")
+
+        if nova_senha and len(nova_senha) < 6:
+            raise ValidationError("A nova senha deve ter pelo menos 6 caracteres.")
 
         return cleaned_data
     
@@ -53,8 +45,6 @@ class ProfissionalSaudeForm(forms.ModelForm):
 
         return profissional
     
-from django import forms
-from users.models import Usuario  # Certifique-se de que o caminho está correto
 
 class UsuarioForm(forms.ModelForm):
     class Meta:

@@ -136,8 +136,8 @@ class UsuarioForm(forms.ModelForm):
         if senha_atual and not self.instance.check_password(senha_atual):
             raise ValidationError("A senha atual está incorreta.")
 
-        if nova_senha and len(nova_senha) < 8:
-            raise ValidationError("A nova senha deve ter pelo menos 8 caracteres.")
+        if nova_senha and len(nova_senha) < 6:
+            raise ValidationError("A nova senha deve ter pelo menos 6 caracteres.")
 
         return cleaned_data
 
