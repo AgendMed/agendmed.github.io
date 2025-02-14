@@ -1,5 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+
+from especialidades.models import Especialidade
 from .forms import EspecialidadeForm 
 
 def cadastrar_especialidade(request):
@@ -16,3 +18,7 @@ def cadastrar_especialidade(request):
 
 def especialidade_sucesso(request):
     return HttpResponse("Especialidade cadastrada com sucesso!")
+
+def listar_especialidades(request):
+    especialidades = Especialidade.objects.all()
+    return render(request, 'profissional/EscolhaConsulta.html', {'especialidades': especialidades})

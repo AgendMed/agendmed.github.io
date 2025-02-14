@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <section class="categorias">
+        <h2>Categorias</h2>
+        <div class="grid-categorias">
+            {% for especialidade in especialidades %}
+                <button class="categoria">
+                    <i class="fas fa-user-md"></i> {{ especialidade.nome }}
+                </button>
+            {% empty %}
+                <p>Nenhuma especialidade cadastrada.</p>
+            {% endfor %}
+        </div>
+        <button class="nova-categoria">+ Nova Categoria</button>
+    </section>    
+    
+</body>
+</html>
