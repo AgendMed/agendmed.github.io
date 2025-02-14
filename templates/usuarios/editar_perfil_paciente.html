@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Editar Perfil</h2>
+<form method="POST">
+    {% csrf_token %}
+    <h3>Informações do Usuário</h3>
+    {{ usuario_form.as_p }}
+
+    <h3>Informações do Paciente</h3>
+    {{ paciente_form.as_p }}
+
+    {% comment %} <h3>Alterar Senha</h3>
+    <label for="id_senha_atual">Senha Atual:</label>
+    <input type="password" name="senha_atual" id="id_senha_atual">
+    
+    <label for="id_nova_senha">Nova Senha:</label>
+    <input type="password" name="nova_senha" id="id_nova_senha"> {% endcomment %}
+
+    <button type="submit">Salvar</button>
+</form>
+{% endblock %}

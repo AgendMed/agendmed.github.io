@@ -1,68 +1,29 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil do Usuário</title>
-    <link rel="stylesheet" href="user.css">
-</head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <span class="back-button">&larr;</span>
-            <h1>Victor Araujo</h1>
-        </header>
+{% extends 'base.html' %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<h2>Bem-vindo, {{ usuario.nome_completo }}!</h2>
+<p><strong>CPF:</strong> {{ usuario.cpf }}</p>
+<p><strong>Email:</strong> {{ usuario.email }}</p>
+<p><strong>Telefone:</strong> {{ usuario.telefone }}</p>
+<p><strong>Data de Nascimento:</strong> {{ usuario.data_nascimento }}</p>
+<p><strong>Bairro:</strong> {{ usuario.bairro }}</p>
+<p><strong>Rua:</strong> {{ usuario.rua }}</p>
+<p><strong>Número da Casa:</strong> {{ usuario.numerocasa }}</p>
+<p><strong>Complemento:</strong> {{ usuario.complemento }}</p>
+<p><strong>Cartão de Saúde:</strong> {{ paciente.cartao_saude }}</p>
+<p><strong>Condição Prioritária:</strong> {{ paciente.condicao_prioritaria }}</p>
 
-        <!-- Profile Section -->
-        <section class="profile">
-            <div class="photo">
-                <img src="https://via.placeholder.com/150" alt="Foto do Usuário">
-            </div>
-            <div class="info">
-                <p class="cpf"><strong>CPF:</strong> 100.000.111-90</p>
-                <p>30 anos &mdash; Masculino</p>
-            </div>
-        </section>
-
-        <!-- Additional Information -->
-        <section class="additional-info">
-            <div class="info-field">
-                <strong>Endereço:</strong> Rua Exemplo, 123 - São Paulo, SP
-            </div>
-            <div class="info-field">
-                <strong>Telefone:</strong> (11) 91234-5678
-            </div>
-            <div class="info-field">
-                <strong>Email:</strong> victor.araujo@email.com
-            </div>
-            <div class="info-field">
-                <strong>Cartão SUS:</strong> 123 4567 8901 2345
-            </div>
-        </section>
-
-        <!-- Decorative Shapes -->
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-
-        <!-- Footer Navigation -->
-        <footer>
-            <nav>
-                <a href="#" class="active">
-                    <img src="home-icon.svg" alt="Home">
-                    <span>Home</span>
-                </a>
-                <a href="#">
-                    <img src="message-icon.svg" alt="Mensagens">
-                    <span>Mensagens</span>
-                </a>
-                <a href="#">
-                    <img src="calendar-icon.svg" alt="Consultas">
-                    <span>Consultas</span>
-                </a>
-            </nav>
-        </footer>
-    </div>
-</body>
-</html>
-
+<a href="{% url 'Paciente:editar_perfil' %}">Editar Perfil</a>
+<script>
+    // Verifica se há mensagens de sucesso na sessão
+    {% if messages %}
+        {% for message in messages %}
+            Swal.fire({
+                text: '{{ message }}',
+                icon: '{{ message.type }}',
+                confirmButtonText: 'OK'
+            });
+        {% endfor %}
+    {% endif %}
+</script>
+{% endblock %}

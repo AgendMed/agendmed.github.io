@@ -20,3 +20,4 @@ class ProfissionalSaude(models.Model):
 
     def __str__(self):
         return f"{self.usuario.nome_completo} - {self.especialidade}"
+
