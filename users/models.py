@@ -16,11 +16,7 @@ class Usuario(AbstractUser):
     bairro = models.CharField(max_length=255, blank=True, null=False, default='Bairro não informado')
     rua = models.CharField(max_length=255, blank=True, null=False, default='Rua não informada')
     complemento = models.CharField(max_length=255, blank=True, null=False, default='complemento não informado')
-<<<<<<< HEAD
-    numerocasa = models.CharField(max_length=20, null=False, default='Numero da Casa não informado')
-=======
     numerocasa = models.CharField(max_length=255, null=False, default='Numero da Casa não informado')
->>>>>>> baf87429d5d719d11660e3cf550af3621ec8fef2
 
 
     class Meta:
