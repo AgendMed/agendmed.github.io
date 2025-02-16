@@ -1,16 +1,18 @@
-from django.shortcuts import render, redirect
+from AgendaConsulta.models import Consulta
 from .forms import CadastroPacienteForm
-from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from .models import Paciente
 from django.contrib.auth import logout as auth_logout  # Renomeando a importação para evitar conflito
 from django.contrib.auth.models import Group, Permission
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import update_session_auth_hash            
+from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.decorators import login_required
+from django.db.models import F
+from AgendaConsulta.views import agendar_consulta
 
-            
+
 
 def cadastro_paciente(request):
     if request.method == 'POST':
@@ -18,7 +20,6 @@ def cadastro_paciente(request):
         if form.is_valid():
             paciente = form.save() 
 
-            # Adiciona o usuário ao grupo "Paciente"
             grupo_paciente = Group.objects.get(name='Paciente')
             paciente.usuario.groups.add(grupo_paciente)
             permissao_consultar = Permission.objects.get(codename='pode_consultar')
@@ -96,7 +97,7 @@ def editar_perfil(request):
         usuario_form = UsuarioForm(instance=usuario)
         paciente_form = PacienteForm(instance=paciente)
 
-    return render(request, 'usuarios/editar_perfil.html', {
+    return render(request, 'usuarios/editar_perfil_paciente.html', {
         'usuario_form': usuario_form,
         'paciente_form': paciente_form
     })
@@ -105,6 +106,34 @@ def logout_view(request):
     auth_logout(request)  # Faz o logout do usuário
     return redirect('Paciente:login')  # Redireciona para a página de login
 
+<<<<<<< HEAD
 
+=======
+# @login_required
+# def paciente_home(request):
+#     return render(request, 'paciente/home.html', {})
+
+@login_required
+>>>>>>> 08d8ff5934cfa94c9aeef2877de08b7609300702
 def paciente_home(request):
-    return render(request, 'paciente/home.html', {})
+    consultas = Consulta.objects.annotate(
+        total_fichas=F('qtd_fichas_prioritarias') + F('qtd_fichas_normais')
+    ).filter(total_fichas__gt=0)
+
+    return render(request, 'paciente/home.html', {'consultas': consultas})
+
+@login_required
+def agendar_consulta(request):
+    return render(request, agendar_consulta)
+
+
+@login_required
+def listar_consultas(request):
+    consultas = Consulta.objects.annotate(
+        total_fichas=F('qtd_fichas_prioritarias') + F('qtd_fichas_normais')
+    ).filter(total_fichas__gt=0)
+
+    return render(request, 'lista_consultas.html', {'consultas': consultas})
+
+
+

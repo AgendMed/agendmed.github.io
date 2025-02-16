@@ -5,56 +5,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
     <title>Home Paciente</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
         }
+        
         header {
-            background-color: #f8f9fa;
-            padding: 10px;
+            background-color: #f4f6f8;
+            color: #007bff;
+            padding: 1px;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 1.2em;
+            font-weight: bold;
+
         }
+        
         nav {
-            margin: 10px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 10px;
         }
+        
         nav a {
-            margin: 0 15px;
             text-decoration: none;
             color: #007bff;
+            padding: 3px 12px;
+            background: rgba(146, 159, 188, 0.2);
+            border-radius: 10px;
+            transition: background 0.3s;
+            font-size: 15px;
         }
-        .sidebar {
-            width: 200px;
-            position: fixed;
-            top: 60px; /* Altura do header */
-            left: 0;
-            background-color: #f8f9fa;
-            padding: 15px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.4);
         }
+        
         .content {
-            margin-left: 220px; /* Largura da sidebar */
             padding: 20px;
+            max-width: 600px;
+            margin: auto;
         }
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
             margin-bottom: 20px;
-            overflow: hidden;
-            display: flex;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1em;
         }
-        .card img {
-            width: 100px; /* Largura da imagem */
-            height: auto;
+        
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px;
+            width: 300px;
+            display: inline-block;
+            vertical-align: top;
         }
-        .card-body {
+        .card h3 {
+            margin-top: 0;
+        }
+        .card a {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
             padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
         }
+        .card a:hover {
+            background-color: #0056b3;
+        }
+        
         footer {
-            background-color: #f8f9fa;
+            background-color: #c8cacb;
             padding: 10px;
             text-align: center;
             position: fixed;
@@ -62,15 +97,16 @@
             width: 100%;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
         }
+        
         footer a {
-            margin: 0 15px;
             text-decoration: none;
-            color: #007bff;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            margin: 0 20px;
         }
     </style>
 </head>
 <body>
-    <!-- Barra de Navegação -->
     <header>
         <h1>Bem-vindo</h1>
         <nav>
@@ -81,38 +117,36 @@
         </nav>
     </header>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h5>Menu</h5>
-        <ul>
-            <li><a href="{% url 'Paciente:pagina_paciente' %}">Editar Perfil</a></li>
-            <li><a href="#">Minha Unidade de Saúde</a></li>
-            <li><a href="#">Notificações</a></li>
-            <li><a href="#">Ajuda</a></li>
-        </ul>
-    </div>
-
-    <!-- Conteúdo Principal -->
     <div class="content">
         <h3>Em busca de Atendimento?</h3>
-        <input type="text" placeholder="Busque um profissional..." style="width: 100%; padding: 10px; margin-bottom: 20px;">
-
-        <!-- Lista de Profissionais -->
+        <input type="text" placeholder="Busque um profissional...">
+        
         <div>
-            {% for profissional in profissionais %}
+            {% comment %} {% for profissional in profissionais %}
             <div class="card">
                 <img src="{{ profissional.imagem_url }}" alt="{{ profissional.nome }}">
                 <div class="card-body">
                     <h5>{{ profissional.nome }}</h5>
                     <p>{{ profissional.especialidade }}</p>
-                    <a href="#" style="background-color: #007bff; color: white; padding: 10px; text-decoration: none; border-radius: 5px;">Agendar Consulta</a>
+                    <a href="#">Agendar Consulta</a>
                 </div>
             </div>
-            {% endfor %}
+            {% endfor %} {% endcomment %}
+                <h1>Consultas Disponíveis</h1>
+                {% for consulta in consultas %}
+                    <div class="card">
+                        <h3>{{ consulta.unidade_saude.nome }}</h3>
+                        <p><strong>Profissional:</strong> {{ consulta.profissional.nome }}</p>
+                        <p><strong>Data:</strong> {{ consulta.data }}</p>
+                        <p><strong>Horário:</strong> {{ consulta.horario_formatado }}</p>
+                        <p><strong>Fichas Prioritárias Disponíveis:</strong> {{ consulta.qtd_fichas_prioritarias }}</p>
+                        <p><strong>Fichas Normais Disponíveis:</strong> {{ consulta.qtd_fichas_normais }}</p>
+                        <a href="{% url 'agendar_consulta' %}">Agendar Consulta</a>
+                    </div>
+                {% endfor %}
         </div>
     </div>
 
-    <!-- Rodapé de Navegação -->
     <footer>
         <a href="#">Home</a>
         <a href="#">Campanhas</a>

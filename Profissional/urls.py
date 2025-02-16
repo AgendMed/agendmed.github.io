@@ -1,9 +1,15 @@
 from django.urls import path
 from . import views
+from .views import editar_perfil_profissional, perfil_profissional
+
+app_name = 'profissional'
+
 
 urlpatterns = [
-    path('', views.cadastro_profissional, name='cadastro_profissional'),
-   path('profissional_home, views.profissional_home, name='profissional_home'),
-
-
+    path('cadastro_profissional', views.cadastro_profissional, name='cadastro_profissional'),
+    # path('profissional_home', views.profissional_home, name='profissional_home'),
+    path('inicio/', views.pagina_inicial, name='paginainicial'),
+    # path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
+    path('editar_perfil_profissional/', editar_perfil_profissional, name='editar_perfil_profissional'),
+    path('perfil_profissional/', perfil_profissional, name='perfil_profissional'),
 ]

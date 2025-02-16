@@ -16,6 +16,11 @@ class Campanha(models.Model):
     null=True,
     blank=True
 )
+    
+    class Meta:
+        permissions = [
+            ("pode_cadastrar_campanha", "Pode cadastrar campanhas"),
+        ]
 
     def __str__(self):
         return self.titulo

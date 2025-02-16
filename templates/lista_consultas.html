@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultas Disponíveis</title>
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: 300px;
+            display: inline-block;
+            vertical-align: top;
+        }
+        .card h3 {
+            margin-top: 0;
+        }
+        .card a {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .card a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consultas Disponíveis</h1>
+    {% for consulta in consultas %}
+        <div class="card">
+            <h3>{{ consulta.unidade_saude.nome }}</h3>
+            <p><strong>Profissional:</strong> {{ consulta.profissional.nome }}</p>
+            <p><strong>Data:</strong> {{ consulta.data }}</p>
+            <p><strong>Horário:</strong> {{ consulta.horario_formatado }}</p>
+            <p><strong>Fichas Prioritárias Disponíveis:</strong> {{ consulta.qtd_fichas_prioritarias }}</p>
+            <p><strong>Fichas Normais Disponíveis:</strong> {{ consulta.qtd_fichas_normais }}</p>
+            <a href="{% url 'agendar_consulta' %}">Agendar Consulta</a>
+        </div>
+    {% endfor %}
+</body>
+</html>

@@ -70,7 +70,7 @@ class CadastroPacienteForm(forms.ModelForm):
 
             results = data.get("result", [])
             if not results:
-                print("Nenhum resultado encontrado:", data)  # Para depuração
+                print("Nenhum resultado encontrado:", data)
                 return None, None
 
             location = results[0].get("geometry", {}).get("location", {})
@@ -136,8 +136,8 @@ class UsuarioForm(forms.ModelForm):
         if senha_atual and not self.instance.check_password(senha_atual):
             raise ValidationError("A senha atual está incorreta.")
 
-        if nova_senha and len(nova_senha) < 8:
-            raise ValidationError("A nova senha deve ter pelo menos 8 caracteres.")
+        if nova_senha and len(nova_senha) < 6:
+            raise ValidationError("A nova senha deve ter pelo menos 6 caracteres.")
 
         return cleaned_data
 

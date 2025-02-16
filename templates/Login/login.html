@@ -42,9 +42,8 @@
         {% if messages %}
             {% for message in messages %}
                 Swal.fire({
-                    title: 'Sucesso!',
                     text: '{{ message }}',
-                    icon: 'success',
+                    icon: '{{ message.type }}',
                     confirmButtonText: 'OK'
                 });
             {% endfor %}
