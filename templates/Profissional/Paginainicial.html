@@ -49,10 +49,9 @@
         <main class="main-content">
             <div class="cards-container">
                 <!-- Card Consulta -->
-                <div class="card">
+                <div class="card" id="consulta-card" data-url="{% url 'AgendaConsulta:listar_consultas' %}">
                     <h3><i class="fas fa-calendar-day"></i> Consultas</h3>
-                    <div class="card-content">
-                    </div>
+                    <div class="card-content"></div>
                 </div>
 
                 <!-- Card Campanhas-->
@@ -77,6 +76,20 @@
             </section>
         </main>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const consultaCard = document.getElementById("consulta-card");
+
+    if (consultaCard) {
+        consultaCard.addEventListener("click", function () {
+            const url = consultaCard.getAttribute("data-url");
+            if (url) {
+                window.location.href = url;
+            }
+        });
+    }
+});
+    </script>
 
     <script src="{% static 'JS/profissional.js' %}"></script>
 </body>

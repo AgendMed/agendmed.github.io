@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Consultas Disponíveis</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Unidade</th>
+                <th>Profissional</th>
+                <th>Data</th>
+                <th>Horário</th>
+                <th>Fichas Disponíveis</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for consulta in consultas %}
+            <tr>
+                <td>{{ consulta.unidade_saude }}</td>
+                <td>{{ consulta.profissional }}</td>
+                <td>{{ consulta.data }}</td>
+                <td>{{ consulta.horario_inicio }} - {{ consulta.horario_fim }}</td>
+                <td>{{ consulta.qtd_fichas_prioritarias }} prioritárias, {{ consulta.qtd_fichas_normais }} normais</td>
+                <td>
+                    <a href="{% url 'agendar_consulta' consulta.id %}" class="btn btn-success">Agendar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Nenhuma consulta disponível</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+</body>
+</html>
