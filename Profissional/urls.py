@@ -13,7 +13,6 @@ urlpatterns = [
     path('inicio/', views.pagina_inicial, name='paginainicial'),
     # path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
     path('escolha-consulta/', listar_especialidades, name='listar_especialidades'),
-
     path('editar_perfil_profissional/', editar_perfil_profissional, name='editar_perfil_profissional'),
     path('perfil_profissional/', perfil_profissional, name='perfil_profissional'),
 ]
