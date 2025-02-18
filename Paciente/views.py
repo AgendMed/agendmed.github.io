@@ -106,15 +106,11 @@ def logout_view(request):
     auth_logout(request)  # Faz o logout do usuário
     return redirect('Paciente:login')  # Redireciona para a página de login
 
-<<<<<<< HEAD
-
-=======
 # @login_required
 # def paciente_home(request):
 #     return render(request, 'paciente/home.html', {})
 
 @login_required
->>>>>>> 08d8ff5934cfa94c9aeef2877de08b7609300702
 def paciente_home(request):
     consultas = Consulta.objects.annotate(
         total_fichas=F('qtd_fichas_prioritarias') + F('qtd_fichas_normais')

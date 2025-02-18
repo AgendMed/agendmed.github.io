@@ -22,20 +22,15 @@ def login_view(request):
                 print("Redirecionando para profissional:paginainicial")
                 return redirect('profissional:paginainicial')
             elif user.groups.filter(name='Paciente').exists(): #redirecionar para lista_consultas.html
-<<<<<<< HEAD
-<<<<<<< HEAD
+                
+                
+
                 print("Redirecionando para Paciente:agendar_consulta")
                 return redirect('Paciente:paciente_home')
-=======
-                print("Redirecionando para Paciente:listar_consultas")
-                return redirect('Paciente:listar_consultas')
->>>>>>> be4015d84aaa5e01bfc1932105eeb35a617fd044
-=======
+
                 # print("Redirecionando para Paciente:listar_consultas")
                 # return redirect('Paciente:listar_consultas')
-                print("Redirecionando para Paciente:agendar_consulta")
-                return redirect('Paciente:paciente_home')
->>>>>>> 393249b43ab7064a0eac261e684937738c6f6bad
+
             else:
                 print("Redirecionando para página padrão")
                 return redirect('pagina_padrao')
