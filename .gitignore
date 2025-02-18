@@ -14,7 +14,7 @@
 *.pyc
 
 # Ignorar migrações antigas
-migrations/
+.migrations/
 
 # Ignorar backups de banco de dados PostgreSQL
 *.sql

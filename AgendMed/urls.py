@@ -14,7 +14,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('paciente/', include('Paciente.urls')),
     path('unidade-saude/', include('Unidade_Saude.urls')),
-    path('cadastro_profissional/', include('Profissional.urls')),
+    path('profissional/', include('Profissional.urls')),
     path('especialidades/', include('especialidades.urls')),
     path('cadastrar/', include('AgendaConsulta.urls')),
     path('users/', include('users.urls', namespace='users')),

@@ -1,7 +1,9 @@
 from django import forms
 import requests
 from .models import Usuario, Paciente
+from users.models import Usuario
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import PasswordChangeForm
 
 class CadastroPacienteForm(forms.ModelForm):
     nome_completo = forms.CharField(max_length=150, required=True)
@@ -38,6 +40,20 @@ class CadastroPacienteForm(forms.ModelForm):
             raise ValidationError('O arquivo de comprovante deve ser PDF, JPG ou PNG.')
         return cleaned_data
 
+    def save(self, commit=True):
+        # Cria o usuário primeiro
+        usuario_data = {
+            'username': self.cleaned_data['cpf'],  # Usando o CPF como username
+            'nome_completo': self.cleaned_data['nome_completo'],
+            'cpf': self.cleaned_data['cpf'],
+            'telefone': self.cleaned_data['telefone'],
+            'bairro': self.cleaned_data['bairro'],
+            'rua': self.cleaned_data['rua'],
+            'complemento': self.cleaned_data['complemento'],
+            'numerocasa': self.cleaned_data['numerocasa'],
+            'data_nascimento': self.cleaned_data['data_nascimento'],
+            'email': self.cleaned_data['email'],
+        }
     def get_coordinates(self, address):
         API_KEY = "j7EFwWOjGiFXvA6bZDH6iNdbuCkuzB1K5caRlJ6jpnwRynXsW9fUY8mNCkyvYYk6"
         GEOCODING_API_URL = "https://api.distancematrix.ai/maps/api/geocode/json"
@@ -103,3 +119,29 @@ class CadastroPacienteForm(forms.ModelForm):
         usuario.save()
 
         return paciente
+
+class UsuarioForm(forms.ModelForm):
+    senha_atual = forms.CharField(widget=forms.PasswordInput, required=False)
+    nova_senha = forms.CharField(widget=forms.PasswordInput, required=False)
+
+    class Meta:
+        model = Usuario
+        fields = ['nome_completo', 'telefone', 'data_nascimento', 'bairro', 'rua', 'complemento', 'numerocasa', 'senha_atual', 'nova_senha']  # Excluindo CPF
+
+    def clean(self):
+        cleaned_data = super().clean()
+        senha_atual = cleaned_data.get('senha_atual')
+        nova_senha = cleaned_data.get('nova_senha')
+
+        if senha_atual and not self.instance.check_password(senha_atual):
+            raise ValidationError("A senha atual está incorreta.")
+
+        if nova_senha and len(nova_senha) < 6:
+            raise ValidationError("A nova senha deve ter pelo menos 6 caracteres.")
+
+        return cleaned_data
+
+class PacienteForm(forms.ModelForm):
+    class Meta:
+        model = Paciente
+        fields = ['cartao_saude', 'condicao_prioritaria']  # Campos que podem ser editados
