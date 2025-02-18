@@ -11,11 +11,22 @@ from django.contrib import messages
 
 
 
+# def cadastro_profissional(request):
+#     if request.method == 'POST':
+#         form = UsuarioForm(request.POST)
+#         form = ProfissionalSaudeForm(request.POST)
+#         if form.is_valid():
+#             profissional = form.save()
 def cadastro_profissional(request):
     if request.method == 'POST':
-        form = ProfissionalSaudeForm(request.POST)
-        if form.is_valid():
-            profissional = form.save()
+        usuario_form = UsuarioForm(request.POST)
+        profissional_form = ProfissionalSaudeForm(request.POST)
+        
+        if usuario_form.is_valid() and profissional_form.is_valid():
+            usuario = usuario_form.save()
+            profissional = profissional_form.save(commit=False)
+            profissional.usuario = usuario
+            profissional.save()
 
             content_type_campanha = ContentType.objects.get_for_model(Campanha)
             content_type_paciente = ContentType.objects.get_for_model(Paciente)
@@ -64,9 +75,16 @@ def cadastro_profissional(request):
             
             return redirect('sucesso')
     else:
-        form = ProfissionalSaudeForm()
+        # form = UsuarioForm()
+        # form = ProfissionalSaudeForm()
+        
+        usuario_form = UsuarioForm()
+        profissional_form = ProfissionalSaudeForm()
 
-    return render(request, 'Formularios/cad_profissional.html', {'form': form})
+    # return render(request, 'Formularios/cad_profissional.html', {'form': form})
+    
+    return render(request, 'Formularios/cad_profissional.html', {'usuario_form': usuario_form, 'profissional_form': profissional_form})
+
 
 def sucesso(request):
     return render(request, 'Profissional/sucesso.html')
