@@ -1,0 +1,32 @@
+<!-- templates/Paciente/AgendarConsulta.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Consulta</title>
+</head>
+<body>
+    <h1>Agendar Consulta</h1>
+    <h2>{{ consulta.unidade_saude.nome }}</h2>
+    <p><strong>Profissional:</strong> {{ consulta.profissional.nome }}</p>
+    <p><strong>Data:</strong> {{ consulta.data }}</p>
+    <p><strong>Horário:</strong> {{ consulta.horario_formatado }}</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Agendar</button>
+    </form>
+
+    {% if messages %}
+        <div>
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+</body>
+</html>
+
+

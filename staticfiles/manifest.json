@@ -1,0 +1,25 @@
+{
+    "name": "AgendMed",
+    "short_name": "AgendamentoHospitalar",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#333333",
+    "icons": [
+        {
+            "src": "/img/Logo-branca-AgendMed.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/img/Logo-Azul-AgendMed.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "/img/Logo-branca-AgendMed.png",
+            "sizes": "50x50",
+            "type": "image/png"
+        }
+    ]
+}
