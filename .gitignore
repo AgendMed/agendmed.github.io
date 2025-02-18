@@ -6,7 +6,7 @@
 .idea/
 .history/
 .git/
-.venv/
+*.venv/
 
 
 # Ignorar arquivos gerados pelo Python
@@ -14,7 +14,7 @@
 *.pyc
 
 # Ignorar migrações antigas
-migrations/
+.migrations/
 
 # Ignorar backups de banco de dados PostgreSQL
 *.sql

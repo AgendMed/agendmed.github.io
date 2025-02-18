@@ -1,70 +1,173 @@
-<form method="POST">
-    {% csrf_token %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="{% static 'css/cad_profissional.css' %}"> -->
+    <title>Cadastro Profissional</title>
+    <style>
+        /* Estilo geral do corpo */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px 400px 20px 400px;
+            padding: 20px;
+        }
+
+        /* Estilo do formulário */
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Estilo dos campos do formulário */
+        div {
+            margin-bottom: 15px;
+        }
+
+        /* Estilo dos rótulos */
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* Estilo dos campos de entrada */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        input[type="tel"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Para incluir padding e border no cálculo da largura */
+        }
+
+        /* Estilo do botão de envio */
+        button {
+            background-color: #007AFF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        /* Efeito de hover no botão */
+        button:hover {
+            background-color: #218838;
+        }
+
+        /* Estilo para telas menores */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            form {
+                padding: 15px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
     
-    <div>
-        <label for="{{ form.nome.id_for_label }}">Nome:</label>
-        {{ form.nome }}
-    </div>
+</head>
+<body>
+    {% comment %} <form method="POST">
+        {% csrf_token %}
+        
+        <div>
+            <label for="{{ form.nome.id_for_label }}">Nome:</label>
+            {{ form.nome }}
+        </div>
 
-    <div>
-        <label for="{{ form.cpf.id_for_label }}">CPF:</label>
-        {{ form.cpf }}
-    </div>
+        <div>
+            <label for="{{ form.cpf.id_for_label }}">CPF:</label>
+            {{ form.cpf }}
+        </div>
 
-    <div>
-        <label for="{{ form.telefone.id_for_label }}">Telefone:</label>
-        {{ form.telefone }}
-    </div>
+        <div>
+            <label for="{{ form.telefone.id_for_label }}">Telefone:</label>
+            {{ form.telefone }}
+        </div>
 
-    <div>
-        <label for="{{ form.bairro.id_for_label }}">Bairro:</label>
-        {{ form.bairro }}
-    </div>
+        <div>
+            <label for="{{ form.bairro.id_for_label }}">Bairro:</label>
+            {{ form.bairro }}
+        </div>
 
-    <div>
-        <label for="{{ form.cep.id_for_label }}">Cep:</label>
-        {{ form.cep }}
-    </div>
+        <div>
+            <label for="{{ form.cep.id_for_label }}">Cep:</label>
+            {{ form.cep }}
+        </div>
 
-    <div>
-        <label for="{{ form.rua.id_for_label }}">Rua:</label>
-        {{ form.rua }}
-    </div>
+        <div>
+            <label for="{{ form.rua.id_for_label }}">Rua:</label>
+            {{ form.rua }}
+        </div>
 
-    <div>
-        <label for="{{ form.complemento.id_for_label }}">Complemento:</label>
-        {{ form.complemento }}
-    </div>
+        <div>
+            <label for="{{ form.complemento.id_for_label }}">Complemento:</label>
+            {{ form.complemento }}
+        </div>
 
-    <div>
-        <label for="{{ form.numero_casa.id_for_label }}">Número da Casa:</label>
-        {{ form.numero_casa }}
-    </div>
+        <div>
+            <label for="{{ form.numero_casa.id_for_label }}">Número da Casa:</label>
+            {{ form.numero_casa }}
+        </div>
 
-    <div>
-        <label for="{{ form.data_nascimento.id_for_label }}">Data de Nascimento:</label>
-        {{ form.data_nascimento }}
-    </div>
+        <div>
+            <label for="{{ form.data_nascimento.id_for_label }}">Data de Nascimento:</label>
+            {{ form.data_nascimento }}
+        </div>
 
-    <div>
-        <label for="{{ form.email.id_for_label }}">Email:</label>
-        {{ form.email }}
-    </div>
+        <div>
+            <label for="{{ form.email.id_for_label }}">Email:</label>
+            {{ form.email }}
+        </div>
 
-    <div>
-        <label for="{{ form.senha.id_for_label }}">Senha:</label>
-        {{ form.senha }}
-    </div>
+        <div>
+            <label for="{{ form.senha.id_for_label }}">Senha:</label>
+            {{ form.senha }}
+        </div>
 
-    <div>
-        <label for="{{ form.especialidade.id_for_label }}">Especialidade:</label>
-        {{ form.especialidade }}
-    </div>
+        <div>
+            <label for="{{ form.especialidade.id_for_label }}">Especialidade:</label>
+            {{ form.especialidade }}
+        </div>
 
-    <div>
-        <label for="{{ form.unidade_saude.id_for_label }}">Unidade de Saúde:</label>
-        {{ form.unidade_saude }}
-    </div>
+        <div>
+            <label for="{{ form.unidade_saude.id_for_label }}">Unidade de Saúde:</label>
+            {{ form.unidade_saude }}
+        </div>
 
-    <button type="submit">Cadastrar</button>
-</form>
+        <button type="submit">Cadastrar</button>
+    </form> {% endcomment %}
+    <form method="POST">
+        {% csrf_token %}
+        
+        <!-- Campos do UsuarioForm -->
+        {{ usuario_form.as_p }}
+    
+        <!-- Campos do ProfissionalSaudeForm -->
+        {{ profissional_form.as_p }}
+    
+        <button type="submit">Cadastrar</button>
+    </form>
+    
+</body>
+</html>
+
+

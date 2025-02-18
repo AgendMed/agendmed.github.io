@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{% static 'JS/login.js' %}" defer></script>
     <title>Login - AgendMed</title>
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
@@ -35,6 +36,19 @@
             <p class="secondary-text">Fazer login como <a href="#">Profissional</a></p>
         </div>
     </main>
+
+    <script>
+        // Verifica se há mensagens de sucesso na sessão
+        {% if messages %}
+            {% for message in messages %}
+                Swal.fire({
+                    text: '{{ message }}',
+                    icon: '{{ message.type }}',
+                    confirmButtonText: 'OK'
+                });
+            {% endfor %}
+        {% endif %}
+    </script>
 
 </body>
 </html>
