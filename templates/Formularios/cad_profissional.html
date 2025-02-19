@@ -85,7 +85,7 @@
     
 </head>
 <body>
-    <form method="POST">
+    {% comment %} <form method="POST">
         {% csrf_token %}
         
         <div>
@@ -153,6 +153,17 @@
             {{ form.unidade_saude }}
         </div>
 
+        <button type="submit">Cadastrar</button>
+    </form> {% endcomment %}
+    <form method="POST">
+        {% csrf_token %}
+        
+        <!-- Campos do UsuarioForm -->
+        {{ usuario_form.as_p }}
+    
+        <!-- Campos do ProfissionalSaudeForm -->
+        {{ profissional_form.as_p }}
+    
         <button type="submit">Cadastrar</button>
     </form>
     
