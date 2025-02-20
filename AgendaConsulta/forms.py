@@ -7,7 +7,7 @@ class ConsultaForm(forms.ModelForm):
     
     class Meta:
         model = Consulta
-        fields = ['unidade_saude', 'profissional', 'data', 'horario_inicio', 'horario_fim', 
+        fields = ['data', 'unidade_saude', 'profissional', 'horario_inicio', 'horario_fim', 
                  'qtd_fichas_prioritarias', 'qtd_fichas_normais']
 
     def clean(self):

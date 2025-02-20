@@ -1,24 +1,190 @@
+{% extends "base.html" %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Consulta</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5F5F5;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #00AEEF;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        form {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #00AEEF;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 174, 239, 0.5);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            border: none;
+        }
+
+        button[type="submit"] {
+            background: #00AEEF;
+            color: white;
+        }
+
+        button[type="submit"]:hover {
+            background: #008FCC;
+        }
+
+        button.cancel {
+            background: #FF4D4D;
+            color: white;
+        }
+
+        button.cancel:hover {
+            background: #CC0000;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #dff0d8;
+            color: #3c763d;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        
+/* Estilos personalizados para o calendário */
+.flatpickr-calendar {
+            width: 100%; /* Aumenta a largura do calendário */
+            max-width: 350px; /* Define um tamanho máximo */
+            margin: 0 auto; /* Centraliza o calendário */
+            font-size: 16px; /* Aumenta o tamanho da fonte */
+        }
+
+        .flatpickr-calendar .flatpickr-month {
+            height: 60px; /* Aumenta a altura do cabeçalho do mês */
+        }
+
+        .flatpickr-calendar .flatpickr-weekdays {
+            height: 40px; /* Aumenta a altura dos dias da semana */
+            width: 100%;
+        }
+        .flatpickr-calendar .flatpickr-day {
+          margin: 0 auto; 
+            height: 40px; /* Aumenta a altura dos dias */
+            line-height: 40px; /* Centraliza o texto verticalmente */
+        }
+
+        .flatpickr-calendar .flatpickr-day.selected {
+            background: #00AEEF; /* Cor de fundo para o dia selecionado */
+            border-color: #00AEEF;
+        }
+
+        .flatpickr-calendar .flatpickr-day.today {
+            border-color: #00AEEF; /* Cor da borda para o dia atual */
+        }
+    </style>
 </head>
-<body>
-    <h1>Cadastrar Consulta</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Cadastrar</button>
+
+<body> 
+
+  <h1>Cadastrar Consulta</h1>
+  <form method="post" id="consulta-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Cadastrar</button>
   </form>
 
   {% if messages %}
-    <ul>
+  <ul>
       {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
+      <li class="{{ message.tags }}">{{ message }}</li>
       {% endfor %}
-    </ul>
+  </ul>
   {% endif %}
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          flatpickr("input[name='data']", {
+              enableTime: false,
+              dateFormat: "d/m/Y",
+              defaultDate: new Date(),
+              inline: true // Mantém o calendário sempre visível
+          });
+      });
+
+      // Filtro de profissionais com base na unidade de saúde
+      $(document).ready(function () {
+          $('#id_unidade_saude').change(function () {
+              var unidadeId = $(this).val(); // Pega o ID da unidade selecionada
+              if (unidadeId) {
+                  // Faz uma requisição AJAX para obter os profissionais da unidade
+                  $.ajax({
+                      url: '{% url "profissional:filtrar_profissionais" %}',
+                      data: {
+                          'unidade_id': unidadeId
+                      },
+                      success: function (data) {
+                          // Limpa o campo de profissionais
+                          $('#id_profissional').empty();
+
+                          // Adiciona as novas opções
+                          $.each(data, function (key, value) {
+                              $('#id_profissional').append($('<option>', {
+                                  value: key,
+                                  text: value
+                              }));
+                          });
+                      }
+                  });
+              } else {
+                  $('#id_profissional').empty();
+              }
+          });
+      });
+  </script>
 </body>
 </html>
+{% endblock %}

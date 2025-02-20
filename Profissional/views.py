@@ -9,6 +9,9 @@ from .models import ProfissionalSaude
 from AgendaConsulta.models import Consulta
 from Campanha.models import Campanha
 from Paciente.models import Paciente
+from django.http import JsonResponse
+from django.shortcuts import render
+from .models import ProfissionalSaude
 
 
 def cadastro_profissional(request):
@@ -96,3 +99,11 @@ def editar_perfil_profissional(request):
 def perfil_profissional(request):
     profissional = get_object_or_404(ProfissionalSaude, usuario=request.user)
     return render(request, 'usuarios/perfil_profissional.html', {'usuario': request.user, 'profissional': profissional})
+
+def filtrar_profissionais(request):
+    unidade_id = request.GET.get('unidade_id')
+    if unidade_id:
+        profissionais = ProfissionalSaude.objects.filter(unidade_saude_id=unidade_id)
+        profissionais_dict = {p.id: str(p) for p in profissionais}
+        return JsonResponse(profissionais_dict)
+    return JsonResponse({})
