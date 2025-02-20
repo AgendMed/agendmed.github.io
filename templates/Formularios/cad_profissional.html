@@ -7,7 +7,7 @@
     <!-- <link rel="stylesheet" href="{% static 'css/cad_profissional.css' %}"> -->
     <title>Cadastro Profissional</title>
     <style>
-        /* Estilo geral do corpo */
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -15,7 +15,7 @@
             padding: 20px;
         }
 
-        /* Estilo do formulário */
+
         form {
             background: #fff;
             padding: 20px;
@@ -23,19 +23,19 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Estilo dos campos do formulário */
+
         div {
             margin-bottom: 15px;
         }
 
-        /* Estilo dos rótulos */
+ 
         label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
         }
 
-        /* Estilo dos campos de entrada */
+
         input[type="text"],
         input[type="email"],
         input[type="password"],
@@ -47,10 +47,9 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-sizing: border-box; /* Para incluir padding e border no cálculo da largura */
+            box-sizing: border-box; 
         }
 
-        /* Estilo do botão de envio */
         button {
             background-color: #007AFF;
             color: white;
@@ -62,15 +61,16 @@
             font-size: 16px;
         }
 
-        /* Efeito de hover no botão */
+
         button:hover {
-            background-color: #218838;
+            background-color: #0849c2;
         }
 
-        /* Estilo para telas menores */
-        @media (max-width: 600px) {
+
+        @media (max-width: 1200px) {
             body {
                 padding: 10px;
+                margin: 20px 100px 20px 100px;
             }
 
             form {
@@ -81,6 +81,13 @@
                 font-size: 14px;
             }
         }
+
+        @media (max-width: 800px) {
+            body{
+                margin: 20px 80px 20px 80px;
+            }
+        }
+
     </style>
     
 </head>
