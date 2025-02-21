@@ -1,5 +1,7 @@
 from django.contrib import messages
 from django.db import transaction
+
+from Paciente.models import Paciente
 from .forms import ConsultaForm, AgendamentoForm
 from django.db.models import F
 from django.shortcuts import render, redirect, get_object_or_404
@@ -23,17 +25,27 @@ def cadastrar_consulta(request):
     return render(request, 'Formularios/cad_Consulta.html', {'form': form})
 
 
+@login_required
 def agendar_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
+    usuario = request.user 
     
+    paciente = get_object_or_404(Paciente, usuario=usuario)
+
+    # Definir o tipo de ficha automaticamente com o status do paciente
+    tipo_ficha_padrao = 'prioritario' if paciente.status == 'prioritario' else 'comum'
+    
+    # Contar quantos pacientes já estão na fila
+    numero_na_fila = Agendamento.objects.filter(consulta=consulta).count() + 1
+
     if request.method == 'POST':
         form = AgendamentoForm(request.POST)
         if form.is_valid():
             try:
                 with transaction.atomic():
-                    paciente = form.cleaned_data['paciente']
-                    
-                    if paciente.status == 'prioritario':
+                    tipo_ficha = form.cleaned_data.get('tipo_ficha', tipo_ficha_padrao)
+
+                    if tipo_ficha == 'prioritario':
                         if consulta.qtd_fichas_prioritarias < 1:
                             raise ValueError("Não há fichas prioritárias disponíveis")
                         consulta.qtd_fichas_prioritarias -= 1
@@ -41,25 +53,32 @@ def agendar_consulta(request, consulta_id):
                         if consulta.qtd_fichas_normais < 1:
                             raise ValueError("Não há fichas normais disponíveis")
                         consulta.qtd_fichas_normais -= 1
-                    
+
                     consulta.save()
+                    
                     agendamento = form.save(commit=False)
                     agendamento.consulta = consulta
+                    agendamento.paciente = paciente
+                    agendamento.numero_na_fila = numero_na_fila  # Salvar posição na fila
                     agendamento.save()
-                    
-                    messages.success(request, 'Agendamento realizado com sucesso!')
-                    return redirect('listar_consultas')
+
+                    messages.success(request, f'Agendamento disponível! Você é o número {numero_na_fila} na fila.')
+                    return redirect('Paciente:paciente_home')
             
             except Exception as e:
                 messages.error(request, str(e))
-                return redirect('agendar_consulta', consulta_id=consulta_id)
+                return redirect('AgendaConsulta:agendar_consulta', consulta_id=consulta_id)
         else:
             messages.error(request, 'Por favor corrija os erros no formulário')
     else:
-        form = AgendamentoForm(initial={'consulta': consulta})
+        form = AgendamentoForm(initial={'consulta': consulta, 'tipo_ficha': tipo_ficha_padrao})
     
-    return render(request, 'Paciente/AgendarConsulta.html', {'form': form, 'consulta': consulta})
-
+    return render(request, 'Paciente/AgendarConsulta.html', {
+        'form': form, 
+        'consulta': consulta,
+        'numero_na_fila': numero_na_fila,
+        'paciente': paciente  # Passando o paciente para o template
+    })
 
 
 
@@ -80,6 +99,12 @@ from .models import Consulta, Agendamento, Notificacao  # Importe o modelo Notif
 @login_required
 def cancelar_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
+    paciente = get_object_or_404(Paciente, usuario=request.user)
+
+    context = {
+        'consulta': consulta,
+        'paciente': paciente,
+    }
     
     if request.method == 'POST':
         razao = request.POST.get('razao')
@@ -88,7 +113,7 @@ def cancelar_consulta(request, consulta_id):
 
         if agendamentos.exists():
             for agendamento in agendamentos:
-                # Criar uma notificação para cada paciente
+
                 Notificacao.objects.create(
                     paciente=agendamento.paciente,
                     mensagem=f"Sua consulta agendada para {consulta.data} às {consulta.horario_inicio} foi cancelada. Motivo: {razao}."
