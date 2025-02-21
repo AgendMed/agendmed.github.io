@@ -126,3 +126,22 @@ def cancelar_consulta(request, consulta_id):
         return redirect('AgendaConsulta:listar_consultas')
     
     return redirect('AgendaConsulta:listar_consultas')
+
+
+
+@login_required
+def editar_consulta(request, consulta_id):
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+
+    if request.method == 'POST':
+        form = ConsultaForm(request.POST, instance=consulta)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Consulta editada com sucesso!")
+            return redirect('AgendaConsulta:listar_consultas')
+        else:
+            messages.error(request, "Erro ao editar. Verifique os dados.")
+    else:
+        form = ConsultaForm(instance=consulta)
+
+    return render(request, 'Formularios/edit_Consulta.html', {'form': form, 'consulta': consulta})
