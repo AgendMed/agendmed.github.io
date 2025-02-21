@@ -1,6 +1,6 @@
-from AgendaConsulta.models import Consulta
+from AgendaConsulta.models import Consulta, Notificacao
 from .forms import CadastroPacienteForm
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from .models import Paciente
@@ -11,7 +11,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from AgendaConsulta.views import agendar_consulta
-
+from django.contrib.auth import login
 
 
 def cadastro_paciente(request):
@@ -50,6 +50,7 @@ def sucesso(request):
 
 def Index_view(request):
     return render(request, 'Login/index.html')
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -132,4 +133,17 @@ def listar_consultas(request):
     return render(request, 'lista_consultas.html', {'consultas': consultas})
 
 
+@login_required
+def notificacoes(request):
+    paciente = request.user.paciente_set.first()
+    notificacoes = Notificacao.objects.filter(paciente=paciente).order_by('-data_criacao')
+    return render(request, 'Paciente/notificacao.html', {'notificacoes': notificacoes})
 
+
+#marcar se a notificacao foi lida
+#@login_required
+#def marcar_como_lida(request, notificacao_id):
+#    notificacao = get_object_or_404(Notificacao, id=notificacao_id, paciente=request.user.paciente)
+#    notificacao.lida = True
+#    notificacao.save()
+#    return redirect('Paciente:pagina_paciente')

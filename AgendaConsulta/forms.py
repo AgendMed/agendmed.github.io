@@ -42,3 +42,20 @@ class AgendamentoForm(forms.ModelForm):
             
             if paciente.status == 'comum' and consulta.qtd_fichas_normais < 1:
                 raise ValidationError("Fichas normais esgotadas")
+            
+
+#Modal para notificações
+
+class CancelamentoConsultaForm(forms.Form):
+    RAZOES_CANCELAMENTO = [
+        ('medico_doente', 'Médico doente'),
+        ('problemas_deslocamento', 'Problemas de deslocamento'),
+        ('compromisso_profissional', 'Compromisso profissional urgente'),
+        ('problemas_unidade', 'Problemas na unidade de saúde'),
+        ('mudanca_agenda', 'Mudança de agenda'),
+        ('licenca_medica', 'Licença médica ou afastamento temporário'),
+        ('ausencia_nao_comunicada', 'Ausência programada não comunicada'),
+        ('cancelamento_administrativo', 'Cancelamento administrativo'),
+    ]
+
+    razao = forms.ChoiceField(choices=RAZOES_CANCELAMENTO, label="Razão do Cancelamento")

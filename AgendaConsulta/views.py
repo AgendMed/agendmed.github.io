@@ -7,7 +7,7 @@ from .models import Consulta
 from django.contrib.auth.decorators import login_required, permission_required
 
 @login_required
-@permission_required('AgendaConsulta.pode_cadastrar_consulta', raise_exception=True)
+#@permission_required('AgendaConsulta.pode_cadastrar_consulta', raise_exception=True)
 def cadastrar_consulta(request):
     if request.method == 'POST':
         form = ConsultaForm(request.POST)
@@ -70,3 +70,34 @@ def listar_consultas(request):
     ).filter(total_fichas__gt=0)
 
     return render(request, 'lista_consultas.html', {'consultas': consultas})
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Consulta, Agendamento, Notificacao  # Importe o modelo Notificacao
+
+@login_required
+def cancelar_consulta(request, consulta_id):
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+    
+    if request.method == 'POST':
+        razao = request.POST.get('razao')
+        
+        agendamentos = Agendamento.objects.filter(consulta=consulta)
+
+        if agendamentos.exists():
+            for agendamento in agendamentos:
+                # Criar uma notificação para cada paciente
+                Notificacao.objects.create(
+                    paciente=agendamento.paciente,
+                    mensagem=f"Sua consulta agendada para {consulta.data} às {consulta.horario_inicio} foi cancelada. Motivo: {razao}."
+                )
+                agendamento.delete()
+        
+        consulta.delete()
+
+        messages.success(request, "Consulta cancelada com sucesso. Os pacientes foram notificados.")
+        return redirect('AgendaConsulta:listar_consultas')
+    
+    return redirect('AgendaConsulta:listar_consultas')

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
-    <title>Home Paciente</title>
+    <title>Notificações</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -22,7 +22,6 @@
             text-align: center;
             font-size: 1.2em;
             font-weight: bold;
-
         }
         
         nav {
@@ -53,39 +52,37 @@
             margin: auto;
         }
         
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 5px;
+        .notificacao {
+            background-color: #fff;
             border: 1px solid #ddd;
-            font-size: 1em;
-        }
-        
-        .card {
-            border: 1px solid #ccc;
             border-radius: 5px;
             padding: 15px;
-            margin: 15px;
-            width: 300px;
-            display: inline-block;
-            vertical-align: top;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        .card h3 {
+        
+        .notificacao h3 {
             margin-top: 0;
+            color: #007bff;
         }
-        .card a {
-            display: block;
-            margin-top: 10px;
-            text-align: center;
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            text-decoration: none;
+        
+        .notificacao p {
+            margin: 5px 0;
         }
-        .card a:hover {
-            background-color: #0056b3;
+        
+        .notificacao .data {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .notificacao .lida {
+            color: green;
+            font-weight: bold;
+        }
+        
+        .notificacao .nao-lida {
+            color: red;
+            font-weight: bold;
         }
         
         footer {
@@ -108,7 +105,7 @@
 </head>
 <body>
     <header>
-        <h1>Bem-vindo</h1>
+        <h1>Notificações</h1>
         <nav>
             <a href="{% url 'Paciente:pagina_paciente' %}">Editar Perfil</a>
             <a href="#">Minha Unidade de Saúde</a>
@@ -118,33 +115,23 @@
     </header>
 
     <div class="content">
-        <h3>Em busca de Atendimento?</h3>
-        <input type="text" placeholder="Busque um profissional...">
-        
-        <div>
-            {% comment %} {% for profissional in profissionais %}
-            <div class="card">
-                <img src="{{ profissional.imagem_url }}" alt="{{ profissional.nome }}">
-                <div class="card-body">
-                    <h5>{{ profissional.nome }}</h5>
-                    <p>{{ profissional.especialidade }}</p>
-                    <a href="#">Agendar Consulta</a>
+        {% if notificacoes %}
+            {% for notificacao in notificacoes %}
+                <div class="notificacao">
+                    <h3>Nova Notificação</h3>
+                    <p>{{ notificacao.mensagem }}</p>
+                    <p class="data">{{ notificacao.data_criacao|date:"d/m/Y H:i" }}</p>
+                    {% if notificacao.lida %}
+                        <p class="lida">Lida</p>
+                    {% else %}
+                        <p class="nao-lida">Não lida</p>
+                        <a href="#">Marcar como lida</a>
+                    {% endif %}
                 </div>
-            </div>
-            {% endfor %} {% endcomment %}
-                <h1>Consultas Disponíveis</h1>
-                {% for consulta in consultas %}
-                    <div class="card">
-                        <h3>{{ consulta.unidade_saude.nome }}</h3>
-                        <p><strong>Profissional:</strong> {{ consulta.profissional.usuario.nome_completo }}</p>
-                        <p><strong>Data:</strong> {{ consulta.data }}</p>
-                        <p><strong>Horário:</strong> {{ consulta.horario_formatado }}</p>
-                        <p><strong>Fichas Prioritárias Disponíveis:</strong> {{ consulta.qtd_fichas_prioritarias }}</p>
-                        <p><strong>Fichas Normais Disponíveis:</strong> {{ consulta.qtd_fichas_normais }}</p>
-                        <a href=" {% url 'AgendaConsulta:agendar_consulta' consulta.id %} "> Agendar Consulta</a>
-                    </div>
-                {% endfor %}
-        </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhuma notificação encontrada.</p>
+        {% endif %}
     </div>
 
     <footer>
