@@ -70,3 +70,40 @@ def listar_consultas(request):
     ).filter(total_fichas__gt=0)
 
     return render(request, 'lista_consultas.html', {'consultas': consultas})
+
+
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Consulta, Agendamento, Notificacao  # Importe o modelo Notificacao
+
+@login_required
+def cancelar_consulta(request, consulta_id):
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+
+    if request.method == 'POST':
+        razao = request.POST.get('razao')
+
+        # Obter todos os agendamentos para esta consulta
+        agendamentos = Agendamento.objects.filter(consulta=consulta)
+
+        if agendamentos.exists():
+            for agendamento in agendamentos:
+                # Criar uma notificação para o paciente
+                Notificacao.objects.create(
+                    paciente=agendamento.paciente,
+                    mensagem=f"Sua consulta na unidade de saúde {consulta.unidade_saude.nome} foi cancelada. Razão: {razao}."
+                )
+
+            # Marcar a consulta como cancelada (ou excluí-la)
+            consulta.delete()  # Ou você pode adicionar um campo `cancelada` no modelo Consulta e marcá-la como True
+
+            messages.success(request, 'Consulta cancelada com sucesso e notificações enviadas aos pacientes.')
+        else:
+            messages.error(request, 'Nenhum agendamento encontrado para esta consulta.')
+        
+        return redirect('AgendaConsulta:listar_consultas')
+
+    return redirect('AgendaConsulta:listar_consultas')

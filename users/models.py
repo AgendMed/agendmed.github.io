@@ -18,7 +18,6 @@ class Usuario(AbstractUser):
     complemento = models.CharField(max_length=255, blank=True, null=False, default='complemento não informado')
     numerocasa = models.CharField(max_length=255, null=False, default='Numero da Casa não informado')
 
-
     class Meta:
         verbose_name = "Usuário"
         verbose_name_plural = "Usuários"
