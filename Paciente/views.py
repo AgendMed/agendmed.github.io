@@ -143,7 +143,12 @@ def notificacoes(request):
 #marcar se a notificacao foi lida
 @login_required
 def marcar_como_lida(request, notificacao_id):
-    notificacao = get_object_or_404(Notificacao, id=notificacao_id, paciente=request.user.paciente)
+    paciente = Paciente.objects.filter(usuario=request.user).first()
+    if not paciente:
+        messages.error(request, "Este usuário não é um paciente.")
+        return redirect('Paciente:notificacoes')
+
+    notificacao = get_object_or_404(Notificacao, id=notificacao_id, paciente=paciente)
     notificacao.lida = True
     notificacao.save()
-    return redirect('Paciente:pagina_paciente')
+    return redirect('Paciente:notificacoes')

@@ -125,7 +125,7 @@
                         <p class="lida">Lida</p>
                     {% else %}
                         <p class="nao-lida">Não lida</p>
-                        <a href="#">Marcar como lida</a>
+                        <a href="{% url 'Paciente:marcar_como_lida' notificacao.id %}">Marcar como lida</a>
                     {% endif %}
                 </div>
             {% endfor %}
