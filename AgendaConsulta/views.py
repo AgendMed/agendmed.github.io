@@ -7,7 +7,7 @@ from .models import Consulta
 from django.contrib.auth.decorators import login_required, permission_required
 
 @login_required
-@permission_required('AgendaConsulta.pode_cadastrar_consulta', raise_exception=True)
+#@permission_required('AgendaConsulta.pode_cadastrar_consulta', raise_exception=True)
 def cadastrar_consulta(request):
     if request.method == 'POST':
         form = ConsultaForm(request.POST)
@@ -73,8 +73,6 @@ def listar_consultas(request):
 
 
 
-
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Consulta, Agendamento, Notificacao  # Importe o modelo Notificacao
@@ -82,28 +80,24 @@ from .models import Consulta, Agendamento, Notificacao  # Importe o modelo Notif
 @login_required
 def cancelar_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
-
+    
     if request.method == 'POST':
         razao = request.POST.get('razao')
-
-        # Obter todos os agendamentos para esta consulta
+        
         agendamentos = Agendamento.objects.filter(consulta=consulta)
 
         if agendamentos.exists():
             for agendamento in agendamentos:
-                # Criar uma notificação para o paciente
+                # Criar uma notificação para cada paciente
                 Notificacao.objects.create(
                     paciente=agendamento.paciente,
-                    mensagem=f"Sua consulta na unidade de saúde {consulta.unidade_saude.nome} foi cancelada. Razão: {razao}."
+                    mensagem=f"Sua consulta agendada para {consulta.data} às {consulta.horario_inicio} foi cancelada. Motivo: {razao}."
                 )
-
-            # Marcar a consulta como cancelada (ou excluí-la)
-            consulta.delete()  # Ou você pode adicionar um campo `cancelada` no modelo Consulta e marcá-la como True
-
-            messages.success(request, 'Consulta cancelada com sucesso e notificações enviadas aos pacientes.')
-        else:
-            messages.error(request, 'Nenhum agendamento encontrado para esta consulta.')
+                agendamento.delete()
         
-        return redirect('AgendaConsulta:listar_consultas')
+        consulta.delete()
 
+        messages.success(request, "Consulta cancelada com sucesso. Os pacientes foram notificados.")
+        return redirect('AgendaConsulta:listar_consultas')
+    
     return redirect('AgendaConsulta:listar_consultas')
