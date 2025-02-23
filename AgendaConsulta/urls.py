@@ -10,5 +10,4 @@ urlpatterns = [
     path('cancelar/<int:consulta_id>/', views.cancelar_consulta, name='cancelar_consulta'),
     path('editar/<int:consulta_id>/', views.editar_consulta, name='editar_consulta'),
 
-
 ]

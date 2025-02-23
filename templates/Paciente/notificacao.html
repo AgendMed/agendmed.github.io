@@ -59,6 +59,7 @@
             padding: 15px;
             margin-bottom: 15px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.5s ease-out;
         }
         
         .notificacao h3 {
@@ -117,7 +118,7 @@
     <div class="content">
         {% if notificacoes %}
             {% for notificacao in notificacoes %}
-                <div class="notificacao">
+                <div class="notificacao" id="notificacao-{{ notificacao.id }}">
                     <h3>Nova Notificação</h3>
                     <p>{{ notificacao.mensagem }}</p>
                     <p class="data">{{ notificacao.data_criacao|date:"d/m/Y H:i" }}</p>
@@ -125,7 +126,7 @@
                         <p class="lida">Lida</p>
                     {% else %}
                         <p class="nao-lida">Não lida</p>
-                        <a href="{% url 'Paciente:marcar_como_lida' notificacao.id %}">Marcar como lida</a>
+                        <a href="#" class="marcar-lida" data-notificacao-id="{{ notificacao.id }}">Marcar como lida</a>
                     {% endif %}
                 </div>
             {% endfor %}
@@ -139,6 +140,40 @@
         <a href="#">Campanhas</a>
         <a href="#">Consultas</a>
     </footer>
+
+    <script>
+        document.querySelectorAll('.marcar-lida').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const notificacaoId = this.getAttribute('data-notificacao-id');
+                const notificacaoDiv = document.getElementById(`notificacao-${notificacaoId}`);
+
+                fetch(`{% url 'Paciente:marcar_como_lida' 0 %}`.replace('0', notificacaoId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Adiciona uma animação de fade-out
+                        notificacaoDiv.style.opacity = '0';
+                        setTimeout(() => {
+                            notificacaoDiv.remove(); 
+                        }, 3000); // 3 segundos
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao marcar notificação como lida:', error);
+                });
+            });
+        });
+    </script>
 </body>
 {% endblock %}
 </html>

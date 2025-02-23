@@ -12,6 +12,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from AgendaConsulta.views import agendar_consulta
 from django.contrib.auth import login
+from django.http import JsonResponse
+import time
+from django.shortcuts import redirect
+from .forms import UsuarioForm, PacienteForm 
 
 
 def cadastro_paciente(request):
@@ -24,11 +28,9 @@ def cadastro_paciente(request):
             paciente.usuario.groups.add(grupo_paciente)
             permissao_consultar = Permission.objects.get(codename='pode_consultar')
             paciente.usuario.user_permissions.add(permissao_consultar)
-            # Adiciona uma mensagem de sucesso
             messages.success(request, 'Cadastro realizado com sucesso! Você pode fazer login agora.')
 
-            return redirect('Paciente:login')  # Redireciona para a página de login
-
+            return redirect('Paciente:login')
         else:
             return render(request, 'usuarios/cadastro.html', {'form': form})
     else:
@@ -39,9 +41,9 @@ def cadastro_paciente(request):
 def pagina_paciente(request):
     usuario = request.user  # Obtém o usuário logado
     try:
-        paciente = Paciente.objects.get(usuario=usuario)  # Obtém o paciente associado ao usuário
+        paciente = Paciente.objects.get(usuario=usuario)
     except Paciente.DoesNotExist:
-        paciente = None  # Caso não exista, paciente será None
+        paciente = None 
 
     return render(request, 'usuarios/user.html', {'usuario': usuario, 'paciente': paciente})
 
@@ -66,8 +68,7 @@ def login_view(request):
     
     return render(request, 'Login/login.html', {'form': form})
 
-from django.shortcuts import redirect
-from .forms import UsuarioForm, PacienteForm  # Supondo que você tenha formulários para Usuario e Paciente
+
 
 @login_required
 def editar_perfil(request):
@@ -145,10 +146,13 @@ def notificacoes(request):
 def marcar_como_lida(request, notificacao_id):
     paciente = Paciente.objects.filter(usuario=request.user).first()
     if not paciente:
-        messages.error(request, "Este usuário não é um paciente.")
-        return redirect('Paciente:notificacoes')
+        return JsonResponse({'success': False, 'message': 'Este usuário não é um paciente.'}, status=403)
 
     notificacao = get_object_or_404(Notificacao, id=notificacao_id, paciente=paciente)
+    
+    # Marca a notificação como lida
     notificacao.lida = True
     notificacao.save()
-    return redirect('Paciente:notificacoes')
+
+    # Retorna uma resposta JSON para o frontend
+    return JsonResponse({'success': True, 'message': 'Notificação marcada como lida.'})

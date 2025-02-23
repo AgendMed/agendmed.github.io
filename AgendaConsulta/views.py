@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.db import transaction
 
 from Paciente.models import Paciente
+from Profissional.models import ProfissionalSaude
 from .forms import ConsultaForm, AgendamentoForm
 from django.db.models import F
 from django.shortcuts import render, redirect, get_object_or_404
@@ -59,7 +60,7 @@ def agendar_consulta(request, consulta_id):
                     agendamento = form.save(commit=False)
                     agendamento.consulta = consulta
                     agendamento.paciente = paciente
-                    agendamento.numero_na_fila = numero_na_fila  # Salvar posição na fila
+                    agendamento.numero_na_fila = numero_na_fila
                     agendamento.save()
 
                     messages.success(request, f'Agendamento disponível! Você é o número {numero_na_fila} na fila.')
@@ -73,18 +74,25 @@ def agendar_consulta(request, consulta_id):
     else:
         form = AgendamentoForm(initial={'consulta': consulta, 'tipo_ficha': tipo_ficha_padrao})
     
-    return render(request, 'Paciente/AgendarConsulta.html', {
+    return render(request, 'Paciente/AgendarConsulta.html', { ######################
         'form': form, 
         'consulta': consulta,
         'numero_na_fila': numero_na_fila,
-        'paciente': paciente  # Passando o paciente para o template
+        'paciente': paciente 
     })
 
 
 
 #teste de listar consultas (incompleta)
+@login_required
 def listar_consultas(request):
-    consultas = Consulta.objects.annotate(
+    profissional = ProfissionalSaude.objects.filter(usuario=request.user).first()
+    
+    if not profissional:
+        messages.error(request, "Este usuário não está cadastrado como profissional de saúde.")
+        return redirect('home')
+
+    consultas = Consulta.objects.filter(unidade_saude=profissional.unidade_saude).annotate(
         total_fichas=F('qtd_fichas_prioritarias') + F('qtd_fichas_normais')
     ).filter(total_fichas__gt=0)
 
@@ -92,40 +100,54 @@ def listar_consultas(request):
 
 
 
+
+
+
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Consulta, Agendamento, Notificacao  # Importe o modelo Notificacao
+from .models import Consulta, Agendamento, Notificacao
 
 @login_required
 def cancelar_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
-    paciente = get_object_or_404(Paciente, usuario=request.user)
+    profissional = ProfissionalSaude.objects.filter(usuario=request.user).first()
 
-    context = {
-        'consulta': consulta,
-        'paciente': paciente,
-    }
-    
+    if not profissional:
+        messages.error(request, "Apenas profissionais de saúde podem cancelar consultas.")
+        return redirect('AgendaConsulta:listar_consultas')
+
+    # Verifica se a consulta pertence à unidade de saúde do profissional
+    if consulta.unidade_saude != profissional.unidade_saude:
+        messages.error(request, "Você não tem permissão para cancelar esta consulta.")
+        return redirect('AgendaConsulta:listar_consultas')
+
     if request.method == 'POST':
         razao = request.POST.get('razao')
         
+        # Notifica todos os pacientes agendados para esta consulta
         agendamentos = Agendamento.objects.filter(consulta=consulta)
-
         if agendamentos.exists():
             for agendamento in agendamentos:
-
                 Notificacao.objects.create(
                     paciente=agendamento.paciente,
                     mensagem=f"Sua consulta agendada para {consulta.data} às {consulta.horario_inicio} foi cancelada. Motivo: {razao}."
                 )
                 agendamento.delete()
         
+        # Deleta a consulta
         consulta.delete()
 
         messages.success(request, "Consulta cancelada com sucesso. Os pacientes foram notificados.")
         return redirect('AgendaConsulta:listar_consultas')
     
-    return redirect('AgendaConsulta:listar_consultas')
+    return render(request, 'AgendaConsulta/cancelar_consulta.html', {
+        'consulta': consulta,
+        'profissional': profissional,
+    })
+
+
+
 
 
 
