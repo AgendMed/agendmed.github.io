@@ -156,3 +156,47 @@ def marcar_como_lida(request, notificacao_id):
 
     # Retorna uma resposta JSON para o frontend
     return JsonResponse({'success': True, 'message': 'Notificação marcada como lida.'})
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from AgendaConsulta.models import Consulta, Agendamento
+from Paciente.models import Paciente
+
+@login_required
+def lista_minhas_consultas(request):
+    # Obtém o paciente associado ao usuário logado
+    paciente = get_object_or_404(Paciente, usuario=request.user)
+    
+    # Obtém todos os agendamentos do paciente
+    agendamentos = Agendamento.objects.filter(paciente=paciente).select_related('consulta')
+    
+    return render(request, 'paciente/lista_minhas_consultas.html', {'agendamentos': agendamentos})
+
+@login_required
+def cancelar_agendamento(request, agendamento_id):
+    # Obtém o agendamento que será cancelado
+    agendamento = get_object_or_404(Agendamento, id=agendamento_id, paciente__usuario=request.user)
+    
+    # Obtém a consulta associada ao agendamento
+    consulta = agendamento.consulta
+    
+    # Libera a ficha (prioritária ou normal) de volta para a consulta
+    if agendamento.paciente.status == 'prioritario':
+        consulta.qtd_fichas_prioritarias += 1
+    else:
+        consulta.qtd_fichas_normais += 1 
+    
+    # Salva a consulta atualizada
+    consulta.save()
+    
+    # Deleta o agendamento
+    agendamento.delete()
+    
+    # Exibe uma mensagem de sucesso
+    messages.success(request, "Agendamento cancelado com sucesso. A ficha foi liberada para outros pacientes.")
+    
+    # Redireciona de volta para a lista de agendamentos
+    return redirect('Paciente:lista_minhas_consultas')

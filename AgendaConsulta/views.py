@@ -60,7 +60,7 @@ def agendar_consulta(request, consulta_id):
                     agendamento = form.save(commit=False)
                     agendamento.consulta = consulta
                     agendamento.paciente = paciente
-                    agendamento.numero_na_fila = numero_na_fila
+                    agendamento.numero_na_fila = numero_na_fila  # Salva o número na fila
                     agendamento.save()
 
                     messages.success(request, f'Agendamento disponível! Você é o número {numero_na_fila} na fila.')
@@ -74,12 +74,13 @@ def agendar_consulta(request, consulta_id):
     else:
         form = AgendamentoForm(initial={'consulta': consulta, 'tipo_ficha': tipo_ficha_padrao})
     
-    return render(request, 'Paciente/AgendarConsulta.html', { ######################
+    return render(request, 'Paciente/AgendarConsulta.html', {
         'form': form, 
         'consulta': consulta,
         'numero_na_fila': numero_na_fila,
         'paciente': paciente 
     })
+
 
 
 
@@ -97,9 +98,6 @@ def listar_consultas(request):
     ).filter(total_fichas__gt=0)
 
     return render(request, 'lista_consultas.html', {'consultas': consultas})
-
-
-
 
 
 

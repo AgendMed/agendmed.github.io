@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Estilização geral dos cards */
+.custom-card {
+    max-width: 90%;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    border: none;
+}
+
+.custom-card:hover {
+    transform: scale(1.03);
+}
+
+/* Ajuste de espaçamento e fonte */
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* Botão de cancelamento */
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* Responsividade para notebooks */
+@media (min-width: 992px) {
+    .custom-card {
+        max-width: 75%;
+    }
+    
+    .card-title {
+        font-size: 1.4rem;
+    }
+
+    .btn {
+        font-size: 1rem;
+    }
+}
+
+</style>
+<div class="container mt-5">
+    <h1 class="mb-4 text-center text-primary fw-bold">Minhas Consultas Agendadas</h1>
+    
+    {% if agendamentos %}
+        <div class="row">
+            {% for agendamento in agendamentos %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+                            <h5 class="card-title text-secondary fw-bold">
+                                <i class="fas fa-hospital me-2"></i>{{ agendamento.consulta.unidade_saude.nome }}
+                            </h5>
+                            <hr>
+                            <p class="card-text">
+                                <strong><i class="fas fa-calendar-alt me-2"></i>Data:</strong> 
+                                <span class="text-dark">{{ agendamento.consulta.data|date:"d/m/Y" }}</span><br>
+                                
+                                <strong><i class="fas fa-clock me-2"></i>Horário:</strong> 
+                                <span class="text-dark">{{ agendamento.consulta.horario_inicio|time:"H:i" }} - {{ agendamento.consulta.horario_fim|time:"H:i" }}</span><br>
+                                
+                                <strong><i class="fas fa-ticket-alt me-2"></i>Tipo de Ficha:</strong> 
+                                <span class="text-dark">
+                                    {% if agendamento.paciente.status == 'prioritario' %}
+                                        <span class="badge bg-warning text-dark">Prioritária</span>
+                                    {% else %}
+                                        <span class="badge bg-info text-white">Comum</span>
+                                    {% endif %}
+                                </span><br>
+                                
+                                <strong><i class="fas fa-list-ol me-2"></i>Número na Fila:</strong> 
+                                <span class="text-dark">{{ agendamento.consulta.numero_na_fila }}</span>  <!-- Exibe o número na fila -->
+                            </p>
+                            <div class="d-grid gap-2">
+                                <form method="post" action="{% url 'Paciente:cancelar_agendamento' agendamento.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm w-100">
+                                        <i class="fas fa-times-circle me-1"></i>Cancelar Agendamento
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            <i class="fas fa-info-circle me-2"></i>Você não possui consultas agendadas.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

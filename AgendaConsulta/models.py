@@ -14,6 +14,7 @@ class Consulta(models.Model):
         related_name='consultas'
     )
     data = models.DateField()
+    numero_na_fila = models.PositiveIntegerField(default=0)
     horario_inicio = models.TimeField()
     horario_fim = models.TimeField()
     qtd_fichas_prioritarias = models.PositiveIntegerField(default=0)
@@ -60,7 +61,6 @@ class Agendamento(models.Model):
     def __str__(self):
         return f"Agendamento {self.id} - {self.paciente} para {self.consulta}"
     
-
 
 from django.db import models
 from Paciente.models import Paciente
