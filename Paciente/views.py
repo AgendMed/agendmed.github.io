@@ -16,26 +16,46 @@ from django.http import JsonResponse
 import time
 from django.shortcuts import redirect
 from .forms import UsuarioForm, PacienteForm 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import CadastroPacienteForm
+from Unidade_Saude.models import UnidadeSaude  # Importe o modelo UnidadeSaude
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import CadastroPacienteForm
+from Unidade_Saude.models import UnidadeSaude  # Importe o modelo UnidadeSaude
 
 def cadastro_paciente(request):
+    unidades_saude = UnidadeSaude.objects.all()
     if request.method == 'POST':
         form = CadastroPacienteForm(request.POST, request.FILES)
         if form.is_valid():
-            paciente = form.save() 
-
-            grupo_paciente = Group.objects.get(name='Paciente')
-            paciente.usuario.groups.add(grupo_paciente)
-            permissao_consultar = Permission.objects.get(codename='pode_consultar')
-            paciente.usuario.user_permissions.add(permissao_consultar)
-            messages.success(request, 'Cadastro realizado com sucesso! Você pode fazer login agora.')
-
-            return redirect('Paciente:login')
+            try:
+                paciente = form.save()
+                grupo_paciente = Group.objects.get(name='Paciente')
+                paciente.usuario.groups.add(grupo_paciente)
+                permissao_consultar = Permission.objects.get(codename='pode_consultar')
+                paciente.usuario.user_permissions.add(permissao_consultar)
+                messages.success(request, 'Cadastro realizado com sucesso! Você pode fazer login agora.')
+                return redirect('Paciente:login')
+            except Exception as e:
+                messages.error(request, f"Erro ao cadastrar: {str(e)}")
         else:
-            return render(request, 'usuarios/cadastro.html', {'form': form})
+            # Exibe os erros do formulário no console
+            print("Erros do formulário:", form.errors)
+            messages.error(request, "Por favor, corrija os erros no formulário.")
     else:
         form = CadastroPacienteForm()
-        return render(request, 'usuarios/cadastro.html', {'form': form})
+
+    return render(request, 'usuarios/cadastro.html', {
+        'form': form,
+        'unidades_saude': unidades_saude
+    })
+
+
+
+
 
 @login_required
 def pagina_paciente(request):

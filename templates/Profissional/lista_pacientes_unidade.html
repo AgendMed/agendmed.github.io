@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-primary text-center fw-bold">Pacientes Agendados - {{ unidade_saude.nome }}</h1>
+
+    {% if consultas %}
+        <table class="table table-striped table-bordered shadow-sm mt-4">
+            <thead class="table-primary">
+                <tr class="text-center">
+                    <th>Ordem da Ficha</th>
+                    <th>Nome do Paciente</th>
+                    <th>Prioridade</th>
+                    <th>Data/Hora da Consulta</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for consulta in consultas %}
+                <tr class="text-center">
+                    <td><strong>{{ consulta.numero_na_fila }}</strong></td>
+                    <td>{{ agendamento.paciente.usuario.nome_completo }}</td>
+                    <td>
+                        {% if consulta.paciente.status == 'prioritario' %}
+                            <span class="badge bg-danger">Prioritário</span>
+                        {% else %}
+                            <span class="badge bg-success">Comum</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ consulta.data|date:"d/m/Y" }} - {{ consulta.horario_inicio|time:"H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info text-center mt-4">
+            <i class="fas fa-info-circle"></i> Nenhum paciente agendado para esta unidade.
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.table {
+    font-size: 1rem;
+}
+.badge {
+    font-size: 0.9rem;
+}
+</style>
+{% endblock %}

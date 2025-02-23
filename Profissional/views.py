@@ -6,7 +6,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from .forms import ProfissionalSaudeForm, UsuarioForm
 from .models import ProfissionalSaude
-from AgendaConsulta.models import Consulta
+from AgendaConsulta.models import Agendamento, Consulta
 from Campanha.models import Campanha
 from Paciente.models import Paciente
 from django.http import JsonResponse
@@ -107,3 +107,18 @@ def filtrar_profissionais(request):
         profissionais_dict = {p.id: str(p) for p in profissionais}
         return JsonResponse(profissionais_dict)
     return JsonResponse({})
+
+
+
+@login_required
+def lista_pacientes_unidade(request):
+    profissional = get_object_or_404(ProfissionalSaude, usuario=request.user)
+    unidade_saude = profissional.unidade_saude
+
+    # Filtra os agendamentos pela unidade de saúde e ordena pelo número na fila
+    agendamentos = Agendamento.objects.filter(consulta__unidade_saude=unidade_saude).order_by('consulta__numero_na_fila')
+
+    return render(request, 'profissional/lista_pacientes_unidade.html', {
+        'agendamentos': agendamentos,
+        'unidade_saude': unidade_saude
+    })
