@@ -8,7 +8,28 @@
             {% csrf_token %}
             
             <div class="form-group">
-                {{ form.as_p }}
+                <label for="id_data">Data:</label>
+                <input type="date" name="data" value="{{ form.data.value|date:'Y-m-d' }}" class="form-control" id="id_data">
+            </div>
+
+            <div class="form-group">
+                <label for="id_horario_inicio">Horário de Início:</label>
+                <input type="time" name="horario_inicio" value="{{ form.horario_inicio.value|time:'H:i' }}" class="form-control" id="id_horario_inicio">
+            </div>
+
+            <div class="form-group">
+                <label for="id_horario_fim">Horário de Término:</label>
+                <input type="time" name="horario_fim" value="{{ form.horario_fim.value|time:'H:i' }}" class="form-control" id="id_horario_fim">
+            </div>
+
+            <div class="form-group">
+                <label for="id_qtd_fichas_prioritarias">Fichas Prioritárias:</label>
+                <input type="number" name="qtd_fichas_prioritarias" value="{{ form.qtd_fichas_prioritarias.value }}" class="form-control" id="id_qtd_fichas_prioritarias">
+            </div>
+
+            <div class="form-group">
+                <label for="id_qtd_fichas_normais">Fichas Normais:</label>
+                <input type="number" name="qtd_fichas_normais" value="{{ form.qtd_fichas_normais.value }}" class="form-control" id="id_qtd_fichas_normais">
             </div>
 
             <div class="d-flex justify-content-between mt-3">
