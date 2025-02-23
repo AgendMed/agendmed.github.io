@@ -2,48 +2,194 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-primary text-center fw-bold">Pacientes Agendados - {{ unidade_saude.nome }}</h1>
+    <h1 class="text-primary text-center fw-bold">Pacientes da Unidade - {{ unidade_saude.nome }}</h1>
 
-    {% if consultas %}
-        <table class="table table-striped table-bordered shadow-sm mt-4">
-            <thead class="table-primary">
-                <tr class="text-center">
-                    <th>Ordem da Ficha</th>
-                    <th>Nome do Paciente</th>
-                    <th>Prioridade</th>
-                    <th>Data/Hora da Consulta</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for consulta in consultas %}
-                <tr class="text-center">
-                    <td><strong>{{ consulta.numero_na_fila }}</strong></td>
-                    <td>{{ agendamento.paciente.usuario.nome_completo }}</td>
-                    <td>
-                        {% if consulta.paciente.status == 'prioritario' %}
-                            <span class="badge bg-danger">Prioritário</span>
+    <!-- Seções organizadas como botões -->
+    <div class="services d-flex justify-content-center mt-4">
+        <button class="service-btn">📋 Lista de Pacientes</button>
+        <button class="service-btn">📅 Agendamentos</button>
+    </div>
+
+    <!-- Campo de Pesquisa -->
+    <div class="search-bar mt-4">
+        <input type="text" id="searchInput" placeholder="🔍 Pesquisar paciente por nome, CPF ou cartão de saúde..." class="form-control">
+    </div>
+
+    <!-- Pacientes Cadastrados -->
+    <div class="section mt-4">
+        <h2 class="section-title">Pacientes Cadastrados</h2>
+        {% if pacientes %}
+            <div class="grid" id="pacientesGrid">
+                {% for paciente in pacientes %}
+                <div class="card">
+                    <h5>{{ paciente.usuario.nome_completo }}</h5>
+                    <p><strong>CPF:</strong> {{ paciente.usuario.cpf }}</p>
+                    <p><strong>Cartão de Saúde:</strong> {{ paciente.cartao_saude }}</p>
+                    <p>
+                        <strong>Condição:</strong> 
+                        {% if paciente.condicao_prioritaria != 'nenhuma' %}
+                            <span class="badge red">{{ paciente.get_condicao_prioritaria_display }}</span>
                         {% else %}
-                            <span class="badge bg-success">Comum</span>
+                            <span class="badge green">Comum</span>
                         {% endif %}
-                    </td>
-                    <td>{{ consulta.data|date:"d/m/Y" }} - {{ consulta.horario_inicio|time:"H:i" }}</td>
-                </tr>
+                    </p>
+                    <!-- Botão de Edição -->
+                    <div class="mt-auto"> <!-- Adicionado para alinhar o botão no final -->
+                        <a href="{% url 'profissional:editar_paciente' paciente.id %}" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                    </div>
+                </div>
                 {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <div class="alert alert-info text-center mt-4">
-            <i class="fas fa-info-circle"></i> Nenhum paciente agendado para esta unidade.
-        </div>
-    {% endif %}
+            </div>
+        {% else %}
+            <p class="no-data">Nenhum paciente cadastrado nesta unidade.</p>
+        {% endif %}
+    </div>
+
+    <!-- Pacientes Agendados -->
+    <div class="section mt-5">
+        <h2 class="section-title">Pacientes Agendados</h2>
+        {% if agendamentos %}
+            <div class="grid">
+                {% for agendamento in agendamentos %}
+                <div class="card">
+                    <h5>{{ agendamento.paciente.usuario.nome_completo }}</h5>
+                    <p><strong>Ordem na Fila:</strong> {{ agendamento.consulta.numero_na_fila }}</p>
+                    <p>
+                        <strong>Prioridade:</strong> 
+                        {% if agendamento.paciente.status == 'prioritario' %}
+                            <span class="badge red">Prioritário</span>
+                        {% else %}
+                            <span class="badge green">Comum</span>
+                        {% endif %}
+                    </p>
+                    <p><strong>Data/Hora:</strong> {{ agendamento.consulta.data|date:"d/m/Y" }} - {{ agendamento.consulta.horario_inicio|time:"H:i" }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-data">Nenhum paciente agendado para esta unidade.</p>
+        {% endif %}
+    </div>
 </div>
 
+<!-- Estilos simplificados -->
 <style>
-.table {
-    font-size: 1rem;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
+
+.services {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.service-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.section-title {
+    text-align: center;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.card h5 {
+    margin-bottom: 15px;
+}
+
+.card p {
+    margin: 5px 0;
+}
+
 .badge {
-    font-size: 0.9rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.badge.red {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge.green {
+    background-color: #28a745;
+    color: white;
+}
+
+.no-data {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    margin-top: auto; /* Alinha o botão no final do card */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
 }
 </style>
+
+<!-- Script para pesquisa -->
+<script>
+document.getElementById('searchInput').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const pacientes = document.querySelectorAll('#pacientesGrid .card');
+
+    pacientes.forEach(paciente => {
+        const nome = paciente.querySelector('h5').textContent.toLowerCase();
+        const cpf = paciente.querySelector('p:nth-child(2)').textContent.toLowerCase();
+        const cartaoSaude = paciente.querySelector('p:nth-child(3)').textContent.toLowerCase();
+
+        if (nome.includes(searchTerm) || cpf.includes(searchTerm) || cartaoSaude.includes(searchTerm)) {
+            paciente.style.display = 'block';
+        } else {
+            paciente.style.display = 'none';
+        }
+    });
+});
+</script>
+
 {% endblock %}

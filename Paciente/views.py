@@ -4,30 +4,23 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from .models import Paciente
-from django.contrib.auth import logout as auth_logout  # Renomeando a importação para evitar conflito
+from django.contrib.auth import logout as auth_logout 
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth import update_session_auth_hash            
-from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from AgendaConsulta.views import agendar_consulta
 from django.contrib.auth import login
 from django.http import JsonResponse
 import time
-from django.shortcuts import redirect
 from .forms import UsuarioForm, PacienteForm 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import CadastroPacienteForm
 from Unidade_Saude.models import UnidadeSaude
-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import CadastroPacienteForm
-from Unidade_Saude.models import UnidadeSaude  # Importe o modelo UnidadeSaude
 
 def cadastro_paciente(request):
-    unidades_saude = UnidadeSaude.objects.all()  # Obtém todas as unidades de saúde
+    unidades_saude = UnidadeSaude.objects.all()  # todas as unidades de saúde
     if request.method == 'POST':
         form = CadastroPacienteForm(request.POST, request.FILES)
         if form.is_valid():
@@ -42,7 +35,6 @@ def cadastro_paciente(request):
             except Exception as e:
                 messages.error(request, f"Erro ao cadastrar: {str(e)}")
         else:
-            # Exibe os erros do formulário no console
             print("Erros do formulário:", form.errors)
             messages.error(request, "Por favor, corrija os erros no formulário.")
     else:
@@ -50,7 +42,7 @@ def cadastro_paciente(request):
 
     return render(request, 'usuarios/cadastro.html', {
         'form': form,
-        'unidades_saude': unidades_saude  # Passa as unidades de saúde para o template
+        'unidades_saude': unidades_saude
     })
 
 
