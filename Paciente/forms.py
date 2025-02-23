@@ -1,5 +1,7 @@
 from django import forms
 import requests
+
+from Unidade_Saude.models import UnidadeSaude
 from .models import Usuario, Paciente
 from users.models import Usuario
 from django.core.exceptions import ValidationError
@@ -22,10 +24,15 @@ class CadastroPacienteForm(forms.ModelForm):
         choices=Paciente._meta.get_field('condicao_prioritaria').choices, required=False
     )
     comprovante = forms.FileField(required=False)
+    unidade_saude = forms.ModelChoiceField(
+        queryset=UnidadeSaude.objects.all(),
+        required=True,
+        label="Unidade de Saúde"
+    )
 
     class Meta:
         model = Paciente
-        fields = ['cartao_saude', 'condicao_prioritaria', 'comprovante']
+        fields = ['cartao_saude', 'condicao_prioritaria', 'comprovante', 'unidade_saude']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -105,6 +112,7 @@ class CadastroPacienteForm(forms.ModelForm):
             cartao_saude=self.cleaned_data['cartao_saude'],
             condicao_prioritaria=self.cleaned_data['condicao_prioritaria'],
             comprovante=self.cleaned_data['comprovante'],
+            unidade_saude=self.cleaned_data['unidade_saude'],
             status='comum'
         )
 

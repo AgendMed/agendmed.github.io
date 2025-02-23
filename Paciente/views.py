@@ -19,7 +19,7 @@ from .forms import UsuarioForm, PacienteForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import CadastroPacienteForm
-from Unidade_Saude.models import UnidadeSaude  # Importe o modelo UnidadeSaude
+from Unidade_Saude.models import UnidadeSaude
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -27,7 +27,7 @@ from .forms import CadastroPacienteForm
 from Unidade_Saude.models import UnidadeSaude  # Importe o modelo UnidadeSaude
 
 def cadastro_paciente(request):
-    unidades_saude = UnidadeSaude.objects.all()
+    unidades_saude = UnidadeSaude.objects.all()  # Obtém todas as unidades de saúde
     if request.method == 'POST':
         form = CadastroPacienteForm(request.POST, request.FILES)
         if form.is_valid():
@@ -50,7 +50,7 @@ def cadastro_paciente(request):
 
     return render(request, 'usuarios/cadastro.html', {
         'form': form,
-        'unidades_saude': unidades_saude
+        'unidades_saude': unidades_saude  # Passa as unidades de saúde para o template
     })
 
 
