@@ -170,3 +170,13 @@ def editar_consulta(request, consulta_id):
         form = ConsultaForm(instance=consulta)
 
     return render(request, 'Formularios/edit_Consulta.html', {'form': form, 'consulta': consulta})
+
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import Consulta
+
+def listar_pacientes_por_consulta(request, consulta_id):
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+    pacientes = consulta.pacientes.all()  # Ajuste de acordo com seu modelo
+    return render(request, 'lista_pacientes.html', {'consulta': consulta, 'pacientes': pacientes})
