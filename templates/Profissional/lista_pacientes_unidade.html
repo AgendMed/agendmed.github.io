@@ -47,30 +47,6 @@
         {% endif %}
     </div>
 
-    <!-- Pacientes Agendados -->
-    <div class="section mt-5">
-        <h2 class="section-title">Pacientes Agendados</h2>
-        {% if agendamentos %}
-            <div class="grid">
-                {% for agendamento in agendamentos %}
-                <div class="card">
-                    <h5>{{ agendamento.paciente.usuario.nome_completo }}</h5>
-                    <p><strong>Ordem na Fila:</strong> {{ agendamento.consulta.numero_na_fila }}</p>
-                    <p>
-                        <strong>Prioridade:</strong> 
-                        {% if agendamento.paciente.status == 'prioritario' %}
-                            <span class="badge red">Prioritário</span>
-                        {% else %}
-                            <span class="badge green">Comum</span>
-                        {% endif %}
-                    </p>
-                    <p><strong>Data/Hora:</strong> {{ agendamento.consulta.data|date:"d/m/Y" }} - {{ agendamento.consulta.horario_inicio|time:"H:i" }}</p>
-                </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <p class="no-data">Nenhum paciente agendado para esta unidade.</p>
-        {% endif %}
     </div>
 </div>
 
