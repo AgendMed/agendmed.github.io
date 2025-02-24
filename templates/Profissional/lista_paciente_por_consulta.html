@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #ddd;
+    }
+
+    .badge-danger {
+        color: white;
+        background-color: red;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .badge-success {
+        color: white;
+        background-color: green;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .container {
+        width: 80%;
+        margin: 0 auto;
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    <h1>Pacientes Agendados para a Consulta #{{ consulta.id }}</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Ordem da Fila</th>
+                <th>Nome do Paciente</th>
+                <th>Prioritário</th>
+                <th>Data do Agendamento</th>
+                <th>Hora do Agendamento</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for agendamento in agendamentos %}
+            <tr>
+                <td>{{ agendamento.consulta.numero_na_fila }}</td>
+                <td>{{ agendamento.paciente.usuario.nome_completo }}</td>
+                <td>
+                    {% if agendamento.paciente.condicao_prioritaria != 'nenhuma' %}
+                        <span class="badge-danger">Sim</span>
+                    {% else %}
+                        <span class="badge-success">Não</span>
+                    {% endif %}
+                </td>
+                <td>{{ agendamento.consulta.data|date:"d/m/Y" }}</td>
+                <td>{{ agendamento.consulta.horario_inicio|time:"H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Nenhum paciente agendado para esta consulta.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
