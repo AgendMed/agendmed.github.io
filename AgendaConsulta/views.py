@@ -1,8 +1,6 @@
 from django.contrib import messages
 from django.db import transaction
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from .models import Consulta, Agendamento, Notificacao
+
 from Paciente.models import Paciente
 from Profissional.models import ProfissionalSaude
 from .forms import ConsultaForm, AgendamentoForm
@@ -28,124 +26,66 @@ def cadastrar_consulta(request):
     return render(request, 'Formularios/cad_Consulta.html', {'form': form})
 
 
-
-
 @login_required
 def agendar_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
-    usuario = request.user
+    usuario = request.user  
     paciente = get_object_or_404(Paciente, usuario=usuario)
 
-    tipo_ficha_padrao = 'prioritario' if paciente.status == 'prioritario' else 'comum'
+    # Verifica se o paciente já tem um agendamento nessa consulta
+    ja_agendado = Agendamento.objects.filter(consulta=consulta, paciente=paciente).exists()
 
-    # Obtém a última posição para cada fila
-    ultima_posicao_prioritaria = (
-        Agendamento.objects.filter(consulta=consulta, paciente__status='prioritario')
-        .order_by('-numero_na_fila')
-        .values_list('numero_na_fila', flat=True)
-        .first()
-    ) or 0
+    numero_na_fila = Agendamento.objects.filter(consulta=consulta).count() + 1
 
-    ultima_posicao_comum = (
-        Agendamento.objects.filter(consulta=consulta, paciente__status='comum')
-        .order_by('-numero_na_fila')
-        .values_list('numero_na_fila', flat=True)
-        .first()
-    ) or 0
-
-    if request.method == 'POST':
+    if request.method == 'POST' and not ja_agendado:
         form = AgendamentoForm(request.POST)
         if form.is_valid():
             try:
                 with transaction.atomic():
-                    tipo_ficha = form.cleaned_data.get('tipo_ficha', tipo_ficha_padrao)
+                    tipo_ficha = form.cleaned_data.get('tipo_ficha')
 
+                    if tipo_ficha == 'prioritario' and consulta.qtd_fichas_prioritarias < 1:
+                        raise ValueError("Não há fichas prioritárias disponíveis")
+                    elif tipo_ficha == 'comum' and consulta.qtd_fichas_normais < 1:
+                        raise ValueError("Não há fichas normais disponíveis")
+
+                    # Atualiza a quantidade de fichas disponíveis
                     if tipo_ficha == 'prioritario':
-                        if consulta.qtd_fichas_prioritarias > 0:
-                            numero_na_fila = ultima_posicao_prioritaria + 1
-                            consulta.qtd_fichas_prioritarias -= 1
-                        else:
-                            consulta.lista_espera_prioritaria.add(paciente)
-                            messages.warning(request, "Todas as fichas prioritárias foram distribuídas. Você foi adicionado à fila de espera.")
-                            return redirect('Paciente:paciente_home')
-
+                        consulta.qtd_fichas_prioritarias -= 1
                     else:
-                        if consulta.qtd_fichas_normais > 0:
-                            numero_na_fila = ultima_posicao_comum + 1
-                            consulta.qtd_fichas_normais -= 1
-                        else:
-                            consulta.lista_espera_comum.add(paciente)
-                            messages.warning(request, "Todas as fichas normais foram distribuídas. Você foi adicionado à fila de espera.")
-                            return redirect('Paciente:paciente_home')
+                        consulta.qtd_fichas_normais -= 1
 
                     consulta.save()
 
+                    # Salva o agendamento
                     agendamento = form.save(commit=False)
                     agendamento.consulta = consulta
                     agendamento.paciente = paciente
                     agendamento.numero_na_fila = numero_na_fila
                     agendamento.save()
 
-                    messages.success(request, f'Agendamento realizado com sucesso! Você é o número {numero_na_fila} na fila de {tipo_ficha}.')
-                    return redirect('Paciente:paciente_home')
+                    messages.success(request, f'Agendamento confirmado! Você é o número {numero_na_fila} na fila.')
+                    return render(request, 'Paciente/AgendarConsulta.html', {
+                        'form': form, 
+                        'consulta': consulta,
+                        'numero_na_fila': numero_na_fila,
+                        'paciente': paciente,
+                        'ja_agendado': ja_agendado
+                    })
 
             except Exception as e:
                 messages.error(request, str(e))
-                return redirect('AgendaConsulta:agendar_consulta', consulta_id=consulta_id)
-        else:
-            messages.error(request, 'Por favor, corrija os erros no formulário.')
+    
     else:
-        form = AgendamentoForm(initial={'consulta': consulta, 'tipo_ficha': tipo_ficha_padrao})
-
+        form = AgendamentoForm(initial={'consulta': consulta})
+    
     return render(request, 'Paciente/AgendarConsulta.html', {
-        'form': form,
+        'form': form, 
         'consulta': consulta,
-        'paciente': paciente
+        'numero_na_fila': numero_na_fila,
+        'paciente': paciente,
+        'ja_agendado': ja_agendado
     })
-
-
-
-
-
-
-# Ainda em testes
-def chamar_proximo_paciente(consulta):
-    """
-    Move um paciente da lista de espera para o agendamento, se houver fichas disponíveis.
-    """
-    if consulta.qtd_fichas_prioritarias > 0 and consulta.lista_espera_prioritaria.exists():
-        # Chamar o primeiro paciente da fila prioritária
-        paciente = consulta.lista_espera_prioritaria.first()
-        consulta.lista_espera_prioritaria.remove(paciente)
-        consulta.qtd_fichas_prioritarias -= 1
-
-    elif consulta.qtd_fichas_normais > 0 and consulta.lista_espera_comum.exists():
-        # Chamar o primeiro paciente da fila comum
-        paciente = consulta.lista_espera_comum.first()
-        consulta.lista_espera_comum.remove(paciente)
-        consulta.qtd_fichas_normais -= 1
-
-    else:
-        return
-
-    # Criar um novo agendamento para o paciente chamado
-    numero_na_fila = Agendamento.objects.filter(consulta=consulta).count() + 1
-    Agendamento.objects.create(
-        consulta=consulta,
-        paciente=paciente,
-        numero_na_fila=numero_na_fila
-    )
-
-    consulta.save()
-    Notificacao.objects.create(
-        paciente=paciente,
-        mensagem=f"Sua consulta foi confirmada para {consulta.data} às {consulta.horario_inicio}."
-    )
-
-
-
-
-
 
 
 
@@ -166,6 +106,11 @@ def listar_consultas(request):
 
 
 
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Consulta, Agendamento, Notificacao
+
 @login_required
 def cancelar_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
@@ -175,32 +120,26 @@ def cancelar_consulta(request, consulta_id):
         messages.error(request, "Apenas profissionais de saúde podem cancelar consultas.")
         return redirect('AgendaConsulta:listar_consultas')
 
+    # Verifica se a consulta pertence à unidade de saúde do profissional
     if consulta.unidade_saude != profissional.unidade_saude:
         messages.error(request, "Você não tem permissão para cancelar esta consulta.")
         return redirect('AgendaConsulta:listar_consultas')
 
     if request.method == 'POST':
         razao = request.POST.get('razao')
-
-        # Notificar e remover todos os pacientes agendados
+        
+        # Notifica todos os pacientes agendados para esta consulta
         agendamentos = Agendamento.objects.filter(consulta=consulta)
         if agendamentos.exists():
             for agendamento in agendamentos:
                 Notificacao.objects.create(
                     paciente=agendamento.paciente,
-                    mensagem=f"Sua consulta agendada para {consulta.data} foi cancelada. Motivo: {razao}."
+                    mensagem=f"Sua consulta agendada para {consulta.data} às {consulta.horario_inicio} foi cancelada. Motivo: {razao}."
                 )
                 agendamento.delete()
-
-        # Liberar fichas para novas consultas
-        consulta.qtd_fichas_prioritarias += len(consulta.lista_espera_prioritaria.all())
-        consulta.qtd_fichas_normais += len(consulta.lista_espera_comum.all())
-
-        # Atualizar lista de espera
-        consulta.lista_espera_prioritaria.clear()
-        consulta.lista_espera_comum.clear()
         
-        consulta.save()
+        # Deleta a consulta
+        consulta.delete()
 
         messages.success(request, "Consulta cancelada com sucesso. Os pacientes foram notificados.")
         return redirect('AgendaConsulta:listar_consultas')
@@ -231,21 +170,3 @@ def editar_consulta(request, consulta_id):
         form = ConsultaForm(instance=consulta)
 
     return render(request, 'Formularios/edit_Consulta.html', {'form': form, 'consulta': consulta})
-
-
-
-@login_required
-def listar_pacientes_por_consulta(request, consulta_id):
-    consulta = get_object_or_404(Consulta, id=consulta_id)
-    profissional = ProfissionalSaude.objects.filter(usuario=request.user).first()
-
-    if not profissional or consulta.unidade_saude != profissional.unidade_saude:
-        messages.error(request, "Você não tem permissão para visualizar esta consulta.")
-        return redirect('AgendaConsulta:listar_consultas')
-
-    agendamentos = Agendamento.objects.filter(consulta=consulta).select_related('paciente')
-
-    return render(request, 'profissional/lista_paciente_por_consulta.html', {
-        'consulta': consulta,
-        'agendamentos': agendamentos
-    })
