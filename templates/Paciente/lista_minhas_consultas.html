@@ -84,7 +84,7 @@
                                 </span><br>
                                 
                                 <strong><i class="fas fa-list-ol me-2"></i>Número na Fila:</strong> 
-                                <span class="text-dark">{{ agendamento.consulta.numero_na_fila }}</span>  <!-- Exibe o número na fila -->
+                                <span class="text-dark">{{ agendamento.numero_na_fila }}</span>
                             </p>
                             <div class="d-grid gap-2">
                                 <form method="post" action="{% url 'Paciente:cancelar_agendamento' agendamento.id %}">

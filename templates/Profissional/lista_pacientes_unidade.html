@@ -20,27 +20,31 @@
         <h2 class="section-title">Pacientes Cadastrados</h2>
         {% if pacientes %}
             <div class="grid" id="pacientesGrid">
-                {% for paciente in pacientes %}
-                <div class="card">
-                    <h5>{{ paciente.usuario.nome_completo }}</h5>
-                    <p><strong>CPF:</strong> {{ paciente.usuario.cpf }}</p>
-                    <p><strong>Cartão de Saúde:</strong> {{ paciente.cartao_saude }}</p>
-                    <p>
-                        <strong>Condição:</strong> 
-                        {% if paciente.condicao_prioritaria != 'nenhuma' %}
-                            <span class="badge red">{{ paciente.get_condicao_prioritaria_display }}</span>
-                        {% else %}
-                            <span class="badge green">Comum</span>
-                        {% endif %}
-                    </p>
-                    <!-- Botão de Edição -->
-                    <div class="mt-auto"> <!-- Adicionado para alinhar o botão no final -->
-                        <a href="{% url 'profissional:editar_paciente' paciente.id %}" class="btn btn-primary">
-                            <i class="fas fa-edit"></i> Editar
-                        </a>
-                    </div>
-                </div>
-                {% endfor %}
+                <!-- Dentro do loop de pacientes -->
+{% for paciente in pacientes %}
+<div class="card">
+    <h5>{{ paciente.usuario.nome_completo }}</h5>
+    <p><strong>CPF:</strong> {{ paciente.usuario.cpf }}</p>
+    <p><strong>Cartão de Saúde:</strong> {{ paciente.cartao_saude }}</p>
+    <p>
+        <strong>Condição:</strong> 
+        {% if paciente.condicao_prioritaria != 'nenhuma' %}
+            <span class="badge red">{{ paciente.get_condicao_prioritaria_display }}</span>
+        {% else %}
+            <span class="badge green">Comum</span>
+        {% endif %}
+    </p>
+    <!-- Botão para alocar o paciente em uma consulta "% url 'AgendaConsulta:alocar_paciente' paciente.id" -->
+    <div class="mt-auto">
+        <a href="{% url 'AgendaConsulta:alocar_paciente' paciente.id%}" class="btn btn-success">
+            <i class="fas fa-calendar-plus"></i> Alocar em Consulta
+        </a>
+    </div>
+    <a href="#" class="btn btn-success">
+        Editar
+    </a>
+</div>
+{% endfor %}
             </div>
         {% else %}
             <p class="no-data">Nenhum paciente cadastrado nesta unidade.</p>

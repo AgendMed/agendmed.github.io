@@ -169,11 +169,77 @@ def editar_consulta(request, consulta_id):
     return render(request, 'Formularios/edit_Consulta.html', {'form': form, 'consulta': consulta})
 
 
+@login_required
 def listar_pacientes_por_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
-    pacientes = consulta.pacientes.all() if hasattr(consulta, 'pacientes') else []
+    
+    # Obtém todos os agendamentos para a consulta
+    agendamentos = Agendamento.objects.filter(consulta=consulta).select_related('paciente')
 
-    if not pacientes:
-        messages.info(request, "Nenhum paciente agendado para esta consulta.") # dando problema aqui! arrumar template
+    if not agendamentos:
+        messages.info(request, "Nenhum paciente agendado para esta consulta.")
 
-    return render(request, 'Profissional/lista_paciente_por_consulta.html', {'consulta': consulta, 'pacientes': pacientes})
+    return render(request, 'Profissional/lista_paciente_por_consulta.html', {
+        'consulta': consulta,
+        'agendamentos': agendamentos
+    })
+
+
+
+@login_required
+def alocar_paciente(request, paciente_id):
+    paciente = get_object_or_404(Paciente, id=paciente_id)
+    
+    # Acessa o ProfissionalSaude relacionado ao usuário
+    try:
+        profissional = request.user.profissionalsaude_set.first()
+    except AttributeError:
+        messages.error(request, "Este usuário não está associado a um profissional de saúde.")
+        return redirect('home')
+
+    if not profissional:
+        messages.error(request, "Este usuário não está associado a um profissional de saúde.")
+        return redirect('home')
+
+    # Obtém as consultas disponíveis na unidade de saúde do profissional
+    consultas_disponiveis = Consulta.objects.filter(
+        unidade_saude=profissional.unidade_saude,
+        qtd_fichas_normais__gt=0
+    )
+
+    if request.method == 'POST':
+        consulta_id = request.POST.get('consulta_id')
+        consulta = get_object_or_404(Consulta, id=consulta_id)
+
+        if Agendamento.objects.filter(consulta=consulta, paciente=paciente).exists():
+            messages.error(request, "Este paciente já está agendado para esta consulta.")
+            return redirect('AgendaConsulta:alocar_paciente', paciente_id=paciente.id)
+
+        # Verifica se há fichas disponíveis
+        if consulta.qtd_fichas_normais < 1:
+            messages.error(request, "Não há fichas disponíveis para esta consulta.")
+            return redirect('AgendaConsulta:alocar_paciente', paciente_id=paciente.id)
+
+        
+        try:
+            with transaction.atomic():
+                agendamento = Agendamento(
+                    consulta=consulta,
+                    paciente=paciente,
+                    numero_na_fila=Agendamento.objects.filter(consulta=consulta).count() + 1
+                )
+                agendamento.save()
+
+                consulta.qtd_fichas_normais -= 1
+                consulta.save()
+
+                messages.success(request, f"Paciente alocado com sucesso na consulta de {consulta.data} às {consulta.horario_inicio}.")
+                return redirect('AgendaConsulta:listar_consultas')
+        except Exception as e:
+            messages.error(request, f"Erro ao alocar paciente: {str(e)}")
+            return redirect('AgendaConsulta:alocar_paciente', paciente_id=paciente.id)
+
+    return render(request, 'Profissional/alocar_paciente.html', {
+        'paciente': paciente,
+        'consultas_disponiveis': consultas_disponiveis
+    })
