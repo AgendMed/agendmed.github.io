@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.db import transaction
-
 from Paciente.models import Paciente
 from Profissional.models import ProfissionalSaude
 from .forms import ConsultaForm, AgendamentoForm
@@ -8,6 +7,11 @@ from django.db.models import F
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Consulta
 from django.contrib.auth.decorators import login_required, permission_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Consulta, Agendamento, Notificacao
+
+
 
 @login_required
 #@permission_required('AgendaConsulta.pode_cadastrar_consulta', raise_exception=True)
@@ -107,10 +111,6 @@ def listar_consultas(request):
 
 
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from .models import Consulta, Agendamento, Notificacao
-
 @login_required
 def cancelar_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
@@ -138,7 +138,6 @@ def cancelar_consulta(request, consulta_id):
                 )
                 agendamento.delete()
         
-        # Deleta a consulta
         consulta.delete()
 
         messages.success(request, "Consulta cancelada com sucesso. Os pacientes foram notificados.")
@@ -148,8 +147,6 @@ def cancelar_consulta(request, consulta_id):
         'consulta': consulta,
         'profissional': profissional,
     })
-
-
 
 
 
@@ -172,11 +169,11 @@ def editar_consulta(request, consulta_id):
     return render(request, 'Formularios/edit_Consulta.html', {'form': form, 'consulta': consulta})
 
 
-
-from django.shortcuts import render, get_object_or_404
-from .models import Consulta
-
 def listar_pacientes_por_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
-    pacientes = consulta.pacientes.all()  # Ajuste de acordo com seu modelo
-    return render(request, 'lista_pacientes.html', {'consulta': consulta, 'pacientes': pacientes})
+    pacientes = consulta.pacientes.all() if hasattr(consulta, 'pacientes') else []
+
+    if not pacientes:
+        messages.info(request, "Nenhum paciente agendado para esta consulta.") # dando problema aqui! arrumar template
+
+    return render(request, 'Profissional/lista_paciente_por_consulta.html', {'consulta': consulta, 'pacientes': pacientes})
