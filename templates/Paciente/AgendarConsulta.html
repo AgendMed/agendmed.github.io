@@ -7,96 +7,111 @@
 
     <style>
         body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-.container {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    width: 100%;
-}
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
 
-h1, h2 {
-    text-align: center;
-    color: #2c3e50;
-}
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
 
-p {
-    margin: 10px 0;
-    color: #34495e;
-}
+        p {
+            margin: 10px 0;
+            color: #34495e;
+        }
 
-ul {
-    list-style: none;
-    padding: 0;
-}
+        ul {
+            list-style: none;
+            padding: 0;
+        }
 
-ul li {
-    background: #ecf0f1;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
-}
+        ul li {
+            background: #ecf0f1;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
 
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-label {
-    font-weight: bold;
-}
+        label {
+            font-weight: bold;
+        }
 
-select, input, button {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #bdc3c7;
-}
+        select, input, button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+        }
 
-button {
-    background: #327bda;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-}
+        button {
+            background: #327bda;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+        }
 
-button:hover {
-    background: #16256b;
-}
+        button:hover {
+            background: #16256b;
+        }
 
-.messages {
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 5px;
-}
+        .messages {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
 
-.messages p {
-    text-align: center;
-    font-weight: bold;
-}
+        .messages p {
+            font-weight: bold;
+        }
 
-.messages .success {
-    background: #2ecc71;
-    color: white;
-}
+        .messages .success {
+            background: #2ecc71;
+            color: white;
+        }
 
-.messages .error {
-    background: #e74c3c;
-    color: white;
-}
+        .messages .error {
+            background: #e74c3c;
+            color: white;
+        }
 
+        .btn-voltar {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px;
+            background: #95a5a6;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn-voltar:hover {
+            background: #7f8c8d;
+        }
     </style>
 </head>
 <body>
@@ -128,7 +143,12 @@ button:hover {
 
             {{ form.as_p }}
 
-            <button type="submit">Agendar</button>
+            {% if ja_agendado %}
+                <button type="submit" disabled>Agendar</button>
+                <p style="color: red;">Você já está agendado para esta consulta.</p>
+            {% else %}
+                <button type="submit">Agendar</button>
+            {% endif %}
         </form>
 
         {% if messages %}
@@ -138,6 +158,8 @@ button:hover {
                 {% endfor %}
             </div>
         {% endif %}
+
+        <a href="{% url 'Paciente:paciente_home' %}" class="btn-voltar">Voltar</a>
     </div>
 </body>
 </html>

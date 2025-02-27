@@ -56,11 +56,11 @@ class Agendamento(models.Model):
         related_name='agendamentos'
     )
     data_agendamento = models.DateTimeField(auto_now_add=True)
+    numero_na_fila = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"Agendamento {self.id} - {self.paciente} para {self.consulta}"
     
-
 
 from django.db import models
 from Paciente.models import Paciente

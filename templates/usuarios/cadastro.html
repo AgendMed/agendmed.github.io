@@ -72,6 +72,16 @@
                 <input type="email" id="email" name="email" value="{{ form.email.value|default:'' }}" autocomplete="email" placeholder="exemplo@gmail.com">
                 <div id="emailError" class="error-message"></div>
 
+
+                <!-- Campo Unidade de Saúde -->
+                <label for="unidade_saude">Unidade de Saúde</label>
+                <select id="unidade_saude" name="unidade_saude" required>
+                    <option value="">Selecione uma unidade de saúde</option>
+                    {% for unidade in unidades_saude %}
+                        <option value="{{ unidade.id }}">{{ unidade.nome }}</option>
+                    {% endfor %}
+                </select>
+
                 <!-- Campo Senha -->
                 <label for="senha">Senha</label>
                 <input type="password" id="senha" name="senha" value="{{ form.senha.value|default:'' }}" autocomplete="current-password" required>
@@ -104,9 +114,6 @@
             </form>
 
             <!-- Exibição de erros -->
-
-            
-
             {% if form.errors %}
                 <ul>
                     {% for field in form %}

@@ -1,4 +1,5 @@
 from django.db import models
+from Unidade_Saude.models import UnidadeSaude
 from users.models import Usuario
 
 class Paciente(models.Model):
@@ -30,6 +31,8 @@ class Paciente(models.Model):
     )
     comprovante = models.FileField(upload_to='comprovantes/', null=True, blank=True)
     data_aprovacao = models.DateTimeField(null=True, blank=True)
+    unidade_saude = models.ForeignKey(UnidadeSaude, on_delete=models.SET_NULL, null=True, blank=True)
+
 
     def __str__(self):
         return f"{self.usuario.nome_completo} ({self.status})"

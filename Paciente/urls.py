@@ -13,7 +13,9 @@ urlpatterns = [
     path('paciente_home/', views.paciente_home, name='paciente_home'),
     path('listar/', views.listar_consultas, name='listar_consultas'),
     path('notificacoes/', views.notificacoes, name='notificacoes'), #visualizar notificacoes na tela paciente
-    
+    path('marcar-como-lida/<int:notificacao_id>/', views.marcar_como_lida, name='marcar_como_lida'),
+    path('minhas-consultas/', views.lista_minhas_consultas, name='lista_minhas_consultas'),
+    path('cancelar-agendamento/<int:agendamento_id>/', views.cancelar_agendamento, name='cancelar_agendamento'),
 
 
 ]

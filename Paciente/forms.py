@@ -1,5 +1,7 @@
 from django import forms
 import requests
+
+from Unidade_Saude.models import UnidadeSaude
 from .models import Usuario, Paciente
 from users.models import Usuario
 from django.core.exceptions import ValidationError
@@ -22,10 +24,15 @@ class CadastroPacienteForm(forms.ModelForm):
         choices=Paciente._meta.get_field('condicao_prioritaria').choices, required=False
     )
     comprovante = forms.FileField(required=False)
+    unidade_saude = forms.ModelChoiceField(
+        queryset=UnidadeSaude.objects.all(),
+        required=True,
+        label="Unidade de Saúde"
+    )
 
     class Meta:
         model = Paciente
-        fields = ['cartao_saude', 'condicao_prioritaria', 'comprovante']
+        fields = ['cartao_saude', 'condicao_prioritaria', 'comprovante', 'unidade_saude']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -40,20 +47,6 @@ class CadastroPacienteForm(forms.ModelForm):
             raise ValidationError('O arquivo de comprovante deve ser PDF, JPG ou PNG.')
         return cleaned_data
 
-    def save(self, commit=True):
-        # Cria o usuário primeiro
-        usuario_data = {
-            'username': self.cleaned_data['cpf'],  # Usando o CPF como username
-            'nome_completo': self.cleaned_data['nome_completo'],
-            'cpf': self.cleaned_data['cpf'],
-            'telefone': self.cleaned_data['telefone'],
-            'bairro': self.cleaned_data['bairro'],
-            'rua': self.cleaned_data['rua'],
-            'complemento': self.cleaned_data['complemento'],
-            'numerocasa': self.cleaned_data['numerocasa'],
-            'data_nascimento': self.cleaned_data['data_nascimento'],
-            'email': self.cleaned_data['email'],
-        }
     def get_coordinates(self, address):
         API_KEY = "j7EFwWOjGiFXvA6bZDH6iNdbuCkuzB1K5caRlJ6jpnwRynXsW9fUY8mNCkyvYYk6"
         GEOCODING_API_URL = "https://api.distancematrix.ai/maps/api/geocode/json"
@@ -86,9 +79,8 @@ class CadastroPacienteForm(forms.ModelForm):
             print("Erro na requisição:", e)
             return None, None
 
-
-
     def save(self, commit=True):
+        # Cria o usuário
         usuario = Usuario.objects.create_user(
             username=self.cleaned_data['cpf'],
             nome_completo=self.cleaned_data['nome_completo'],
@@ -102,21 +94,27 @@ class CadastroPacienteForm(forms.ModelForm):
             email=self.cleaned_data['email'],
             password=self.cleaned_data['senha']
         )
+
+        endereco_completo = f"{self.cleaned_data['rua']}, {self.cleaned_data['numerocasa']}, {self.cleaned_data['bairro']}, {self.cleaned_data['cep']}"
+        latitude, longitude = self.get_coordinates(endereco_completo)
+
+        if latitude is None or longitude is None:
+            raise ValidationError("Não foi possível obter as coordenadas para o endereço informado.")
+
+        # Atribui as coordenadas ao usuário
+        usuario.latitude = latitude
+        usuario.longitude = longitude
+        usuario.save()
+
+        # Cria o paciente
         paciente = Paciente.objects.create(
             usuario=usuario,
             cartao_saude=self.cleaned_data['cartao_saude'],
             condicao_prioritaria=self.cleaned_data['condicao_prioritaria'],
             comprovante=self.cleaned_data['comprovante'],
+            unidade_saude=self.cleaned_data['unidade_saude'],
             status='comum'
         )
-        endereco_completo = f"{self.cleaned_data['rua']}, {self.cleaned_data['numerocasa']}, {self.cleaned_data['bairro']}, {self.cleaned_data['cep']}"
-        latitude, longitude = self.get_coordinates(endereco_completo)
-        if latitude is None or longitude is None:
-            raise ValidationError("Não foi possível obter as coordenadas para o endereço informado.")
-
-        usuario.latitude = latitude
-        usuario.longitude = longitude
-        usuario.save()
 
         return paciente
 
