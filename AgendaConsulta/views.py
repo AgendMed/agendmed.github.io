@@ -248,3 +248,47 @@ def alocar_paciente(request, paciente_id):
         'paciente': paciente,
         'consultas_disponiveis': consultas_disponiveis
     })
+
+
+
+@login_required
+def cancelar_agendamento(request, agendamento_id):
+    # Obtém o agendamento
+    agendamento = get_object_or_404(Agendamento, id=agendamento_id)
+    
+    # Verifica se o profissional logado pertence à mesma unidade de saúde da consulta
+    profissional = get_object_or_404(ProfissionalSaude, usuario=request.user)
+    if agendamento.consulta.unidade_saude != profissional.unidade_saude:
+        messages.error(request, "Você não tem permissão para cancelar este agendamento.")
+        return redirect('AgendaConsulta:listar_consultas')
+
+    if request.method == 'POST':
+        razao = request.POST.get('razao', 'Sem motivo especificado.')  # Motivo do cancelamento
+
+        try:
+            with transaction.atomic():
+                # Notifica o paciente sobre o cancelamento
+                Notificacao.objects.create(
+                    paciente=agendamento.paciente,
+                    mensagem=f"Seu agendamento para a consulta de {agendamento.consulta.data} às {agendamento.consulta.horario_inicio} foi cancelado. Motivo: {razao}."
+                )
+
+                # Devolve a ficha para a consulta
+                if agendamento.paciente.condicao_prioritaria != 'nenhuma':
+                    agendamento.consulta.qtd_fichas_prioritarias += 1
+                else:
+                    agendamento.consulta.qtd_fichas_normais += 1
+                agendamento.consulta.save()
+
+                # Remove o agendamento
+                agendamento.delete()
+
+                messages.success(request, "Agendamento cancelado com sucesso. O paciente foi notificado.")
+                return redirect('AgendaConsulta:listar_consultas')
+        except Exception as e:
+            messages.error(request, f"Erro ao cancelar agendamento: {str(e)}")
+            return redirect('AgendaConsulta:listar_consultas')
+
+    return render(request, 'Profissional/cancelar_agendamento.html', {
+        'agendamento': agendamento
+    })

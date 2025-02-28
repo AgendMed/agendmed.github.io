@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Cancelar Agendamento</h2>
+    <p>Você está prestes a cancelar o agendamento do paciente <strong>{{ agendamento.paciente.usuario.nome_completo }}</strong> para a consulta de <strong>{{ agendamento.consulta.data }}</strong> às <strong>{{ agendamento.consulta.horario_inicio }}</strong>.</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="razao">Motivo do Cancelamento:</label>
+            <textarea class="form-control" id="razao" name="razao" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger">Confirmar Cancelamento</button>
+        <a href="{% url 'AgendaConsulta:listar_consultas' %}" class="btn btn-secondary">Voltar</a>
+    </form>
+</div>
+{% endblock %}
