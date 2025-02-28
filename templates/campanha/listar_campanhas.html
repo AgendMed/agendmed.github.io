@@ -20,7 +20,7 @@
                 <td>{{ campanha.data_inicial }}</td>
                 <td>{{ campanha.data_final }}</td>
                 <td>
-                    <a href="{% url 'deletar_campanha' campanha.id %}" class="btn btn-danger btn-sm">Deletar</a>
+                    <a href="{% url 'Campanha:deletar_campanha' campanha.id %}" class="btn btn-danger btn-sm">Deletar</a>
                 </td>
             </tr>
             {% empty %}
