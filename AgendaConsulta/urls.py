@@ -12,6 +12,7 @@ urlpatterns = [
     path('listar_pacientes/<int:consulta_id>/', views.listar_pacientes_por_consulta, name='listar_pacientes_por_consulta'),
     path('alocar-paciente/<int:paciente_id>/', views.alocar_paciente, name='alocar_paciente'),
     path('cancelar-agendamento/<int:agendamento_id>/', views.cancelar_agendamento, name='cancelar_agendamento'),
+    path('fila-espera/<int:consulta_id>/', views.listar_fila_espera, name='fila_espera'),
 
 
 

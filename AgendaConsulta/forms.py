@@ -9,7 +9,7 @@ class ConsultaForm(forms.ModelForm):
         model = Consulta
         fields = ['data', 'unidade_saude', 'profissional', 'horario_inicio', 'horario_fim', 
                  'qtd_fichas_prioritarias', 'qtd_fichas_normais']
-
+        
     def clean(self):
         cleaned_data = super().clean()
         unidade = cleaned_data.get('unidade_saude')
@@ -29,13 +29,13 @@ class AgendamentoForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         consulta = cleaned_data.get('consulta')
-        
-        if consulta:
-            if cleaned_data.get('tipo_ficha') == 'prioritaria' and consulta.qtd_fichas_prioritarias < 1:
-                raise ValidationError("Fichas prioritárias esgotadas")
-            
-            if cleaned_data.get('tipo_ficha') == 'comum' and consulta.qtd_fichas_normais < 1:
-                raise ValidationError("Fichas normais esgotadas")
+        tipo_ficha = cleaned_data.get('tipo_ficha')
+
+        if consulta and tipo_ficha:
+            if tipo_ficha == 'prioritario' and consulta.qtd_fichas_prioritarias < 1:
+                raise ValidationError("Não há fichas prioritárias disponíveis.")
+            elif tipo_ficha == 'comum' and consulta.qtd_fichas_normais < 1:
+                raise ValidationError("Não há fichas normais disponíveis.")
           
 
 #Modal para notificações

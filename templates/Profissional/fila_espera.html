@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Fila de Espera para a Consulta</h2>
+
+    <p><strong>Unidade de Saúde:</strong> {{ consulta.unidade_saude.nome }}</p>
+    <p><strong>Data:</strong> {{ consulta.data|date:"d/m/Y" }}</p>
+    <p><strong>Horário:</strong> {{ consulta.horario_inicio|time:"H:i" }} - {{ consulta.horario_fim|time:"H:i" }}</p>
+
+    <h3>Fila de Espera Prioritária</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome do Paciente</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for paciente in fila_prioritaria %}
+                <tr>
+                    <td>{{ paciente.usuario.nome_completo }}</td>
+                    <td>Prioritário</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center">Nenhum paciente na fila prioritária.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Fila de Espera Comum</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome do Paciente</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for paciente in fila_comum %}
+                <tr>
+                    <td>{{ paciente.usuario.nome_completo }}</td>
+                    <td>Comum</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center">Nenhum paciente na fila comum.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'AgendaConsulta:listar_consultas' %}" class="btn btn-secondary">Voltar</a>
+</div>
+{% endblock %}

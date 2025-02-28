@@ -48,15 +48,53 @@ def agendar_consulta(request, consulta_id):
                 with transaction.atomic():
                     tipo_ficha = form.cleaned_data.get('tipo_ficha')
 
+                    # Verifica se há fichas disponíveis
                     if tipo_ficha == 'prioritario' and consulta.qtd_fichas_prioritarias < 1:
-                        raise ValueError("Não há fichas prioritárias disponíveis")
-                    elif tipo_ficha == 'comum' and consulta.qtd_fichas_normais < 1:
-                        raise ValueError("Não há fichas normais disponíveis")
+                        # Pergunta ao paciente se deseja entrar na lista de espera
+                        if 'entrar_na_lista_espera' in request.POST:
+                            consulta.lista_espera_prioritaria.add(paciente)
+                            consulta.save()
+                            messages.success(request, "Você foi adicionado à lista de espera prioritária.")
+                            return redirect('Paciente:paciente_home')
+                        else:
+                            messages.error(request, "Não há fichas prioritárias disponíveis. Deseja entrar na lista de espera?")
+                            return render(request, 'Paciente/AgendarConsulta.html', {
+                                'form': form,
+                                'consulta': consulta,
+                                'numero_na_fila': numero_na_fila,
+                                'paciente': paciente,
+                                'ja_agendado': ja_agendado,
+                                'mostrar_opcao_lista_espera': True,
+                            })
 
-                    # Atualiza a quantidade de fichas disponíveis
+                    elif tipo_ficha == 'comum' and consulta.qtd_fichas_normais < 1:
+                        # Pergunta ao paciente se deseja entrar na lista de espera
+                        if 'entrar_na_lista_espera' in request.POST:
+                            consulta.lista_espera_comum.add(paciente)
+                            consulta.save()
+                            messages.success(request, "Você foi adicionado à lista de espera comum.")
+                            return redirect('Paciente:paciente_home')
+                        else:
+                            messages.error(request, "Não há fichas normais disponíveis. Deseja entrar na lista de espera?")
+                            return render(request, 'Paciente/AgendarConsulta.html', {
+                                'form': form,
+                                'consulta': consulta,
+                                'numero_na_fila': numero_na_fila,
+                                'paciente': paciente,
+                                'ja_agendado': ja_agendado,
+                                'mostrar_opcao_lista_espera': True,
+                            })
+
+                    # Se há fichas disponíveis, realiza o agendamento
                     if tipo_ficha == 'prioritario':
+                        if consulta.qtd_fichas_prioritarias < 1:
+                            messages.error(request, "Não há fichas prioritárias disponíveis.")
+                            return redirect('Paciente:paciente_home')
                         consulta.qtd_fichas_prioritarias -= 1
                     else:
+                        if consulta.qtd_fichas_normais < 1:
+                            messages.error(request, "Não há fichas normais disponíveis.")
+                            return redirect('Paciente:paciente_home')
                         consulta.qtd_fichas_normais -= 1
 
                     consulta.save()
@@ -69,16 +107,10 @@ def agendar_consulta(request, consulta_id):
                     agendamento.save()
 
                     messages.success(request, f'Agendamento confirmado! Você é o número {numero_na_fila} na fila.')
-                    return render(request, 'Paciente/AgendarConsulta.html', {
-                        'form': form, 
-                        'consulta': consulta,
-                        'numero_na_fila': numero_na_fila,
-                        'paciente': paciente,
-                        'ja_agendado': ja_agendado
-                    })
+                    return redirect('Paciente:paciente_home')
 
             except Exception as e:
-                messages.error(request, str(e))
+                messages.error(request, f"Erro ao agendar consulta: {str(e)}")
     
     else:
         form = AgendamentoForm(initial={'consulta': consulta})
@@ -88,8 +120,10 @@ def agendar_consulta(request, consulta_id):
         'consulta': consulta,
         'numero_na_fila': numero_na_fila,
         'paciente': paciente,
-        'ja_agendado': ja_agendado
+        'ja_agendado': ja_agendado,
+        'mostrar_opcao_lista_espera': False,
     })
+
 
 
 
@@ -291,4 +325,30 @@ def cancelar_agendamento(request, agendamento_id):
 
     return render(request, 'Profissional/cancelar_agendamento.html', {
         'agendamento': agendamento
+    })
+
+
+
+
+@login_required
+def listar_fila_espera(request, consulta_id):
+    # Obtém a consulta
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+    
+    # Verifica se o profissional logado pertence à mesma unidade de saúde da consulta
+    profissional = get_object_or_404(ProfissionalSaude, usuario=request.user)
+    if consulta.unidade_saude != profissional.unidade_saude:
+        messages.error(request, "Você não tem permissão para visualizar esta fila de espera.")
+        return redirect('AgendaConsulta:listar_consultas')
+
+    # Obtém os pacientes na fila de espera prioritária
+    fila_prioritaria = consulta.lista_espera_prioritaria.all()
+
+    # Obtém os pacientes na fila de espera comum
+    fila_comum = consulta.lista_espera_comum.all()
+
+    return render(request, 'Profissional/fila_espera.html', {
+        'consulta': consulta,
+        'fila_prioritaria': fila_prioritaria,
+        'fila_comum': fila_comum,
     })
