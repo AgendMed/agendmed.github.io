@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Lista de Campanhas</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Subtítulo</th>
+                <th>Data Inicial</th>
+                <th>Data Final</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for campanha in campanhas %}
+            <tr>
+                <td>{{ campanha.titulo }}</td>
+                <td>{{ campanha.subtitulo }}</td>
+                <td>{{ campanha.data_inicial }}</td>
+                <td>{{ campanha.data_final }}</td>
+                <td>
+                    <a href="{% url 'Campanha:deletar_campanha' campanha.id %}" class="btn btn-danger btn-sm">Deletar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">Nenhuma campanha cadastrada.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
