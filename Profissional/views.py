@@ -4,9 +4,11 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
+
+from Paciente.forms import PacienteForm
 from .forms import ProfissionalSaudeForm, UsuarioForm
 from .models import ProfissionalSaude
-from AgendaConsulta.models import Consulta
+from AgendaConsulta.models import Agendamento, Consulta
 from Campanha.models import Campanha
 from Paciente.models import Paciente
 from django.http import JsonResponse
@@ -107,3 +109,73 @@ def filtrar_profissionais(request):
         profissionais_dict = {p.id: str(p) for p in profissionais}
         return JsonResponse(profissionais_dict)
     return JsonResponse({})
+
+
+
+
+@login_required
+def lista_pacientes_unidade(request):
+    # profissional logado
+    profissional = get_object_or_404(ProfissionalSaude, usuario=request.user)
+    unidade_saude = profissional.unidade_saude
+
+    # Filtra os pacientes pela unidade de saúde
+    pacientes = Paciente.objects.filter(unidade_saude=unidade_saude)
+
+    # erro ao Filtrar os agendamentos relacionados à unidade de saúde (pode ser o filter)
+    agendamentos = Agendamento.objects.filter(consulta__unidade_saude=unidade_saude).order_by('consulta__numero_na_fila')
+
+    return render(request, 'profissional/lista_pacientes_unidade.html', {
+        'pacientes': pacientes,
+        'agendamentos': agendamentos,
+        'unidade_saude': unidade_saude 
+    })
+
+
+def editar_paciente(request, paciente_id):
+    paciente = get_object_or_404(Paciente, id=paciente_id)
+    if request.method == 'POST':
+        form = PacienteForm(request.POST, instance=paciente)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_pacientes_unidade')
+    else:
+        form = PacienteForm(instance=paciente)
+    return render(request, 'Profissional/editar_paciente.html', {'form': form})
+
+
+#profissional vai agendar consulta para paciente
+@login_required
+def agendar_consulta_paciente(request, consulta_id):
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+    if request.method == 'POST':
+        paciente_id = request.POST.get('paciente_id')
+        paciente = get_object_or_404(Paciente, id=paciente_id)
+
+        # Verifica se o paciente pertence à mesma unidade de saúde da consulta
+        if paciente.unidade_saude != consulta.unidade_saude:
+            messages.error(request, "O paciente não pertence à mesma unidade de saúde.")
+            return redirect('lista_pacientes_unidade')
+
+        # Verifica se há fichas disponíveis
+        if consulta.qtd_fichas_normais <= 0 and consulta.qtd_fichas_prioritarias <= 0:
+            messages.error(request, "Não há fichas disponíveis para esta consulta.")
+            return redirect('lista_pacientes_unidade')
+
+        # Cria o agendamento
+        Agendamento.objects.create(
+            consulta=consulta,
+            paciente=paciente,
+            status='agendado'
+        )
+
+        if paciente.condicao_prioritaria != 'nenhuma':
+            consulta.qtd_fichas_prioritarias -= 1
+        else:
+            consulta.qtd_fichas_normais -= 1
+        consulta.save()
+
+        messages.success(request, "Agendamento realizado com sucesso!")
+        return redirect('lista_pacientes_unidade')
+
+    return redirect('lista_pacientes_unidade')

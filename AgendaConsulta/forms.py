@@ -24,21 +24,31 @@ class ConsultaForm(forms.ModelForm):
 class AgendamentoForm(forms.ModelForm):
     class Meta:
         model = Agendamento
-        fields = '__all__'
+        fields = []
 
     def clean(self):
         cleaned_data = super().clean()
         consulta = cleaned_data.get('consulta')
-        paciente = cleaned_data.get('paciente')
         
-        if consulta and paciente:
-            # Verifica agendamentos duplicados
-            if Agendamento.objects.filter(consulta=consulta, paciente=paciente).exists():
-                raise ValidationError("Paciente já possui agendamento para esta consulta")
-            
-            # Verifica disponibilidade
-            if paciente.status == 'prioritario' and consulta.qtd_fichas_prioritarias < 1:
+        if consulta:
+            if cleaned_data.get('tipo_ficha') == 'prioritaria' and consulta.qtd_fichas_prioritarias < 1:
                 raise ValidationError("Fichas prioritárias esgotadas")
             
-            if paciente.status == 'comum' and consulta.qtd_fichas_normais < 1:
+            if cleaned_data.get('tipo_ficha') == 'comum' and consulta.qtd_fichas_normais < 1:
                 raise ValidationError("Fichas normais esgotadas")
+          
+
+#Modal para notificações
+class CancelamentoConsultaForm(forms.Form):
+    RAZOES_CANCELAMENTO = [
+        ('medico_doente', 'Médico doente'),
+        ('problemas_deslocamento', 'Problemas de deslocamento'),
+        ('compromisso_profissional', 'Compromisso profissional urgente'),
+        ('problemas_unidade', 'Problemas na unidade de saúde'),
+        ('mudanca_agenda', 'Mudança de agenda'),
+        ('licenca_medica', 'Licença médica ou afastamento temporário'),
+        ('ausencia_nao_comunicada', 'Ausência programada não comunicada'),
+        ('cancelamento_administrativo', 'Cancelamento administrativo'),
+    ]
+
+    razao = forms.ChoiceField(choices=RAZOES_CANCELAMENTO, label="Razão do Cancelamento")

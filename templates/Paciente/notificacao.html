@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <title>Notificações</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        header {
+            background-color: #f4f6f8;
+            color: #007bff;
+            padding: 1px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 10px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 3px 12px;
+            background: rgba(146, 159, 188, 0.2);
+            border-radius: 10px;
+            transition: background 0.3s;
+            font-size: 15px;
+        }
+        
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .content {
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        
+        .notificacao {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.5s ease-out;
+        }
+        
+        .notificacao h3 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        
+        .notificacao p {
+            margin: 5px 0;
+        }
+        
+        .notificacao .data {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .notificacao .lida {
+            color: green;
+            font-weight: bold;
+        }
+        
+        .notificacao .nao-lida {
+            color: red;
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: #c8cacb;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        footer a {
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            margin: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Notificações</h1>
+        <nav>
+            <a href="{% url 'Paciente:pagina_paciente' %}">Editar Perfil</a>
+            <a href="#">Minha Unidade de Saúde</a>
+            <a href="{% url 'Paciente:notificacoes' %}">Notificações</a>
+            <a href="#">Ajuda</a>
+        </nav>
+    </header>
+
+    <div class="content">
+        {% if notificacoes %}
+            {% for notificacao in notificacoes %}
+                <div class="notificacao" id="notificacao-{{ notificacao.id }}">
+                    <h3>Nova Notificação</h3>
+                    <p>{{ notificacao.mensagem }}</p>
+                    <p class="data">{{ notificacao.data_criacao|date:"d/m/Y H:i" }}</p>
+                    {% if notificacao.lida %}
+                        <p class="lida">Lida</p>
+                    {% else %}
+                        <p class="nao-lida">Não lida</p>
+                        <a href="#" class="marcar-lida" data-notificacao-id="{{ notificacao.id }}">Marcar como lida</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhuma notificação encontrada.</p>
+        {% endif %}
+    </div>
+
+    <footer>
+        <a href="#">Home</a>
+        <a href="#">Campanhas</a>
+        <a href="#">Consultas</a>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.marcar-lida').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const notificacaoId = this.getAttribute('data-notificacao-id');
+                const notificacaoDiv = document.getElementById(`notificacao-${notificacaoId}`);
+
+                fetch(`{% url 'Paciente:marcar_como_lida' 0 %}`.replace('0', notificacaoId), {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Adiciona uma animação de fade-out
+                        notificacaoDiv.style.opacity = '0';
+                        setTimeout(() => {
+                            notificacaoDiv.remove(); 
+                        }, 3000); // 3 segundos
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao marcar notificação como lida:', error);
+                });
+            });
+        });
+    </script>
+</body>
+{% endblock %}
+</html>

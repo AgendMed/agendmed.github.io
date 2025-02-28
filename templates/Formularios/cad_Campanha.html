@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -34,10 +34,10 @@ h2 {
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="text-center">Cadastro de Campanha</h2>
+        <h2 class="text-center">Cadastro de Campanha</h2> -->
 
         <!-- Formulário de Cadastro -->
-        <form>
+        <!-- <form>
             <div class="form-group">
                 <label for="titulo">Título da Campanha</label>
                 <input type="text" class="form-control" id="titulo" placeholder="Digite o título da campanha">
@@ -71,10 +71,10 @@ h2 {
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">Salvar</button>
-        </form>
+        </form> -->
 
         <!-- Notificação após envio -->
-        <div class="alert alert-success mt-4" id="notification" style="display: none;">
+        <!-- <div class="alert alert-success mt-4" id="notification" style="display: none;">
             <strong>Campanha Divulgada!</strong>
         </div>
     </div>
@@ -90,4 +90,17 @@ h2 {
         });
     </script>
 </body>
-</html>
+</html> -->
+
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Cadastro de Campanha</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary btn-block">Salvar</button>
+    </form>
+</div>
+{% endblock %}
+

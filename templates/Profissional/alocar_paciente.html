@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-primary text-center fw-bold">Alocar Paciente em Consulta</h1>
+    <h2 class="text-center">{{ paciente.usuario.nome_completo }}</h2>
+
+    <!-- Lista de consultas disponíveis -->
+    <div class="section mt-4">
+        <h2 class="section-title">Consultas Disponíveis</h2>
+        {% if consultas_disponiveis %}
+            <div class="grid">
+                {% for consulta in consultas_disponiveis %}
+                <div class="card">
+                    <h5>{{ consulta.unidade_saude.nome }}</h5>
+                    <p><strong>Profissional:</strong> {{ consulta.profissional.usuario.nome_completo }}</p>
+                    <p><strong>Data:</strong> {{ consulta.data }}</p>
+                    <p><strong>Horário:</strong> {{ consulta.horario_inicio }} - {{ consulta.horario_fim }}</p>
+                    <p><strong>Fichas Disponíveis:</strong> {{ consulta.qtd_fichas_normais }}</p>
+                    <form method="post" action="{% url 'AgendaConsulta:alocar_paciente' paciente.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="consulta_id" value="{{ consulta.id }}">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-calendar-plus"></i> Alocar
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-data">Nenhuma consulta disponível.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

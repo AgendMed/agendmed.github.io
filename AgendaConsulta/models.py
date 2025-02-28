@@ -56,6 +56,20 @@ class Agendamento(models.Model):
         related_name='agendamentos'
     )
     data_agendamento = models.DateTimeField(auto_now_add=True)
+    numero_na_fila = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"Agendamento {self.id} - {self.paciente} para {self.consulta}"
+    
+
+from django.db import models
+from Paciente.models import Paciente
+
+class Notificacao(models.Model):
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='notificacoes')
+    mensagem = models.TextField()
+    data_criacao = models.DateTimeField(auto_now_add=True)
+    lida = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Notificação para {self.paciente.usuario.nome_completo} - {self.mensagem[:50]}..."

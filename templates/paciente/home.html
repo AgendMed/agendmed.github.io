@@ -112,7 +112,7 @@
         <nav>
             <a href="{% url 'Paciente:pagina_paciente' %}">Editar Perfil</a>
             <a href="#">Minha Unidade de Saúde</a>
-            <a href="#">Notificações</a>
+            <a href="{% url 'Paciente:notificacoes' %}">Notificações</a>
             <a href="#">Ajuda</a>
         </nav>
     </header>
@@ -136,12 +136,12 @@
                 {% for consulta in consultas %}
                     <div class="card">
                         <h3>{{ consulta.unidade_saude.nome }}</h3>
-                        <p><strong>Profissional:</strong> {{ consulta.profissional.nome }}</p>
+                        <p><strong>Profissional:</strong> {{ consulta.profissional.usuario.nome_completo }}</p>
                         <p><strong>Data:</strong> {{ consulta.data }}</p>
                         <p><strong>Horário:</strong> {{ consulta.horario_formatado }}</p>
                         <p><strong>Fichas Prioritárias Disponíveis:</strong> {{ consulta.qtd_fichas_prioritarias }}</p>
                         <p><strong>Fichas Normais Disponíveis:</strong> {{ consulta.qtd_fichas_normais }}</p>
-                        <a href="{% url 'Paciente:agendar_consulta' consulta.id %}">Agendar Consulta</a>
+                        <a href=" {% url 'AgendaConsulta:agendar_consulta' consulta.id %} "> Agendar Consulta</a>
                     </div>
                 {% endfor %}
         </div>
@@ -150,7 +150,7 @@
     <footer>
         <a href="#">Home</a>
         <a href="#">Campanhas</a>
-        <a href="#">Consultas</a>
+        <a href="{% url 'Paciente:lista_minhas_consultas' %}">Consultas</a>
     </footer>
 </body>
 {% endblock %}
