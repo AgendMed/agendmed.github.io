@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendar Consulta</title>
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -112,6 +111,23 @@
         .btn-voltar:hover {
             background: #7f8c8d;
         }
+
+        .lista-espera-opcao {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f8d7da;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .lista-espera-opcao button {
+            background: #dc3545;
+            margin-top: 10px;
+        }
+
+        .lista-espera-opcao button:hover {
+            background: #c82333;
+        }
     </style>
 </head>
 <body>
@@ -150,6 +166,18 @@
                 <button type="submit">Agendar</button>
             {% endif %}
         </form>
+
+        {% if mostrar_opcao_lista_espera %}
+    <div class="lista-espera-opcao">
+        <p>Não há fichas disponíveis. Deseja entrar na lista de espera?</p>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="entrar_na_lista_espera" value="true">
+            <button type="submit">Entrar na Lista de Espera</button>
+        </form>
+    </div>
+{% endif %}
+
 
         {% if messages %}
             <div class="messages">

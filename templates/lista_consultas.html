@@ -14,7 +14,7 @@
             border-radius: 5px;
             padding: 20px;
             margin: 10px;
-            width: 300px;
+            width: 350px; /* Aumentei a largura do card */
             display: inline-block;
             vertical-align: top;
             position: relative;
@@ -26,15 +26,17 @@
             display: flex;
             gap: 10px;
             margin-top: 15px;
+            flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha */
         }
         .btn {
             display: block;
             text-align: center;
             color: rgb(255, 255, 255);
-            padding: 10px;
+            padding: 8px; /* Reduzi o padding */
             border-radius: 5px;
             text-decoration: none;
             flex: 1;
+            font-size: 14px; /* Reduzi o tamanho da fonte */
         }
         .btn-agendar {
             background-color: #007bff;
@@ -84,6 +86,7 @@
                     Profissional não especificado
                 {% endif %}
             </p>
+            <p><strong>Especialidade:</strong> {{ consulta.profissional.especialidade }}</p>
             <p><strong>Data:</strong> {{ consulta.data|date:"d/m/Y" }}</p>
             <p><strong>Horário:</strong> {{ consulta.horario_inicio|time:"H:i" }} - {{ consulta.horario_fim|time:"H:i" }}</p>
             <p><strong>Fichas Prioritárias:</strong> {{ consulta.qtd_fichas_prioritarias }}</p>
@@ -93,8 +96,10 @@
                 <a href="{% url 'AgendaConsulta:listar_pacientes_por_consulta' consulta.id %}" class="btn btn-primary">
                     Ver Pacientes
                 </a>
+                <a href="{% url 'AgendaConsulta:fila_espera' consulta.id %}" class="btn btn-info btn-sm">Ver Fila de Espera</a>
                 
                 <a href="{% url 'AgendaConsulta:editar_consulta' consulta.id %}" class="btn btn-editar">Editar</a>
+
                 
                 <button type="button" class="btn btn-excluir" data-bs-toggle="modal" data-bs-target="#cancelarModal{{ consulta.id }}">
                     Cancelar

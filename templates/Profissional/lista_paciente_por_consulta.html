@@ -13,6 +13,7 @@
             <th>Nome do Paciente</th>
             <th>Status</th>
             <th>Posição na Fila</th>
+            <th>Ações</th> <!-- Nova coluna para ações -->
         </tr>
     </thead>
     <tbody>
@@ -22,6 +23,9 @@
                     <td>{{ agendamento.paciente.usuario.nome_completo }}</td>
                     <td>Prioritário</td>
                     <td>{{ agendamento.numero_na_fila }}</td>
+                    <td>
+                        <a href="{% url 'AgendaConsulta:cancelar_agendamento' agendamento.id %}" class="btn btn-danger btn-sm">Cancelar</a>
+                    </td>
                 </tr>
             {% endif %}
         {% endfor %}
@@ -35,6 +39,7 @@
             <th>Nome do Paciente</th>
             <th>Status</th>
             <th>Posição na Fila</th>
+            <th>Ações</th> <!-- Nova coluna para ações -->
         </tr>
     </thead>
     <tbody>
@@ -44,6 +49,9 @@
                     <td>{{ agendamento.paciente.usuario.nome_completo }}</td>
                     <td>Comum</td>
                     <td>{{ agendamento.numero_na_fila }}</td>
+                    <td>
+                        <a href="{% url 'AgendaConsulta:cancelar_agendamento' agendamento.id %}" class="btn btn-danger btn-sm">Cancelar</a>
+                    </td>
                 </tr>
             {% endif %}
         {% endfor %}
