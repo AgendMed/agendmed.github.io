@@ -80,6 +80,7 @@
             <p><strong>Profissional:</strong> 
                 {% if consulta.profissional %}
                     {{ consulta.profissional.usuario.nome_completo }}
+                    {{ consulta.profissional.especialidade }}
                 {% else %}
                     Profissional não especificado
                 {% endif %}

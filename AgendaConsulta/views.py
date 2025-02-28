@@ -220,7 +220,6 @@ def alocar_paciente(request, paciente_id):
             messages.error(request, "Não há fichas disponíveis para esta consulta.")
             return redirect('AgendaConsulta:alocar_paciente', paciente_id=paciente.id)
 
-        
         try:
             with transaction.atomic():
                 agendamento = Agendamento(
@@ -232,6 +231,12 @@ def alocar_paciente(request, paciente_id):
 
                 consulta.qtd_fichas_normais -= 1
                 consulta.save()
+
+                # Cria a notificação para o paciente
+                Notificacao.objects.create(
+                    paciente=paciente,
+                    mensagem=f"Você foi alocado para a consulta de {consulta.data} às {consulta.horario_inicio}. Você é o número {agendamento.numero_na_fila} na fila."
+                )
 
                 messages.success(request, f"Paciente alocado com sucesso na consulta de {consulta.data} às {consulta.horario_inicio}.")
                 return redirect('AgendaConsulta:listar_consultas')
