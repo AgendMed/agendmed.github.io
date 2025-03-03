@@ -19,7 +19,7 @@ class UnidadeSaudeForm(forms.ModelForm):
         if self.instance.pk:  # Se a instância já existir, é uma edição
             if UnidadeSaude.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
                 raise forms.ValidationError('Já existe uma unidade de saúde cadastrada com este e-mail.')
-        else:  # Se for um novo cadastro
+        else:
             if UnidadeSaude.objects.filter(email=email).exists():
                 raise forms.ValidationError('Já existe uma unidade de saúde cadastrada com este e-mail.')
         return email
