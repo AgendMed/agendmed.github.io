@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
 <div class="container mt-5">
     <h1 class="text-primary text-center fw-bold">Pacientes da Unidade - {{ unidade_saude.nome }}</h1>
 
@@ -24,6 +26,9 @@
 {% for paciente in pacientes %}
 <div class="card">
     <h5>{{ paciente.usuario.nome_completo }}</h5>
+    <a href="{% url 'Paciente:ver_localizacao_paciente' paciente.id %}" target="_blank" class="icon-localizacao">
+        <i class="bi bi-geo-alt"></i>
+    </a>
     <p><strong>CPF:</strong> {{ paciente.usuario.cpf }}</p>
     <p><strong>Cartão de Saúde:</strong> {{ paciente.cartao_saude }}</p>
     <p>

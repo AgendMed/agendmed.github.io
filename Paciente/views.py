@@ -48,7 +48,6 @@ def cadastro_paciente(request):
 
 
 
-
 @login_required
 def pagina_paciente(request):
     usuario = request.user  # Obtém o usuário logado
@@ -203,3 +202,13 @@ def cancelar_agendamento(request, agendamento_id):
     messages.success(request, "Agendamento cancelado com sucesso. A ficha foi liberada para outros pacientes.")
     
     return redirect('Paciente:lista_minhas_consultas')
+
+
+
+def ver_localizacao_paciente(request, paciente_id):
+    paciente = get_object_or_404(Paciente, id=paciente_id)
+    return render(request, 'Paciente/localizacao_paciente.html', {
+        'paciente': paciente,
+        'latitude': paciente.usuario.latitude,
+        'longitude': paciente.usuario.longitude
+    })
