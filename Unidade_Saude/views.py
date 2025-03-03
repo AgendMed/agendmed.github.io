@@ -26,9 +26,6 @@ def sucesso(request):
 
 
 
-
-
-
 def detalhe_unidade_saude(request, pk):
     unidade = get_object_or_404(UnidadeSaude, pk=pk)
     return render(request, 'UnidadeSaude/detalhe_unidade_saude.html', {'unidade': unidade})
@@ -37,12 +34,13 @@ def detalhe_unidade_saude(request, pk):
 @login_required
 def editar_unidade_saude(request, pk):
     unidade = get_object_or_404(UnidadeSaude, pk=pk)
+
     if request.method == 'POST':
         form = UnidadeSaudeForm(request.POST, instance=unidade)
         if form.is_valid():
             form.save()
-            return redirect('UnidadeSaude:detalhe_unidade_saude', pk=pk)
+            return redirect('UnidadeSaude:detalhe_unidade', pk=pk)
     else:
         form = UnidadeSaudeForm(instance=unidade)
-    return render(request, 'UnidadeSaude/editar_UnidadeSaude.html', {'form': form, 'unidade': unidade})
 
+    return render(request, 'UnidadeSaude/editar_UnidadeSaude.html', {'form': form, 'unidade': unidade})

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendar Consulta</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,6 +24,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 500px;
             width: 100%;
+            position: relative;
         }
 
         h1, h2 {
@@ -128,12 +130,32 @@
         .lista-espera-opcao button:hover {
             background: #c82333;
         }
+
+        .icon-localizacao {
+    display: inline-flex;
+    align-items: center;
+    color: red;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+.icon-localizacao i {
+    margin-right: 5px;
+}
+
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Agendar Consulta</h1>
-        <h2>{{ consulta.unidade_saude.nome }}</h2>
+        <p><strong>Unidade de Saúde:</strong> {{ consulta.unidade_saude.nome }}
+            <a href="{% url 'UnidadeSaude:detalhe_unidade' consulta.unidade_saude.id %}" target="_blank" class="icon-localizacao">
+                <i class="bi bi-geo-alt"></i>
+            </a>
+        </p>
+        
 
         <p><strong>Profissional:</strong> {{ consulta.profissional.usuario.nome_completo }}</p>
         <p><strong>Data:</strong> {{ consulta.data }}</p>
@@ -168,16 +190,15 @@
         </form>
 
         {% if mostrar_opcao_lista_espera %}
-    <div class="lista-espera-opcao">
-        <p>Não há fichas disponíveis. Deseja entrar na lista de espera?</p>
-        <form method="post">
-            {% csrf_token %}
-            <input type="hidden" name="entrar_na_lista_espera" value="true">
-            <button type="submit">Entrar na Lista de Espera</button>
-        </form>
-    </div>
-{% endif %}
-
+        <div class="lista-espera-opcao">
+            <p>Não há fichas disponíveis. Deseja entrar na lista de espera?</p>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="entrar_na_lista_espera" value="true">
+                <button type="submit">Entrar na Lista de Espera</button>
+            </form>
+        </div>
+        {% endif %}
 
         {% if messages %}
             <div class="messages">

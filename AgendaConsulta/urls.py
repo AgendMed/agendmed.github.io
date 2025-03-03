@@ -15,5 +15,4 @@ urlpatterns = [
     path('fila-espera/<int:consulta_id>/', views.listar_fila_espera, name='fila_espera'),
 
 
-
 ]

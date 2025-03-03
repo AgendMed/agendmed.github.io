@@ -1,3 +1,6 @@
+<!--Nesta página, há a visualização no mapa, da unidade de saúde da consulta escolhida-->
+
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -18,9 +21,7 @@
     <p><strong>Endereço:</strong> {{ unidade.endereco }}</p>
     <p><strong>Telefone:</strong> {{ unidade.telefone }}</p>
     <p><strong>Email:</strong> {{ unidade.email }}</p>
-    {% if request.user.is_profissional %}
-    <a href="{% url 'UnidadeSaude:editar_unidade_saude' unidade.id %}">Editar Unidade</a>
-{% endif %}
+
     {% if unidade.latitude and unidade.longitude %}
         <h3>Localização no Mapa</h3>
         <div id="map"></div>
