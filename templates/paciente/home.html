@@ -13,16 +13,15 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f8f9fa;
+            padding-bottom: 80px; 
         }
 
         header {
-            background-color: #f4f6f8;
-            color: #007bff;
-            padding: 1px;
-            text-align: center;
-            font-size: 1.2em;
-            font-weight: bold;
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         nav {
@@ -30,61 +29,96 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 15px;
-            padding: 10px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin-top: 15px;
         }
 
         nav a {
             text-decoration: none;
-            color: #007bff;
-            padding: 3px 12px;
-            background: rgba(146, 159, 188, 0.2);
-            border-radius: 10px;
-            transition: background 0.3s;
-            font-size: 15px;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         nav a:hover {
-            background: rgba(255, 255, 255, 0.4);
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
         .content {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .search-container {
+            background: white;
             padding: 20px;
-            max-width: 600px;
-            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
         }
 
         input[type="text"] {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 5px;
+            padding: 12px 20px;
+            border-radius: 25px;
             border: 1px solid #ddd;
             font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 15px;
         }
 
         .card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 15px;
-            width: 300px;
-            display: inline-block;
-            vertical-align: top;
-            background: #fff;
+            background: white;
+            border: none;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
         .card h3 {
-            margin-top: 0;
+            color: #007bff;
+            margin: 0 0 15px 0;
+            font-size: 1.4em;
+        }
+
+        .card p {
+            margin: 8px 0;
+            font-size: 0.95em;
+            color: #555;
         }
 
         .botao-agendar {
             display: block;
-            margin-top: 10px;
-            text-align: center;
-            padding: 10px;
-            border-radius: 5px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
+            text-align: center;
+            margin-top: 15px;
+            transition: all 0.3s;
         }
 
         .botao-agendar.azul {
@@ -94,6 +128,7 @@
 
         .botao-agendar.azul:hover {
             background-color: #0056b3;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
 
         .botao-agendar.verde {
@@ -103,28 +138,50 @@
 
         .botao-agendar.verde:hover {
             background-color: #1e7e34;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
 
         footer {
-            background-color: #c8cacb;
-            padding: 10px;
+            background-color: #fff;
+            padding: 20px;
             text-align: center;
             position: fixed;
             bottom: 0;
             width: 100%;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
         }
 
         footer a {
             text-decoration: none;
-            color: rgb(0, 0, 0);
-            font-weight: bold;
-            margin: 0 20px;
+            color: #007bff;
+            font-weight: 500;
+            margin: 0 25px;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            nav {
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            nav a {
+                padding: 6px 15px;
+                font-size: 0.9em;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Modal de Erro -->
+    <!-- Modal de Erro (mantido original) -->
     <div class="modal fade" id="modalErro" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -153,27 +210,31 @@
     </header>
 
     <div class="content">
-        <h3>Em busca de Atendimento?</h3>
-        <input type="text" placeholder="Busque um profissional...">
+        <div class="search-container">
+            <h3>Em busca de Atendimento?</h3>
+            <input type="text" placeholder="Busque por profissional, especialidade ou unidade...">
+        </div>
 
         <h1>Consultas Disponíveis</h1>
-        {% for consulta in consultas %}
-            <div class="card">
-                <h3>{{ consulta.unidade_saude.nome }}</h3>
-                <p><strong>Consulta:</strong> {{ consulta.tipo_consulta }}</p>
-                <p><strong>Especialidade:</strong> {{ consulta.profissional.especialidade }}</p>
-                <p><strong>Profissional:</strong> {{ consulta.profissional.usuario.nome_completo }}</p>
-                <p><strong>Data:</strong> {{ consulta.data }}</p>
-                <p><strong>Horário:</strong> {{ consulta.horario_formatado }}</p>
-                <p><strong>Fichas Prioritárias Disponíveis:</strong> {{ consulta.qtd_fichas_prioritarias }}</p>
-                <p><strong>Fichas Normais Disponíveis:</strong> {{ consulta.qtd_fichas_normais }}</p>
-                <a href="{% url 'AgendaConsulta:agendar_consulta' consulta.id %}" 
-                   class="botao-agendar {% if consulta.tipo_consulta == 'domiciliar' %}verde{% else %}azul{% endif %}"
-                   data-consulta-tipo="{{ consulta.tipo_consulta }}">
-                   Agendar Consulta
-                </a>
-            </div>
-        {% endfor %}
+        <div class="cards-container">
+            {% for consulta in consultas %}
+                <div class="card">
+                    <h3>{{ consulta.unidade_saude.nome }}</h3>
+                    <p><strong>Consulta:</strong> {{ consulta.tipo_consulta }}</p>
+                    <p><strong>Especialidade:</strong> {{ consulta.profissional.especialidade }}</p>
+                    <p><strong>Profissional:</strong> {{ consulta.profissional.usuario.nome_completo }}</p>
+                    <p><strong>Data:</strong> {{ consulta.data }}</p>
+                    <p><strong>Horário:</strong> {{ consulta.horario_formatado }}</p>
+                    <p><strong>Fichas Prioritárias:</strong> {{ consulta.qtd_fichas_prioritarias }}</p>
+                    <p><strong>Fichas Normais:</strong> {{ consulta.qtd_fichas_normais }}</p>
+                    <a href="{% url 'AgendaConsulta:agendar_consulta' consulta.id %}" 
+                       class="botao-agendar {% if consulta.tipo_consulta == 'domiciliar' %}verde{% else %}azul{% endif %}"
+                       data-consulta-tipo="{{ consulta.tipo_consulta }}">
+                       Agendar Consulta
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
     <footer>
@@ -183,7 +244,8 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
+    <!-- JavaScript mantido intacto -->
+    <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.botao-agendar[data-consulta-tipo="domiciliar"]').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -200,11 +262,9 @@
                 })
                 .then(data => {
                     if(!data.success) {
-                        // Exibe modal de erro
                         document.getElementById('mensagemErro').textContent = data.message;
                         new bootstrap.Modal(document.getElementById('modalErro')).show();
                     } else {
-                        // Redireciona para formulário de agendamento
                         window.location.href = this.href;
                     }
                 })
