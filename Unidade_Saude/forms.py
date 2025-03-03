@@ -12,13 +12,18 @@ class UnidadeSaudeForm(forms.ModelForm):
 
     class Meta:
         model = UnidadeSaude
-        fields = ['nome', 'telefone', 'email']
+        fields = ['nome', 'telefone', 'email', 'cep', 'rua', 'numero']
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if UnidadeSaude.objects.filter(email=email).exists():
-            raise forms.ValidationError('Já existe uma unidade de saúde cadastrada com este e-mail.')
+        if self.instance.pk:  # Se a instância já existir, é uma edição
+            if UnidadeSaude.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError('Já existe uma unidade de saúde cadastrada com este e-mail.')
+        else:  # Se for um novo cadastro
+            if UnidadeSaude.objects.filter(email=email).exists():
+                raise forms.ValidationError('Já existe uma unidade de saúde cadastrada com este e-mail.')
         return email
+
 
     def get_coordinates(self, address):
         """Consulta a API para obter latitude e longitude a partir do endereço."""

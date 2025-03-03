@@ -18,6 +18,7 @@
     <p><strong>Endereço:</strong> {{ unidade.endereco }}</p>
     <p><strong>Telefone:</strong> {{ unidade.telefone }}</p>
     <p><strong>Email:</strong> {{ unidade.email }}</p>
+    <a href="{% url 'UnidadeSaude:editar_unidade_saude' unidade.pk %}">Editar</a>
 
     {% if unidade.latitude and unidade.longitude %}
         <h3>Localização no Mapa</h3>
