@@ -7,8 +7,14 @@ class ConsultaForm(forms.ModelForm):
     
     class Meta:
         model = Consulta
-        fields = ['data', 'unidade_saude', 'profissional', 'horario_inicio', 'horario_fim', 
+        fields = ['data', 'unidade_saude', 'profissional', 'tipo_consulta', 'horario_inicio', 'horario_fim', 
                  'qtd_fichas_prioritarias', 'qtd_fichas_normais']
+        
+        widgets = {
+            'tipo_consulta': forms.Select(attrs={'class': 'form-control'}),
+            'data': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'hora': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+        }
         
     def clean(self):
         cleaned_data = super().clean()

@@ -1,5 +1,7 @@
 from django.contrib import messages
 from django.db import transaction
+from django.http import JsonResponse
+from networkx import reverse
 from Paciente.models import Paciente
 from Profissional.models import ProfissionalSaude
 from .forms import ConsultaForm, AgendamentoForm
@@ -30,98 +32,68 @@ def cadastrar_consulta(request):
     return render(request, 'Formularios/cad_Consulta.html', {'form': form})
 
 
+
 @login_required
 def agendar_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
-    usuario = request.user  
-    paciente = get_object_or_404(Paciente, usuario=usuario)
+    paciente = get_object_or_404(Paciente, usuario=request.user)
 
-    # Verifica se o paciente já tem um agendamento nessa consulta
-    ja_agendado = Agendamento.objects.filter(consulta=consulta, paciente=paciente).exists()
+    # Verificação AJAX para consultas domiciliares
+    if (request.headers.get('X-Requested-With') == 'XMLHttpRequest' 
+        and consulta.tipo_consulta == 'domiciliar'):
+        
+        if paciente.condicao_prioritaria == 'nenhuma':
+            return JsonResponse({
+                'success': False,
+                'message': 'Consulta domiciliar disponível apenas para pacientes prioritários!'
+            })
+        return JsonResponse({'success': True})
 
-    numero_na_fila = Agendamento.objects.filter(consulta=consulta).count() + 1
+    ja_agendado = Agendamento.objects.filter(
+        consulta=consulta, 
+        paciente=paciente
+    ).exists()
 
-    if request.method == 'POST' and not ja_agendado:
+    if request.method == 'POST':
         form = AgendamentoForm(request.POST)
         if form.is_valid():
             try:
                 with transaction.atomic():
                     tipo_ficha = form.cleaned_data.get('tipo_ficha')
 
-                    # Verifica se há fichas disponíveis
                     if tipo_ficha == 'prioritario' and consulta.qtd_fichas_prioritarias < 1:
-                        # Pergunta ao paciente se deseja entrar na lista de espera
-                        if 'entrar_na_lista_espera' in request.POST:
-                            consulta.lista_espera_prioritaria.add(paciente)
-                            consulta.save()
-                            messages.success(request, "Você foi adicionado à lista de espera prioritária.")
-                            return redirect('Paciente:paciente_home')
-                        else:
-                            messages.error(request, "Não há fichas prioritárias disponíveis. Deseja entrar na lista de espera?")
-                            return render(request, 'Paciente/AgendarConsulta.html', {
-                                'form': form,
-                                'consulta': consulta,
-                                'numero_na_fila': numero_na_fila,
-                                'paciente': paciente,
-                                'ja_agendado': ja_agendado,
-                                'mostrar_opcao_lista_espera': True,
-                            })
+                        messages.error(request, "Fichas prioritárias esgotadas!")
+                        return redirect('Paciente:paciente_home')
+                    
+                    if tipo_ficha == 'comum' and consulta.qtd_fichas_normais < 1:
+                        messages.error(request, "Fichas normais esgotadas!")
+                        return redirect('Paciente:paciente_home')
 
-                    elif tipo_ficha == 'comum' and consulta.qtd_fichas_normais < 1:
-                        # Pergunta ao paciente se deseja entrar na lista de espera
-                        if 'entrar_na_lista_espera' in request.POST:
-                            consulta.lista_espera_comum.add(paciente)
-                            consulta.save()
-                            messages.success(request, "Você foi adicionado à lista de espera comum.")
-                            return redirect('Paciente:paciente_home')
-                        else:
-                            messages.error(request, "Não há fichas normais disponíveis. Deseja entrar na lista de espera?")
-                            return render(request, 'Paciente/AgendarConsulta.html', {
-                                'form': form,
-                                'consulta': consulta,
-                                'numero_na_fila': numero_na_fila,
-                                'paciente': paciente,
-                                'ja_agendado': ja_agendado,
-                                'mostrar_opcao_lista_espera': True,
-                            })
-
-                    # Se há fichas disponíveis, realiza o agendamento
                     if tipo_ficha == 'prioritario':
-                        if consulta.qtd_fichas_prioritarias < 1:
-                            messages.error(request, "Não há fichas prioritárias disponíveis.")
-                            return redirect('Paciente:paciente_home')
                         consulta.qtd_fichas_prioritarias -= 1
                     else:
-                        if consulta.qtd_fichas_normais < 1:
-                            messages.error(request, "Não há fichas normais disponíveis.")
-                            return redirect('Paciente:paciente_home')
                         consulta.qtd_fichas_normais -= 1
-
                     consulta.save()
 
-                    # Salva o agendamento
                     agendamento = form.save(commit=False)
                     agendamento.consulta = consulta
                     agendamento.paciente = paciente
-                    agendamento.numero_na_fila = numero_na_fila
                     agendamento.save()
 
-                    messages.success(request, f'Agendamento confirmado! Você é o número {numero_na_fila} na fila.')
-                    return redirect('Paciente:paciente_home')
+                    messages.success(request, "Agendamento realizado com sucesso!")
+                    return redirect('Paciente:lista_minhas_consultas')
 
             except Exception as e:
-                messages.error(request, f"Erro ao agendar consulta: {str(e)}")
-    
+                messages.error(request, f"Erro no agendamento: {str(e)}")
+                return redirect('Paciente:paciente_home')
+
     else:
-        form = AgendamentoForm(initial={'consulta': consulta})
-    
+        form = AgendamentoForm()
+
     return render(request, 'Paciente/AgendarConsulta.html', {
-        'form': form, 
+        'form': form,
         'consulta': consulta,
-        'numero_na_fila': numero_na_fila,
-        'paciente': paciente,
-        'ja_agendado': ja_agendado,
-        'mostrar_opcao_lista_espera': False,
+        'ja_agendado': ja_agendado
     })
 
 

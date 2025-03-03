@@ -3,6 +3,11 @@ from django.db import models
 from django.db import models
 
 class Consulta(models.Model):
+    CONSULTA_TIPO_CHOICES = [
+        ('domiciliar', 'Consulta Domiciliar'),
+        ('comum', 'Consulta Comum (Posto de Saúde)'),
+    ]
+
     unidade_saude = models.ForeignKey(
         'Unidade_Saude.UnidadeSaude',
         on_delete=models.CASCADE,
@@ -27,6 +32,12 @@ class Consulta(models.Model):
         'Paciente.Paciente',
         related_name='espera_comum',
         blank=True
+    )
+
+    tipo_consulta = models.CharField(
+        max_length=15,
+        choices=CONSULTA_TIPO_CHOICES,
+        default='comum',
     )
 
     class Meta:
