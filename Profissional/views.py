@@ -66,8 +66,9 @@ def atender_paciente(request):
 
 @login_required
 def pagina_inicial(request):
-    return render(request, 'Profissional/Paginainicial.html')
-
+    profissional = get_object_or_404(ProfissionalSaude, usuario=request.user)
+    unidade = profissional.unidade_saude
+    return render(request, 'Profissional/Paginainicial.html', {'unidade': unidade})
 
 @login_required
 def editar_perfil_profissional(request):
@@ -162,7 +163,6 @@ def agendar_consulta_paciente(request, consulta_id):
             messages.error(request, "Não há fichas disponíveis para esta consulta.")
             return redirect('lista_pacientes_unidade')
 
-        # Cria o agendamento
         Agendamento.objects.create(
             consulta=consulta,
             paciente=paciente,

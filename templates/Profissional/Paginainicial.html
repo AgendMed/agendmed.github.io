@@ -27,10 +27,10 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <i class="fas fa-calendar-check"></i> Unidade de Saude
+                    <a href="{% url 'UnidadeSaude:detalhe_unidade' pk=unidade.pk %}">
+                        <i class="fas fa-calendar-check"></i> Unidade de Saúde
                     </a>
-                </li>
+                </li>                
                 <li>
                     <a href="{% url 'profissional:perfil_profissional' %}"> <!--posteriormente href="url 'profissional:editar_perfil' "-->
                         <i class="fas fa-users"></i> Meu Perfil

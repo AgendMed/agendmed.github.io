@@ -1,6 +1,7 @@
 from django import forms
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UnidadeSaudeForm
+from .models import UnidadeSaude
 
 def cadastro_unidade_saude(request):
     if request.method == 'POST':
@@ -20,3 +21,13 @@ def cadastro_unidade_saude(request):
 
 def sucesso(request):
     return render(request, 'sucesso.html')
+
+
+
+
+
+
+def detalhe_unidade_saude(request, pk):
+    unidade = get_object_or_404(UnidadeSaude, pk=pk)
+    return render(request, 'UnidadeSaude/detalhe_unidade_saude.html', {'unidade': unidade})
+
