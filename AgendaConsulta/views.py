@@ -35,7 +35,7 @@ def cadastrar_consulta(request):
 @login_required
 def agendar_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
-    usuario = request.user  
+    usuario = request.user
     paciente = get_object_or_404(Paciente, usuario=usuario)
 
     ja_agendado = Agendamento.objects.filter(consulta=consulta, paciente=paciente).exists()
@@ -46,7 +46,7 @@ def agendar_consulta(request, consulta_id):
         if form.is_valid():
             try:
                 with transaction.atomic():
-                    tipo_ficha = request.POST.get('tipo_ficha')  # Capturando diretamente do request
+                    tipo_ficha = request.POST.get('tipo_ficha')
 
                     if tipo_ficha == 'prioritario':
                         if consulta.qtd_fichas_prioritarias > 0:
@@ -86,7 +86,6 @@ def agendar_consulta(request, consulta_id):
         'paciente': paciente,
         'ja_agendado': ja_agendado,
     })
-
 
 
 
