@@ -1,4 +1,4 @@
-from AgendaConsulta.models import Consulta, Notificacao
+from AgendaConsulta.models import Agendamento, Consulta, Notificacao
 from .forms import CadastroPacienteForm
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.forms import AuthenticationForm
@@ -171,11 +171,6 @@ def marcar_como_lida(request, notificacao_id):
 
 
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from AgendaConsulta.models import Consulta, Agendamento
-from Paciente.models import Paciente
 
 @login_required
 def lista_minhas_consultas(request):
@@ -189,7 +184,6 @@ def lista_minhas_consultas(request):
 
 @login_required
 def cancelar_agendamento(request, agendamento_id):
-    # Obtém o agendamento que será cancelado
     agendamento = get_object_or_404(Agendamento, id=agendamento_id, paciente__usuario=request.user)
     
     # Obtém a consulta associada ao agendamento
@@ -204,11 +198,8 @@ def cancelar_agendamento(request, agendamento_id):
     # Salva a consulta atualizada
     consulta.save()
     
-    # Deleta o agendamento
     agendamento.delete()
     
-    # Exibe uma mensagem de sucesso
     messages.success(request, "Agendamento cancelado com sucesso. A ficha foi liberada para outros pacientes.")
     
-    # Redireciona de volta para a lista de agendamentos
     return redirect('Paciente:lista_minhas_consultas')

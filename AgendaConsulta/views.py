@@ -32,29 +32,18 @@ def cadastrar_consulta(request):
     return render(request, 'Formularios/cad_Consulta.html', {'form': form})
 
 
-
 @login_required
 def agendar_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
-    paciente = get_object_or_404(Paciente, usuario=request.user)
+    usuario = request.user  
+    paciente = get_object_or_404(Paciente, usuario=usuario)
 
-    # Verificação AJAX para consultas domiciliares
-    if (request.headers.get('X-Requested-With') == 'XMLHttpRequest' 
-        and consulta.tipo_consulta == 'domiciliar'):
-        
-        if paciente.condicao_prioritaria == 'nenhuma':
-            return JsonResponse({
-                'success': False,
-                'message': 'Consulta domiciliar disponível apenas para pacientes prioritários!'
-            })
-        return JsonResponse({'success': True})
+    # Verifica se o paciente já tem um agendamento nessa consulta
+    ja_agendado = Agendamento.objects.filter(consulta=consulta, paciente=paciente).exists()
 
-    ja_agendado = Agendamento.objects.filter(
-        consulta=consulta, 
-        paciente=paciente
-    ).exists()
+    numero_na_fila = Agendamento.objects.filter(consulta=consulta).count() + 1
 
-    if request.method == 'POST':
+    if request.method == 'POST' and not ja_agendado:
         form = AgendamentoForm(request.POST)
         if form.is_valid():
             try:
@@ -62,39 +51,48 @@ def agendar_consulta(request, consulta_id):
                     tipo_ficha = form.cleaned_data.get('tipo_ficha')
 
                     if tipo_ficha == 'prioritario' and consulta.qtd_fichas_prioritarias < 1:
-                        messages.error(request, "Fichas prioritárias esgotadas!")
-                        return redirect('Paciente:paciente_home')
-                    
-                    if tipo_ficha == 'comum' and consulta.qtd_fichas_normais < 1:
-                        messages.error(request, "Fichas normais esgotadas!")
-                        return redirect('Paciente:paciente_home')
+                        raise ValueError("Não há fichas prioritárias disponíveis")
+                    elif tipo_ficha == 'comum' and consulta.qtd_fichas_normais < 1:
+                        raise ValueError("Não há fichas normais disponíveis")
 
+                    # Atualiza a quantidade de fichas disponíveis
                     if tipo_ficha == 'prioritario':
                         consulta.qtd_fichas_prioritarias -= 1
                     else:
                         consulta.qtd_fichas_normais -= 1
+
                     consulta.save()
 
+                    # Salva o agendamento
                     agendamento = form.save(commit=False)
                     agendamento.consulta = consulta
                     agendamento.paciente = paciente
+                    agendamento.numero_na_fila = numero_na_fila
                     agendamento.save()
 
-                    messages.success(request, "Agendamento realizado com sucesso!")
-                    return redirect('Paciente:lista_minhas_consultas')
+                    messages.success(request, f'Agendamento confirmado! Você é o número {numero_na_fila} na fila.')
+                    return render(request, 'Paciente/AgendarConsulta.html', {
+                        'form': form, 
+                        'consulta': consulta,
+                        'numero_na_fila': numero_na_fila,
+                        'paciente': paciente,
+                        'ja_agendado': ja_agendado
+                    })
 
             except Exception as e:
-                messages.error(request, f"Erro no agendamento: {str(e)}")
-                return redirect('Paciente:paciente_home')
-
+                messages.error(request, str(e))
+    
     else:
-        form = AgendamentoForm()
-
+        form = AgendamentoForm(initial={'consulta': consulta})
+    
     return render(request, 'Paciente/AgendarConsulta.html', {
-        'form': form,
+        'form': form, 
         'consulta': consulta,
+        'numero_na_fila': numero_na_fila,
+        'paciente': paciente,
         'ja_agendado': ja_agendado
     })
+
 
 
 
