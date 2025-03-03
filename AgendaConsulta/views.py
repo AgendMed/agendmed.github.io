@@ -38,9 +38,7 @@ def agendar_consulta(request, consulta_id):
     usuario = request.user  
     paciente = get_object_or_404(Paciente, usuario=usuario)
 
-    # Verifica se o paciente já tem um agendamento nessa consulta
     ja_agendado = Agendamento.objects.filter(consulta=consulta, paciente=paciente).exists()
-
     numero_na_fila = Agendamento.objects.filter(consulta=consulta).count() + 1
 
     if request.method == 'POST' and not ja_agendado:
@@ -48,49 +46,45 @@ def agendar_consulta(request, consulta_id):
         if form.is_valid():
             try:
                 with transaction.atomic():
-                    tipo_ficha = form.cleaned_data.get('tipo_ficha')
+                    tipo_ficha = request.POST.get('tipo_ficha')  # Capturando diretamente do request
 
-                    if tipo_ficha == 'prioritario' and consulta.qtd_fichas_prioritarias < 1:
-                        raise ValueError("Não há fichas prioritárias disponíveis")
-                    elif tipo_ficha == 'comum' and consulta.qtd_fichas_normais < 1:
-                        raise ValueError("Não há fichas normais disponíveis")
-
-                    # Atualiza a quantidade de fichas disponíveis
                     if tipo_ficha == 'prioritario':
-                        consulta.qtd_fichas_prioritarias -= 1
-                    else:
-                        consulta.qtd_fichas_normais -= 1
+                        if consulta.qtd_fichas_prioritarias > 0:
+                            consulta.qtd_fichas_prioritarias -= 1
+                        else:
+                            messages.error(request, "Não há fichas prioritárias disponíveis.")
+                            return redirect('Paciente:paciente_home')
+
+                    elif tipo_ficha == 'comum':
+                        if consulta.qtd_fichas_normais > 0:
+                            consulta.qtd_fichas_normais -= 1
+                        else:
+                            messages.error(request, "Não há fichas normais disponíveis.")
+                            return redirect('Paciente:paciente_home')
 
                     consulta.save()
 
-                    # Salva o agendamento
-                    agendamento = form.save(commit=False)
-                    agendamento.consulta = consulta
-                    agendamento.paciente = paciente
-                    agendamento.numero_na_fila = numero_na_fila
-                    agendamento.save()
+                    agendamento = Agendamento.objects.create(
+                        consulta=consulta,
+                        paciente=paciente,
+                        numero_na_fila=numero_na_fila
+                    )
 
-                    messages.success(request, f'Agendamento confirmado! Você é o número {numero_na_fila} na fila.')
-                    return render(request, 'Paciente/AgendarConsulta.html', {
-                        'form': form, 
-                        'consulta': consulta,
-                        'numero_na_fila': numero_na_fila,
-                        'paciente': paciente,
-                        'ja_agendado': ja_agendado
-                    })
+                    messages.success(request, f"Consulta agendada com sucesso! Número na fila: {agendamento.numero_na_fila}")
+                    return redirect('Paciente:paciente_home')
 
             except Exception as e:
-                messages.error(request, str(e))
-    
+                messages.error(request, f"Erro ao agendar: {str(e)}")
+
     else:
-        form = AgendamentoForm(initial={'consulta': consulta})
-    
+        form = AgendamentoForm()
+
     return render(request, 'Paciente/AgendarConsulta.html', {
-        'form': form, 
+        'form': form,
         'consulta': consulta,
         'numero_na_fila': numero_na_fila,
         'paciente': paciente,
-        'ja_agendado': ja_agendado
+        'ja_agendado': ja_agendado,
     })
 
 
