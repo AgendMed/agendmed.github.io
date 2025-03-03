@@ -36,9 +36,9 @@
             if (!isNaN(lat) && !isNaN(lng)) {
                 var map = L.map('map').setView([lat, lng], 15);
                 L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-    maxZoom: 20,
-    attribution: '© Google Maps'
-}).addTo(map);
+                    maxZoom: 20,
+                    attribution: '© Google Maps'
+                }).addTo(map);
                 L.marker([lat, lng]).addTo(map).bindPopup("{{ unidade.nome }}<br>{{ unidade.endereco }}").openPopup();
             } else {
                 console.error("Erro: Latitude ou Longitude inválida.");
