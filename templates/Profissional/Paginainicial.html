@@ -15,44 +15,48 @@
     </div>
     <div class="container">
         <main class="main-content">
-
             <div class="cards-container">
+                <!-- Card Consulta -->
                 <div class="card" id="consulta-card" data-url="{% url 'AgendaConsulta:listar_consultas' %}">
                     <h3><img src="{% static 'img/icon-consulta.png' %}" alt="Consulta Icon"> Consultas</h3>
                     <div class="card-content"></div>
                 </div>
 
+                <!-- Card Campanhas -->
                 <div class="card" id="campanha-card" data-url="{% url 'Campanha:cad_Campanha' %}">
                     <h3><img src="{% static 'img/icons-injecao.png' %}" alt="Campanha Icon"> Campanhas</h3>
                     <div class="card-content"></div>
                 </div>
                 
+                <!-- Card Pacientes -->
                 <div class="card" id="paciente-card" data-url="{% url 'profissional:lista_pacientes_unidade' %}">
                     <h3><img src="https://img.icons8.com/color/48/pharmacist-skin-type-1.png" alt="Paciente Icon"> Pacientes</h3>
-                    <div class="card-content" ></div>
+                    <div class="card-content"></div>
                 </div>
                 
+                <!-- Card Acompanhamento -->
                 <div class="card" id="acompanhamento-card" data-url="{% url 'profissional:lista_pacientes_unidade' %}">
                     <h3><img src="https://img.icons8.com/color-glass/48/out-patient-department.png" alt="Acompanhamento Icon"> Acompanhamento Domiciliar</h3>
                     <div class="card-content"></div>
                 </div>
-                
-
             </div>
         </main>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const consultaCard = document.getElementById("consulta-card");
-            if (consultaCard) {
-                consultaCard.addEventListener("click", function () {
-                    const url = consultaCard.getAttribute("data-url");
+            // Seleciona todos os cards
+            const cards = document.querySelectorAll(".card");
+
+            // Adiciona evento de clique para cada card
+            cards.forEach(card => {
+                card.addEventListener("click", function () {
+                    const url = card.getAttribute("data-url");
                     if (url) {
                         window.location.href = url;
                     }
                 });
-            }
+            });
         });
     </script>
 
