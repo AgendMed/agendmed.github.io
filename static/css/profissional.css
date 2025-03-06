@@ -15,179 +15,293 @@ body {
 /* Container principal */
 .container {
     display: flex;
-    height: 100vh;
-}
-
-/* Header */
-
-.header .logo img {
-    height: 40px;
-}
-
-.header .user-info {
-    display: flex;
-    align-items: center;
-}
-
-.header .user-info span {
-    margin-right: 10px;
-}
-
-.header .logout-btn {
-    color: white;
-    text-decoration: none;
-    font-size: 20px;
-}
-
-.header .logout-btn:hover {
-    color: #ff5733;
-}
-
-/* Barra Lateral */
-.sidebar {
-    position: fixed; /* Fixa a barra lateral na tela */
-    top: 0;
-    left: 0;
-    height: 100%; /* Ocupa toda a altura da tela */
-    width: 250px; /* Definindo a largura fixa */
-    background-color: #1E3A8A; /* Cor de fundo */
-    color: #fff; /* Cor do texto */
-    padding-top: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sombra para a barra lateral */
-}
-
-.sidebar .nav-menu {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar .nav-menu li {
-    padding: 15px;
-    text-align: left;
-}
-
-.sidebar .nav-menu li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-}
-
-.sidebar .nav-menu li a:hover {
-    background-color: #3b4b8b; /* Altera a cor ao passar o mouse */
-}
-
-.sidebar .nav-menu .active a {
-    background-color: #2c3e70; /* Cor ativa */
-}
-
-/* Ajustes do layout principal para não sobrepor a barra lateral */
-.main-content {
-    margin-left: 250px; /* Deixa um espaço para a barra lateral */
-    padding: 20px;
-}
-
-
-/* Main Content */
-.main-content {
-    flex: 1;
-    padding: 30px;
-}
-
-.cards-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-.card {
-    background-color: #fff;
-    padding: 20px;
-    width: 48%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    text-align: center;
-}
-
-.card h3 {
-    font-size: 20px;
-    margin-bottom: 15px;
-}
-
-.card .card-content {
-    margin-top: 20px;
-}
-
-.card .number {
-    font-size: 36px;
-    font-weight: bold;
-    color: #007bff;
-}
-
-.card .btn-small {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 20px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.card .btn-small:hover {
-    background-color: #0056b3;
-}
-
-/* Agenda */
-.agenda-section {
-    margin-top: 40px;
-}
-
-.agenda-section h2 {
-    font-size: 24px;
-    margin-bottom: 15px;
-}
-
-.consultas-list {
-    list-style: none;
-    padding-left: 0;
-}
-
-.consulta-item {
-    display: flex;
-    justify-content: space-between;
-    background-color: #fff;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-.consulta-item .paciente-info {
-    display: flex;
+    min-height: 100vh;
     flex-direction: column;
 }
 
-.consulta-item .paciente-info .nome {
-    font-size: 18px;
-    font-weight: bold;
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 53%;
+    right: 0;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    z-index: 100;
 }
 
-.consulta-item .paciente-info .horario {
-    font-size: 16px;
-    color: #666;
+.header .logo img {
+    height: 100px;
 }
 
-.consulta-item .actions button {
-    padding: 8px 12px;
-    font-size: 14px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    margin-left: 10px;
+
+.barra-superior{
+    color: #1E3A8A;    
 }
 
-.consulta-item .actions button:hover {
-    background-color: #0056b3;
+
+/* Conteúdo Principal */
+.main-content {
+    margin-left: 250px;
+    margin-top: 80px;
+    padding: 30px;
+    width: calc(100% - 250px);
+    min-height: calc(100vh - 80px);
+    
+    display: flex; /* Permite alinhamento */
+    flex-direction: column; /* Mantém a estrutura vertical */
+    align-items: center; /* Centraliza os cards */
 }
+
+
+/* Container dos Cards */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Se adapta ao tamanho da tela */
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 900px; /* Ajuste para telas maiores */
+    padding: 0 20px;
+    justify-content: center; /* Garante centralização */
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px; /* Ajustado para melhor visualização */
+    text-align: center;
+}
+
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border-color: #1E3A8A;
+}
+
+.card h3 {
+    color: #1E3A8A;
+    font-weight: 600;
+    font-size: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+}
+
+.card img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+}
+
+/* Estilo do Banner */
+.banner {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Ajuste no main-content para incluir o banner */
+.main-content {
+    margin-left: 250px;
+    margin-top: 80px;
+    padding: 30px;
+    width: calc(100% - 250px);
+    min-height: calc(100vh - 80px);
+}
+
+
+/* Responsividade */
+/* Reset de estilos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo geral */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+/* Container principal */
+.container {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 53%;
+    right: 0;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    z-index: 100;
+}
+
+.header .logo img {
+    height: 100px;
+}
+
+
+.barra-superior{
+    color: #1E3A8A;    
+}
+
+
+/* Conteúdo Principal */
+.main-content {
+    margin-top: -400px;
+    padding: 0px;
+    width: calc(100% - 250px);
+    min-height: calc(100vh - 80px);
+    display: flex; /* Permite alinhamento */
+    flex-direction: column; /* Mantém a estrutura vertical */
+    align-items: center; /* Centraliza os cards */
+}
+
+
+/* Container dos Cards */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ajusta dinamicamente */
+    gap: 2rem;
+    justify-content: center; /* Mantém centralizado */
+    width: 100%;
+    max-width: 900px;
+    padding: 2px;
+    margin: 0 auto;
+    padding-top: 10px; /* Ajusta a distância entre o topo do container e os cards */
+    position: relative; /* Para que possamos manipular a posição */
+    top: -70px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px; /* Ajustado para melhor visualização */
+    text-align: center;
+}
+
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border-color: #1E3A8A;
+}
+
+.card h3 {
+    color: #1E3A8A;
+    font-weight: 600;
+    font-size: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+}
+
+.card img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+}
+
+/* Estilo do Banner */
+.banner {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Ajuste no main-content para incluir o banner */
+.main-content {
+    margin: 80px auto 0; /* Remove margin-left e centraliza */
+    padding: 30px;
+    width: 100%;
+    max-width: 1200px; /* Evita que o conteúdo fique muito largo */
+    min-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza os elementos internos */
+    padding-top: 20px;
+}
+
+
+/* Responsividade */
+@media (max-width: 1024px) {
+    .main-content {
+        margin-left: 0; /* Remove margem lateral para telas menores */
+        width: 100%;
+    }
+
+    .cards-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 cards por linha */
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .cards-container {
+        grid-template-columns: 1fr; /* Apenas 1 card por linha */
+    }
+    
+    .card {
+        min-height: 140px;
+        padding: 1.5rem;
+    }
+    
+    .card img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+
