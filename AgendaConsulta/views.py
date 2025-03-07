@@ -103,7 +103,7 @@ def listar_consultas(request):
         total_fichas=F('qtd_fichas_prioritarias') + F('qtd_fichas_normais')
     ).filter(total_fichas__gt=0)
 
-    return render(request, 'lista_consultas.html', {'consultas': consultas})
+    return render(request, 'Profissional/listaConsultas.html', {'consultas': consultas})
 
 
 
