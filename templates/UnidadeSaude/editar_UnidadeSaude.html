@@ -1,46 +1,122 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Editar Unidade de Saúde</h2>
-<form method="post">
-  {% csrf_token %}
-  
-  <label>Nome da Unidade:</label>
-  {{ form.nome }}
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+    }
 
-  <label>Telefone:</label>
-  {{ form.telefone }}
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        position: relative; /* Adicionado para posicionamento absoluto do botão */
+    }
 
-  <label>E-mail:</label>
-  {{ form.email }}
+    h2 {
+        color: #007bff;
+        margin-bottom: 20px;
+        text-align: center;
+    }
 
-  <label>CEP:</label>
-  {{ form.cep }}
+    form {
+        display: flex;
+        flex-direction: column;
+    }
 
-  <label>Rua:</label>
-  {{ form.rua }}
+    label {
+        margin-top: 10px;
+        font-weight: bold;
+    }
 
-  <label>Número:</label>
-  {{ form.numero }}
+    input[type="text"],
+    input[type="email"] {
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
 
-  <button type="submit">Salvar Alterações</button>
-</form>
+    button[type="submit"] {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
 
-<a href="{% url 'UnidadeSaude:detalhe_unidade' pk=unidade.pk %}">Cancelar</a>
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    .cancel-link {
+        position: absolute; /* Posicionamento absoluto */
+        top: 10px; /* Ajuste a distância do topo */
+        right: 10px; /* Ajuste a distância da direita */
+        color: #007bff;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .cancel-link:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container">
+    <a href="{% url 'UnidadeSaude:detalhe_unidade' pk=unidade.pk %}" class="cancel-link">
+        <i class="fas fa-times"></i> Cancelar
+    </a>
+    <h2>Editar Unidade de Saúde</h2>
+    <form method="post">
+        {% csrf_token %}
+
+        <label>Nome da Unidade:</label>
+        {{ form.nome }}
+
+        <label>Telefone:</label>
+        {{ form.telefone }}
+
+        <label>E-mail:</label>
+        {{ form.email }}
+
+        <label>CEP:</label>
+        {{ form.cep }}
+
+        <label>Rua:</label>
+        {{ form.rua }}
+
+        <label>Número:</label>
+        {{ form.numero }}
+
+        <button type="submit">Salvar Alterações</button>
+    </form>
+</div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const endereco = "{{ unidade.endereco }}";  // Pega o endereço completo
+    document.addEventListener("DOMContentLoaded", function () {
+        const endereco = "{{ unidade.endereco }}"; // Pega o endereço completo
 
-    if (endereco) {
-      const partes = endereco.split(",");  // Divide o endereço nas vírgulas
+        if (endereco) {
+            const partes = endereco.split(","); // Divide o endereço nas vírgulas
 
-      if (partes.length === 3) {
-        document.getElementById("id_rua").value = partes[0].trim();      // Rua
-        document.getElementById("id_numero").value = partes[1].trim();   // Número
-        document.getElementById("id_cep").value = partes[2].trim();      // CEP
-      }
-    }
-  });
+            if (partes.length === 3) {
+                document.getElementById("id_rua").value = partes[0].trim(); // Rua
+                document.getElementById("id_numero").value = partes[1].trim(); // Número
+                document.getElementById("id_cep").value = partes[2].trim(); // CEP
+            }
+        }
+    });
 </script>
 {% endblock %}

@@ -1,62 +1,216 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Pacientes Agendados para a Consulta</h2>
+<style>
+    /* Estilos Gerais */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        line-height: 1.6;
+    }
 
-<p><strong>Unidade de Saúde:</strong> {{ consulta.unidade_saude.nome }}</p>
-<p><strong>Data:</strong> {{ consulta.data|date:"d/m/Y" }}</p>
-<p><strong>Horário:</strong> {{ consulta.horario_inicio|time:"H:i" }} - {{ consulta.horario_fim|time:"H:i" }}</p>
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-<h3>Fila Prioritária</h3>
-<table border="1">
-    <thead>
-        <tr>
-            <th>Nome do Paciente</th>
-            <th>Status</th>
-            <th>Posição na Fila</th>
-            <th>Ações</th> <!-- Nova coluna para ações -->
-        </tr>
-    </thead>
-    <tbody>
-        {% for agendamento in agendamentos %}
-            {% if agendamento.paciente.status == "prioritario" %}
-                <tr>
-                    <td>{{ agendamento.paciente.usuario.nome_completo }}</td>
-                    <td>Prioritário</td>
-                    <td>{{ agendamento.numero_na_fila }}</td>
-                    <td>
-                        <a href="{% url 'AgendaConsulta:cancelar_agendamento' agendamento.id %}" class="btn btn-danger btn-sm">Cancelar</a>
-                    </td>
-                </tr>
-            {% endif %}
+    .container h2 {
+        color: #007bff;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .container p {
+        margin-bottom: 10px;
+    }
+
+    .container h3 {
+        margin-top: 30px;
+        margin-bottom: 15px;
+        color: #007bff;
+    }
+
+    /* Tabelas */
+    .container .table-responsive {
+        margin-bottom: 20px;
+    }
+
+    .container table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+    }
+
+    .container thead {
+        background-color: #f0f0f0;
+    }
+
+    .container th {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 2px solid #ddd;
+    }
+
+    .container tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .container td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* Botões */
+    .container .btn {
+        padding: 8px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .container .btn.btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+    }
+
+    .container .btn.btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .container .btn.btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+        border: none;
+        margin-top: 20px;
+    }
+
+    .container .btn.btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+    
+.alert-container {
+    color: rgb(212, 4, 4);
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050;
+}
+
+.alert {
+    animation: slideIn 0.5s ease-out, fadeOut 2s 4s forwards;
+    margin-bottom: 10px;
+    opacity: 1;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(-50%);
+    }
+}
+
+</style>
+{% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
         {% endfor %}
-    </tbody>
-</table>
+    </div>
+{% endif %}
 
-<h3>Fila Comum</h3>
-<table border="1">
-    <thead>
-        <tr>
-            <th>Nome do Paciente</th>
-            <th>Status</th>
-            <th>Posição na Fila</th>
-            <th>Ações</th> <!-- Nova coluna para ações -->
-        </tr>
-    </thead>
-    <tbody>
-        {% for agendamento in agendamentos %}
-            {% if agendamento.paciente.status == "comum" %}
+<div class="container mt-4">
+    <h2 class="mb-4">Pacientes Agendados para a Consulta</h2>
+
+    <div class="mb-3">
+        <p><strong>Unidade de Saúde:</strong> {{ consulta.unidade_saude.nome }}</p>
+        <p><strong>Data:</strong> {{ consulta.data|date:"d/m/Y" }}</p>
+        <p><strong>Horário:</strong> {{ consulta.horario_inicio|time:"H:i" }} - {{ consulta.horario_fim|time:"H:i" }}</p>
+    </div>
+
+    <h3 class="mt-4">Fila Prioritária</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-light">
                 <tr>
-                    <td>{{ agendamento.paciente.usuario.nome_completo }}</td>
-                    <td>Comum</td>
-                    <td>{{ agendamento.numero_na_fila }}</td>
-                    <td>
-                        <a href="{% url 'AgendaConsulta:cancelar_agendamento' agendamento.id %}" class="btn btn-danger btn-sm">Cancelar</a>
-                    </td>
+                    <th>Nome do Paciente</th>
+                    <th>Status</th>
+                    <th>Posição na Fila</th>
+                    <th>Ações</th>
                 </tr>
-            {% endif %}
-        {% endfor %}
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+                {% for agendamento in agendamentos %}
+                    {% if agendamento.paciente.status == "prioritario" %}
+                        <tr>
+                            <td>{{ agendamento.paciente.usuario.nome_completo }}</td>
+                            <td>Prioritário</td>
+                            <td>{{ agendamento.numero_na_fila }}</td>
+                            <td>
+                                <a href="{% url 'AgendaConsulta:cancelar_agendamento' agendamento.id %}" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-<a href="{% url 'AgendaConsulta:listar_consultas' %}" class="btn btn-secondary">Voltar</a>
+    <h3 class="mt-4">Fila Comum</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Nome do Paciente</th>
+                    <th>Status</th>
+                    <th>Posição na Fila</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for agendamento in agendamentos %}
+                    {% if agendamento.paciente.status == "comum" %}
+                        <tr>
+                            <td>{{ agendamento.paciente.usuario.nome_completo }}</td>
+                            <td>Comum</td>
+                            <td>{{ agendamento.numero_na_fila }}</td>
+                            <td>
+                                <a href="{% url 'AgendaConsulta:cancelar_agendamento' agendamento.id %}" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{% url 'AgendaConsulta:listar_consultas' %}" class="btn btn-secondary mt-4">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
 {% endblock %}

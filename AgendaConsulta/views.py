@@ -173,9 +173,6 @@ def listar_pacientes_por_consulta(request, consulta_id):
     # Obtém todos os agendamentos para a consulta
     agendamentos = Agendamento.objects.filter(consulta=consulta).select_related('paciente')
 
-    if not agendamentos:
-        messages.info(request, "Nenhum paciente agendado para esta consulta.")
-
     return render(request, 'Profissional/lista_paciente_por_consulta.html', {
         'consulta': consulta,
         'agendamentos': agendamentos
