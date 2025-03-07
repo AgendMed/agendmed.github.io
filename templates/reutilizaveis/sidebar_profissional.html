@@ -8,26 +8,36 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,500i,700,800i" rel="stylesheet">
   <style>
-    .social-part .fa{
+    .social-part .fa {
       padding-right: 20px;
     }
-    ul li a{
+
+    ul li a {
       margin-right: 20px;
     }
+
     .navbar {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       z-index: 1000;
-      background-color: #f8f9fa;
+      background-color: #035fc2; /* Cor azul */
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .navbar-nav .nav-link {
+      color: #ffffff; /* Cor dos links na navbar */
+    }
+
+    .navbar .navbar-nav .nav-link:hover {
+      color: #061541; /* Cor dos links ao passar o mouse */
     }
   </style>
 </head>
 <body>
 
-  <nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <nav class="navbar navbar-expand-sm navbar-light">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -37,7 +47,6 @@
 
         <li class="nav-item dropdown dmenu">
           <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-            <img width="25" height="25" src="https://img.icons8.com/ios/50/user-male-circle--v1.png" alt="user-male-circle--v1"/> 
             Perfil
           </a>
           <div class="dropdown-menu sm-menu">
@@ -51,9 +60,14 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'UnidadeSaude:detalhe_unidade' pk=unidade.pk %}">
-            Unidade de Saúde</a>
-        </li>
+          {% if request.user.profissional.unidade %}
+              <a class="nav-link" href="{% url 'UnidadeSaude:detalhe_unidade' pk=request.user.profissional.unidade.pk %}">
+                  Unidade de Saúde
+              </a>
+          {% else %}
+              <span class="nav-link text-muted">Sem unidade</span>
+          {% endif %}
+      </li>
 
         <li class="nav-item">
           <a class="nav-link" href="#">Notificações</a>
