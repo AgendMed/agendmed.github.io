@@ -1,4 +1,5 @@
 {% load static %}
+{% include 'reutilizaveis/sidebar_profissional.html' %}
 <!DOCTYPE html>
 <html lang="pt-br">
 {% block content %}
@@ -14,6 +15,8 @@
 
 </head>
 <body>
+    {% include 'reutilizaveis/sidebar_profissional.html' %}
+
     {% if messages %}
     <div class="alert-container">
         {% for message in messages %}
@@ -30,12 +33,12 @@
         <header class="main-header text-center">
             <h1>
                 <i class="fas fa-calendar-check"></i>
-                Gestão de Consultas
+                Gestão de Consultas <a href="{% url 'AgendaConsulta:cadastrar_consulta' %}" class="btn btn-primary mt-3">
+                    <i class="fas fa-plus-circle"></i> Nova Consulta
+                </a>
+            </header>
             </h1>
-            <a href="{% url 'AgendaConsulta:cadastrar_consulta' %}" class="btn btn-primary mt-3">
-                <i class="fas fa-plus-circle"></i> Nova Consulta
-            </a>
-        </header>
+            
 
         <div class="cards-grid">
             {% for consulta in consultas %}

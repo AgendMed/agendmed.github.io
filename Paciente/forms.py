@@ -32,7 +32,7 @@ class CadastroPacienteForm(forms.ModelForm):
 
     class Meta:
         model = Paciente
-        fields = ['cartao_saude', 'condicao_prioritaria', 'comprovante', 'unidade_saude']
+        fields = ['status', 'condicao_prioritaria', 'comprovante', 'data_aprovacao', 'unidade_saude']
 
     def clean(self):
         cleaned_data = super().clean()

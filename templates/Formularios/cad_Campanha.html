@@ -1,106 +1,243 @@
-<!-- <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Campanha</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Estilização do formulário */
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-}
+{% include 'reutilizaveis/sidebar_profissional.html' %}
 
-/* Estilização dos botões */
-.btn-block {
-    margin-top: 20px;
-}
-
-/* Notificação de sucesso */
-.alert {
-    display: none;
-}
-
-/* Customização de fontes */
-h2 {
-    font-family: 'Arial', sans-serif;
-    font-weight: bold;
-    color: #007bff;
-}
-
-    </style>
-</head>
-<body>
-    <div class="container mt-5">
-        <h2 class="text-center">Cadastro de Campanha</h2> -->
-
-        <!-- Formulário de Cadastro -->
-        <!-- <form>
-            <div class="form-group">
-                <label for="titulo">Título da Campanha</label>
-                <input type="text" class="form-control" id="titulo" placeholder="Digite o título da campanha">
-            </div>
-
-            <div class="form-group">
-                <label for="subtitulo">Subtítulo</label>
-                <input type="text" class="form-control" id="subtitulo" placeholder="Digite o subtítulo">
-            </div>
-
-            <div class="form-group">
-                <label for="descricao">Descrição</label>
-                <textarea class="form-control" id="descricao" rows="3" placeholder="Descreva a campanha"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="imagem">Adicionar imagem</label>
-                <input type="file" class="form-control-file" id="imagem">
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="data_inicio">Data de Início</label>
-                    <input type="date" class="form-control" id="data_inicio">
-                </div>
-
-                <div class="form-group col-md-6">
-                    <label for="data_fim">Data de Validade</label>
-                    <input type="date" class="form-control" id="data_fim">
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-block">Salvar</button>
-        </form> -->
-
-        <!-- Notificação após envio -->
-        <!-- <div class="alert alert-success mt-4" id="notification" style="display: none;">
-            <strong>Campanha Divulgada!</strong>
-        </div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        // Exibir notificação de sucesso
-        $('form').submit(function(event) {
-            event.preventDefault();
-            $('#notification').fadeIn().delay(3000).fadeOut();
-        });
-    </script>
-</body>
-</html> -->
-
-{% extends "base.html" %}
 {% block content %}
-<div class="container mt-5">
-    <h2 class="text-center">Cadastro de Campanha</h2>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary btn-block">Salvar</button>
-    </form>
-</div>
+<main class="content">
+    <div class="form-card">
+        <h2>Cadastro de Campanha</h2>
+
+        <!-- Contêiner para a visualização da imagem -->
+        <div id="image-preview" style="text-align: center; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: center; align-items: center; height: 300px; border: 2px dashed #ccc; border-radius: 8px;">
+                <img id="preview" src="#" alt="Preview da Imagem" style="max-width: 100%; max-height: 100%; display: none; border-radius: 8px;" />
+            </div>
+            <button id="delete-image" style="display: none; margin-top: 10px;" class="btn btn-danger">Deletar Imagem</button>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Campo de Upload de Imagem (inicialmente visível) -->
+            <div id="upload-section">
+                <div class="form-group">
+                    <label for="{{ form.imagem.id_for_label }}" class="form-label">{{ form.imagem.label }}</label>
+                    {{ form.imagem }}
+                    {% if form.imagem.errors %}
+                    <div class="error-message">{{ form.imagem.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Informações da Campanha -->
+            <h3 class="form-section-title">Detalhes da Campanha</h3>
+            <div class="form-grid">
+                {% for field in form %}
+                    {% if field.name != 'imagem' %} <!-- Exclui o campo de imagem do loop -->
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                        <small class="form-text">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% if field.errors %}
+                        <div class="error-message">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <a href="#" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</main>
 {% endblock %}
 
+<style>
+    /* Estilos gerais */
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #F5F5F5;
+        margin: 0;
+        padding: 0;
+    }
+
+    .content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .form-card {
+        background: #FFFFFF;
+        border-radius: 12px;
+        padding: 25px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-top: 45px;
+    }
+
+    h2 {
+        color: #007BFF;
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    .form-section-title {
+        color: #333;
+        font-size: 18px;
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    .form-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-group {
+        text-align: left;
+    }
+
+    .form-label {
+        font-size: 14px;
+        color: #333;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    input[type="number"],
+    input[type="file"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        border-color: #007BFF;
+        outline: none;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        display: inline-block;
+        margin: 5px;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background-color: #007BFF;
+        color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-secondary {
+        background-color: #F5F5F5;
+        color: #007BFF;
+        border: 1px solid #007BFF;
+    }
+
+    .btn-secondary:hover {
+        background-color: #E0E0E0;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: #FFFFFF;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    /* Estilos para o contêiner da imagem */
+    #image-preview {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #preview {
+        max-width: 100%;
+        max-height: 100%;
+        display: none;
+        border-radius: 8px;
+    }
+
+    /* Responsividade */
+    @media (max-width: 600px) {
+        .form-card {
+            padding: 20px;
+            max-width: 90%;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('{{ form.imagem.id_for_label }}');
+        const preview = document.getElementById('preview');
+        const deleteButton = document.getElementById('delete-image');
+        const uploadSection = document.getElementById('upload-section');
+
+        fileInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    deleteButton.style.display = 'block';
+                    uploadSection.style.display = 'none'; // Oculta o campo de upload
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        deleteButton.addEventListener('click', function (e) {
+            e.preventDefault(); // Evita o comportamento padrão do botão
+            preview.src = '#';
+            preview.style.display = 'none';
+            deleteButton.style.display = 'none';
+            uploadSection.style.display = 'block'; // Exibe o campo de upload novamente
+            fileInput.value = ''; // Limpa o valor do campo de arquivo
+        });
+    });
+</script>

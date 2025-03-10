@@ -1,3 +1,4 @@
+from time import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.decorators import permission_required, login_required
@@ -133,16 +134,31 @@ def lista_pacientes_unidade(request):
     })
 
 
+
+@login_required
 def editar_paciente(request, paciente_id):
     paciente = get_object_or_404(Paciente, id=paciente_id)
+    usuario = paciente.usuario 
+
     if request.method == 'POST':
-        form = PacienteForm(request.POST, instance=paciente)
-        if form.is_valid():
-            form.save()
+        usuario_form = UsuarioForm(request.POST, instance=usuario)
+        paciente_form = PacienteForm(request.POST, request.FILES, instance=paciente)
+
+        if usuario_form.is_valid() and paciente_form.is_valid():
+            usuario_form.save()
+            paciente_form.save()
+            messages.success(request, "Paciente atualizado com sucesso!")
             return redirect('lista_pacientes_unidade')
+        else:
+            messages.error(request, "Por favor, corrija os erros abaixo.")
     else:
-        form = PacienteForm(instance=paciente)
-    return render(request, 'Profissional/editar_paciente.html', {'form': form})
+        usuario_form = UsuarioForm(instance=usuario)
+        paciente_form = PacienteForm(instance=paciente)
+
+    return render(request, 'Profissional/editar_paciente.html', {
+        'usuario_form': usuario_form,
+        'paciente_form': paciente_form,
+    })
 
 
 #profissional vai agendar consulta para paciente

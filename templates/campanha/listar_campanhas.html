@@ -1,34 +1,144 @@
-{% extends "base.html" %}
+{% include 'reutilizaveis/sidebar_profissional.html' %}
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center">Lista de Campanhas</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Subtítulo</th>
-                <th>Data Inicial</th>
-                <th>Data Final</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for campanha in campanhas %}
-            <tr>
-                <td>{{ campanha.titulo }}</td>
-                <td>{{ campanha.subtitulo }}</td>
-                <td>{{ campanha.data_inicial }}</td>
-                <td>{{ campanha.data_final }}</td>
-                <td>
-                    <a href="{% url 'Campanha:deletar_campanha' campanha.id %}" class="btn btn-danger btn-sm">Deletar</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5" class="text-center">Nenhuma campanha cadastrada.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <h2 class="text-center mb-4">Lista de Campanhas</h2>
+
+    <!-- Verifica se há campanhas -->
+    {% if campanhas %}
+    <div class="row">
+        {% for campanha in campanhas %}
+        <div class="col-md-6 mb-4"> <!-- Dois cards por linha -->
+            <div class="card campanha-card h-100"> <!-- Altura total do card -->
+                <!-- Imagem da Campanha (opcional) -->
+                {% if campanha.imagem %}
+                <img src="{{ campanha.imagem.url }}" class="card-img-top" alt="{{ campanha.titulo }}">
+                {% else %}
+                <div class="card-img-top no-image">
+                    <span>Sem imagem</span>
+                </div>
+                {% endif %}
+
+                <!-- Corpo do Card -->
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ campanha.titulo }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ campanha.subtitulo }}</h6>
+                    <p class="card-text">
+                        <strong>Data Inicial:</strong> {{ campanha.data_inicial }}<br>
+                        <strong>Data Final:</strong> {{ campanha.data_final }}
+                    </p>
+                    <p class="card-text flex-grow-1"> <!-- Descrição com flex-grow para ocupar espaço restante -->
+                        {{ campanha.descricao }}
+                    </p>
+                    <div class="d-flex justify-content-between mt-3"> <!-- Botões alinhados -->
+                        <a href="#" class="btn btn-primary btn-sm">Editar</a>
+                        <a href="{% url 'Campanha:deletar_campanha' campanha.id %}" class="btn btn-danger btn-sm">Deletar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        Nenhuma campanha cadastrada.
+    </div>
+    {% endif %}
 </div>
+
+<style>
+    /* Estilos para os cards de campanha */
+    .campanha-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%; /* Altura total do card */
+    }
+
+    .campanha-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: 200px; /* Altura da imagem */
+        object-fit: cover;
+    }
+
+    .no-image {
+        width: 100%;
+        height: 200px; /* Altura do placeholder */
+        background-color: #f8f9fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #6c757d;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .card-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #007BFF;
+        margin-bottom: 10px;
+    }
+
+    .card-subtitle {
+        font-size: 16px;
+        color: #6c757d;
+        margin-bottom: 15px;
+    }
+
+    .card-text {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .btn-primary {
+        background-color: #007BFF;
+        border: none;
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .alert-info {
+        background-color: #e2f0ff;
+        border-color: #b6d4fe;
+        color: #004085;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+        .col-md-6 {
+            flex: 0 0 100%; /* Em telas menores, exibe 1 card por linha */
+            max-width: 100%;
+        }
+    }
+</style>
 {% endblock %}
