@@ -54,6 +54,14 @@
         </form>
     </div>
 </main>
+
+<!-- Modal de Sucesso -->
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Campanha cadastrada com sucesso!</p>
+    </div>
+</div>
 {% endblock %}
 
 <style>
@@ -194,6 +202,53 @@
         border-radius: 8px;
     }
 
+    /* Estilos do Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.5s;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.5s;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close:hover {
+        color: #000;
+    }
+
+    /* Animações */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-50px); }
+        to { transform: translateY(0); }
+    }
+
     /* Responsividade */
     @media (max-width: 600px) {
         .form-card {
@@ -207,12 +262,38 @@
     }
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.4/lottie.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const fileInput = document.getElementById('{{ form.imagem.id_for_label }}');
         const preview = document.getElementById('preview');
         const deleteButton = document.getElementById('delete-image');
         const uploadSection = document.getElementById('upload-section');
+        const successModal = document.getElementById('successModal');
+        const closeModal = document.querySelector('.close');
+
+        // Função para exibir o modal
+        function showModal() {
+            successModal.style.display = 'flex';
+            setTimeout(function () {
+                successModal.style.display = 'none';
+                window.location.href = "{% url 'Campanha:listar_campanhas' %}"; // Substitua pela URL desejada
+            }, 3000); // 3 segundos
+        }
+
+        // Fechar o modal ao clicar no botão de fechar
+        closeModal.addEventListener('click', function () {
+            successModal.style.display = 'none';
+        });
+
+        // Exibir o modal após o envio do formulário
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            setTimeout(function () {
+                showModal();
+            }, 500); // Simula um delay de envio
+        });
 
         fileInput.addEventListener('change', function (event) {
             const file = event.target.files[0];
