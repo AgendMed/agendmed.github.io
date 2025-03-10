@@ -3,6 +3,11 @@
 {% block content %}
 <main class="content">
     <div class="form-card">
+
+        <a href="{% url 'Campanha:listar_campanhas' %}" class="btn-voltar-icon" title="Voltar">
+            <img width="32" height="32" src="https://img.icons8.com/color/48/left2.png" alt="left2"/>
+        </a>
+
         <h2>Cadastro de Campanha</h2>
 
         <!-- Contêiner para a visualização da imagem -->
@@ -31,7 +36,7 @@
             <h3 class="form-section-title">Detalhes da Campanha</h3>
             <div class="form-grid">
                 {% for field in form %}
-                    {% if field.name != 'imagem' %} <!-- Exclui o campo de imagem do loop -->
+                    {% if field.name != 'imagem' %} 
                     <div class="form-group">
                         <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
                         {{ field }}
@@ -49,7 +54,6 @@
             <!-- Botões de Ação -->
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Salvar</button>
-                <a href="#" class="btn btn-secondary">Cancelar</a>
             </div>
         </form>
     </div>
@@ -63,7 +67,6 @@
     </div>
 </div>
 {% endblock %}
-
 <style>
     /* Estilos gerais */
     body {
@@ -90,6 +93,25 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         text-align: center;
         margin-top: 45px;
+        position: relative; 
+    }
+
+    /* Estilo do ícone de "Voltar" */
+    .btn-voltar-icon {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .btn-voltar-icon img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .btn-voltar-icon:hover {
+        transform: scale(1.1); 
     }
 
     h2 {
@@ -261,7 +283,6 @@
         }
     }
 </style>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.4/lottie.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -277,14 +298,9 @@
             successModal.style.display = 'flex';
             setTimeout(function () {
                 successModal.style.display = 'none';
-                window.location.href = "{% url 'Campanha:listar_campanhas' %}"; // Substitua pela URL desejada
-            }, 3000); // 3 segundos
+                window.location.href = "{% url 'Campanha:listar_campanhas' %}";
+            }, 3000); 
         }
-
-        // Fechar o modal ao clicar no botão de fechar
-        closeModal.addEventListener('click', function () {
-            successModal.style.display = 'none';
-        });
 
         // Exibir o modal após o envio do formulário
         const form = document.querySelector('form');
@@ -292,7 +308,7 @@
             e.preventDefault();
             setTimeout(function () {
                 showModal();
-            }, 500); // Simula um delay de envio
+            }, 500); 
         });
 
         fileInput.addEventListener('change', function (event) {
@@ -305,7 +321,7 @@
                     preview.src = e.target.result;
                     preview.style.display = 'block';
                     deleteButton.style.display = 'block';
-                    uploadSection.style.display = 'none'; // Oculta o campo de upload
+                    uploadSection.style.display = 'none'; 
                 };
 
                 reader.readAsDataURL(file);
@@ -313,11 +329,11 @@
         });
 
         deleteButton.addEventListener('click', function (e) {
-            e.preventDefault(); // Evita o comportamento padrão do botão
+            e.preventDefault(); 
             preview.src = '#';
             preview.style.display = 'none';
             deleteButton.style.display = 'none';
-            uploadSection.style.display = 'block'; // Exibe o campo de upload novamente
+            uploadSection.style.display = 'block'; 
             fileInput.value = ''; // Limpa o valor do campo de arquivo
         });
     });

@@ -2,7 +2,10 @@
 {% block content %}
 <div class="container mt-5">
     <h2 class="text-center mb-4">Lista de Campanhas</h2>
-
+    <a href="{% url 'Campanha:cad_Campanha' %}" class="btn btn-nova-campanha" id="nova-campanha" title="Adicionar uma nova campanha">
+        <img src="https://img.icons8.com/?size=100&id=eMO7MERcZneU&format=png&color=000000" alt="Ícone Nova Campanha" class="btn-icon" />
+        Nova Campanha
+    </a>
     <!-- Verifica se há campanhas -->
     {% if campanhas %}
     <div class="row">
@@ -29,10 +32,10 @@
                     <p class="card-text flex-grow-1"> <!-- Descrição com flex-grow para ocupar espaço restante -->
                         {{ campanha.descricao }}
                     </p>
-                    <div class="d-flex justify-content-center gap-4 mt-3"> <!-- Botões centralizados com espaçamento maior -->
-                        <a href="#" class="btn btn-primary btn-lg">Editar</a> <!-- Botão maior -->
-                        <!-- Botão para abrir o modal de confirmação -->
-                        <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ campanha.id }}">
+                    <!-- Contêiner dos botões -->
+                    <div class="card-buttons">
+                        <a href="#" class="btn btn-primary">Editar</a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ campanha.id }}">
                             Deletar
                         </button>
                     </div>
@@ -74,13 +77,21 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <style>
+    .text-center{
+        color: #007BFF;
+    }
+    .container {
+    padding: 20px; /* Adiciona um espaçamento interno */
+}
+
     /* Estilos para os cards de campanha */
     .campanha-card {
         border: 1px solid #e0e0e0;
         border-radius: 10px;
         overflow: hidden;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        height: 100%; /* Altura total do card */
+        height: 100%;
+        
     }
 
     .campanha-card:hover {
@@ -131,34 +142,75 @@
         margin-bottom: 20px;
     }
 
-    .btn-danger {
-        background-color: #dc3545;
-        border: none;
-        font-size: 16px; /* Tamanho da fonte aumentado */
-        padding: 10px 20px; /* Padding aumentado */
+    /* Estilo do botão "Nova Campanha" */
+    .btn-nova-campanha {
+        background-color: #ffffff; /* Cor de fundo */
+        color: #1ea5ff; /* Cor do texto */
+        border: 2px solid #1ea5ff; /* Borda azul */
+        border-radius: 20px; /* Bordas arredondadas */
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        display: inline-flex;
+        align-items: center; /* Alinha o ícone e o texto verticalmente */
+        gap: 10px; /* Espaçamento entre o ícone e o texto */
+        text-decoration: none;
+        margin-bottom: 20px; /* Espaçamento abaixo do botão */
+        transition: background-color 0.3s ease, color 0.3s ease; /* Transição suave */
     }
 
-    .btn-danger:hover {
-        background-color: #c82333;
+    .btn-nova-campanha:hover {
+        background-color: #1ea5ff; /* Cor de fundo ao passar o mouse */
+        color: #ffffff; /* Cor do texto ao passar o mouse */
     }
 
+    .btn-icon {
+        width: 24px; /* Tamanho do ícone */
+        height: 24px;
+    }
+
+    /* Estilo dos botões dentro dos cards */
+    .card-buttons {
+        display: flex;
+        justify-content: center; /* Centraliza os botões */
+        gap: 20px; /* Aumenta o espaçamento entre os botões */
+        margin-top: 20px; /* Adiciona espaço acima dos botões */
+    }
+
+    /* Estilo dos botões "Editar" e "Deletar" */
+    .btn-primary, .btn-danger {
+        padding: 12px 24px; /* Aumenta o padding dos botões */
+        font-size: 16px; /* Tamanho da fonte */
+        border-radius: 8px; /* Bordas arredondadas */
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Transição suave */
+    }
+
+    .btn-primary:hover, .btn-danger:hover {
+        transform: translateY(-2px); /* Efeito de levantar ao passar o mouse */
+    }
+
+    /* Botão "Editar" */
     .btn-primary {
-        background-color: #007BFF;
-        border: none;
-        font-size: 16px; /* Tamanho da fonte aumentado */
-        padding: 10px 20px; /* Padding aumentado */
+        background-color: #ffffff; /* Cor de fundo branca */
+        color: #007BFF; /* Cor do texto azul */
+        border: 2px solid #007BFF; /* Borda azul */
     }
 
     .btn-primary:hover {
-        background-color: #0056b3;
+        background-color: #007BFF; /* Cor de fundo azul ao passar o mouse */
+        color: #ffffff; /* Cor do texto branca ao passar o mouse */
+        border-color: #007BFF; /* Mantém a borda azul */
     }
 
-    .alert-info {
-        background-color: #e2f0ff;
-        border-color: #b6d4fe;
-        color: #004085;
-        padding: 15px;
-        border-radius: 5px;
+    /* Botão "Deletar" */
+    .btn-danger {
+        background-color: #007BFF; /* Cor de fundo azul */
+        color: #ffffff; /* Cor do texto branca */
+        border: none; /* Sem borda */
+    }
+
+    .btn-danger:hover {
+        background-color: #0056b3; /* Cor de fundo azul mais escura ao passar o mouse */
     }
 
     /* Responsividade */
