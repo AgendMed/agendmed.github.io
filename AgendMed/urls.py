@@ -10,6 +10,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('paciente/', include('Paciente.urls')),
@@ -23,7 +24,6 @@ urlpatterns = [
     # Servir o index.html diretamente
     re_path(r'^$', serve, {'path': 'index.html', 'document_root': BASE_DIR}),
 ]
-
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
