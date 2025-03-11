@@ -12,7 +12,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/listaConsultas.css' %}">
 
-
+<style>
+    #card-topo{
+        color: #1E3A8A;
+    }
+</style>
 </head>
 <body>
     {% include 'reutilizaveis/sidebar_profissional.html' %}
@@ -43,7 +47,7 @@
         <div class="cards-grid">
             {% for consulta in consultas %}
             <div class="consult-card">
-                <div class="card-header">
+                <div class="card-header" id="card-topo">
                     <h2 class="card-title">
                         <i class="fas fa-hospital"></i>
                         {{ consulta.unidade_saude.nome }}

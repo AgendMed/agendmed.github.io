@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-
+from networkx import reverse
+from django.utils.timezone import now
 from Paciente.forms import PacienteForm
 from .forms import ProfissionalSaudeForm, UsuarioForm
 from .models import ProfissionalSaude
@@ -195,3 +196,59 @@ def agendar_consulta_paciente(request, consulta_id):
         return redirect('lista_pacientes_unidade')
 
     return redirect('lista_pacientes_unidade')
+
+@login_required
+def pacientes_prioritarios_aguardando(request):
+    profissional = get_object_or_404(ProfissionalSaude, usuario=request.user)
+    unidade_saude = profissional.unidade_saude
+
+    # Filtra os pacientes da unidade que têm condição prioritária
+    pacientes_prioritarios = Paciente.objects.filter(
+        unidade_saude=unidade_saude, condicao_prioritaria__isnull=False
+    )
+
+    # Filtra agendamentos desses pacientes que ainda estão aguardando resposta
+    agendamentos_pendentes = Agendamento.objects.filter(
+        paciente__in=pacientes_prioritarios, status='aguardando'
+    ).order_by('consulta__numero_na_fila')
+
+    return render(request, 'profissional/requisicoes_pendentes.html', {
+        'pacientes': pacientes_prioritarios,
+        'agendamentos': agendamentos_pendentes,
+        'unidade_saude': unidade_saude
+    })
+
+
+@login_required
+def requisicoes_pendentes(request):
+    # Obtém o profissional logado
+    profissional = get_object_or_404(ProfissionalSaude, usuario=request.user)
+    
+    # Filtra os pacientes da unidade de saúde do profissional
+    pacientes_pendentes = Paciente.objects.filter(
+        unidade_saude=profissional.unidade_saude,  # Filtra pela unidade de saúde do profissional
+        condicao_prioritaria__isnull=False,  # Condição prioritária não é nula
+        status='comum'  # Status ainda não foi alterado para "prioritário"
+    ).exclude(
+        condicao_prioritaria='nenhuma'  # Exclui pacientes sem condição prioritária
+    )
+
+    return render(request, 'Profissional/requisicoes_pendentes.html', {
+        'pacientes_pendentes': pacientes_pendentes
+    })
+
+
+def atualizar_status_paciente(request, paciente_id):
+    if request.method == "POST":
+        paciente = get_object_or_404(Paciente, id=paciente_id)
+        novo_status = request.POST.get("status")
+
+        if novo_status in ["pendente", "aprovado", "rejeitado"]:
+            paciente.status = novo_status
+            paciente.data_aprovacao = now()
+            paciente.save()
+            messages.success(request, "Status atualizado com sucesso!")
+        else:
+            messages.error(request, "Status inválido.")
+
+    return redirect('profissional:requisicoes_pendentes')

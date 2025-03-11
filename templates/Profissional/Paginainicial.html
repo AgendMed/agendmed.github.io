@@ -18,24 +18,29 @@
             <div class="cards-container">
                 <!-- Card Consulta -->
                 <div class="card" id="consulta-card" data-url="{% url 'AgendaConsulta:listar_consultas' %}">
-                    <h3><img src="{% static 'img/icon-consulta.png' %}" alt="Consulta Icon"> Consultas</h3>
+                    <h3><img src="{% static 'img/relatorio-de-saude.gif' %}" alt="Consulta Icon"> Consultas</h3>
                     <div class="card-content"></div>
                 </div>
 
                 <!-- Card Campanhas -->
                 <div class="card" id="campanha-card" data-url="{% url 'Campanha:listar_campanhas' %}">
-                    <h3><img src="{% static 'img/icons-injecao.png' %}" alt="Campanha Icon"> Campanhas</h3>
+                    <h3><img src="{% static 'img/seringa.gif' %}" alt="Campanha Icon"> Campanhas</h3>
                 </div>
                 
                 <!-- Card Pacientes -->
                 <div class="card" id="paciente-card" data-url="{% url 'profissional:lista_pacientes_unidade' %}">
-                    <h3><img src="https://img.icons8.com/color/48/pharmacist-skin-type-1.png" alt="Paciente Icon"> Pacientes</h3>
+                    <h3><img src="{% static 'img/monitoramento-de-saude.gif' %}" alt="Paciente Icon"> Pacientes</h3>
                     <div class="card-content"></div>
                 </div>
                 
                 <!-- Card Acompanhamento -->
                 <div class="card" id="acompanhamento-card" data-url="{% url 'profissional:lista_pacientes_unidade' %}">
-                    <h3><img src="https://img.icons8.com/color-glass/48/out-patient-department.png" alt="Acompanhamento Icon"> Acompanhamento Domiciliar</h3>
+                    <h3><img src="{% static 'img/exame-completo-de-saude.gif' %}" alt="Acompanhamento Icon"> Acompanhamento Domiciliar</h3>
+                    <div class="card-content"></div>
+                </div>
+
+                <div class="card" id="acompanhamento-card" data-url="{% url 'UnidadeSaude:detalhe_unidade' unidade.pk %}">
+                    <h3><img src="{% static 'img/farmacia.gif' %}" alt="Acompanhamento Icon"> Unidade de Saúde</h3>
                     <div class="card-content"></div>
                 </div>
             </div>

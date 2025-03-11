@@ -1,0 +1,164 @@
+{% include 'reutilizaveis/sidebar_profissional.html' %}
+
+{% block content %}
+<div class="container mt-6" style="margin-top: 90px;">
+    <h2 class="mb-4 text-center">Requisições de Pacientes Prioritários</h2>
+    {% if messages %}
+    <div class="alert alert-success">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Nome do Paciente</th>
+                    <th>Condição Prioritária</th>
+                    <th>Comprovante</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paciente in pacientes_pendentes %}
+                <tr>
+                    <td>{{ paciente.usuario.nome_completo }}</td>
+                    <td>{{ paciente.get_condicao_prioritaria_display }}</td>
+                    <td>
+                        {% if paciente.comprovante %}
+                            <a href="{{ paciente.comprovante.url }}" target="_blank" class="btn btn-info">Ver Comprovante</a>
+                        {% else %}
+                            Nenhum comprovante enviado.
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'profissional:atualizar_status_paciente' paciente.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <select name="status" class="form-control d-inline w-auto">
+                                <option value="pendente" {% if paciente.status == "pendente" %}selected{% endif %}>Pendente</option>
+                                <option value="aprovado" {% if paciente.status == "aprovado" %}selected{% endif %}>Aprovado</option>
+                                <option value="rejeitado" {% if paciente.status == "rejeitado" %}selected{% endif %}>Rejeitado</option>
+                            </select>
+                            <button type="submit" class="btn btn-success">Salvar</button>
+                        </form>
+                        <button onclick="abrirModalRejeitar({{ paciente.id }})" class="btn btn-danger">Rejeitar</button>
+
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">Nenhuma requisição pendente.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal de Rejeição -->
+<div id="modalRejeitar" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModalRejeitar()">&times;</span>
+        <h3>Rejeitar Paciente</h3>
+        <form id="formRejeitar" method="post">
+            {% csrf_token %}
+            <input type="hidden" id="paciente_id" name="paciente_id">
+            <label for="motivo">Motivo:</label>
+            <select id="motivo" name="motivo" class="form-control">
+                <option value="documentacao_invalida">Documentação Inválida</option>
+                <option value="nao_se_qualifica">Falta de assinatura, carimbo ou selo oficial</option>
+                <option value="nao_se_qualifica">Dados inconsistentes ou vencidos</option>
+                <option value="nao_se_qualifica">Alterações visíveis, rasuras ou edições digitais</option>
+                <option value="nao_se_qualifica">Cópia de baixa qualidade que impossibilita a verificação</option>
+                <option value="nao_se_qualifica">O paciente não se enquadra na categoria prioritária</option>
+                <option value="outro">Outro</option>
+            </select>
+            <div id="outroMotivoContainer" style="display: none;">
+                <label for="outro_motivo">Descreva o motivo:</label>
+                <textarea id="outro_motivo" name="outro_motivo" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger mt-2">Confirmar Rejeição</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function abrirModalRejeitar(pacienteId) {
+        document.getElementById('paciente_id').value = pacienteId;
+        document.getElementById('formRejeitar').action = `/aprovar_rejeitar_paciente/${pacienteId}/`;
+        document.getElementById('modalRejeitar').style.display = 'block';
+    }
+
+    function fecharModalRejeitar() {
+        document.getElementById('modalRejeitar').style.display = 'none';
+    }
+
+    document.getElementById('motivo').addEventListener('change', function() {
+        document.getElementById('outroMotivoContainer').style.display = this.value === 'outro' ? 'block' : 'none';
+    });
+</script>
+
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .close {
+        float: right;
+        font-size: 28px;
+        cursor: pointer;
+    }
+
+    .close:hover {
+        color: red;
+    }
+
+    .table thead {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        border-radius: 5px;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+</style>
+{% endblock %}
