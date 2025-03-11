@@ -26,3 +26,7 @@ def deletar_campanha(request, campanha_id):
         campanha.delete()
         return redirect('Campanha:listar_campanhas')
     return render(request, 'campanha/confirmar_exclusao.html', {'campanha': campanha})
+
+def visualizar_campanhas(request):
+    campanhas = Campanha.objects.all()
+    return render(request, 'campanha/visualizar_campanhas.html', {'campanhas': campanhas})
