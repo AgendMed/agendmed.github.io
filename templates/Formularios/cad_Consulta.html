@@ -1,4 +1,3 @@
-{% extends "base.html" %}
 {% block content %}
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -125,10 +124,29 @@
         .flatpickr-calendar .flatpickr-day.today {
             border-color: #00AEEF; /* Cor da borda para o dia atual */
         }
+
+        .back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        .back-home a {
+            text-decoration: none;
+            color: #00AEEF;
+            font-weight: normal;
+        }
+
+
     </style>
 </head>
 
 <body> 
+    <div class="back-home">
+        <a href="{% url 'AgendaConsulta:listar_consultas' %}">&larr; Voltar</a>
+    </div>
 
   <h1>Cadastrar Consulta</h1>
   <form method="post" id="consulta-form">

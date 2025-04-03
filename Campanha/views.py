@@ -6,14 +6,21 @@ from .forms import CampanhaForm
 #@permission_required('campanha.pode_cadastrar_campanha')
 def cadastrar_campanha(request):
     if request.method == "POST":
+        print('Recebeu POST')
         form = CampanhaForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            print('Formulário válido')
+            nova_campanha = form.save()
+            print(f'Campanha salva: ID {nova_campanha.id}')
             return redirect('Campanha:listar_campanhas')
+        else:
+            print('Formulário inválido')
+            print(form.errors)  # Mostra os erros no console
     else:
         form = CampanhaForm()
     
     return render(request, 'Formularios/cad_Campanha.html', {'form': form})
+    
 
 def listar_campanhas(request):
     campanhas = Campanha.objects.all()
