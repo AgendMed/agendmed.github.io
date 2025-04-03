@@ -1,6 +1,14 @@
 {% include 'reutilizaveis/sidebar_profissional.html' %}
 
 {% block content %}
+<!-- NO TOPO DO TEMPLATE cad_Campanha.html -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
 <main class="content">
     <div class="form-card">
 
@@ -285,56 +293,38 @@
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.4/lottie.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const fileInput = document.getElementById('{{ form.imagem.id_for_label }}');
-        const preview = document.getElementById('preview');
-        const deleteButton = document.getElementById('delete-image');
-        const uploadSection = document.getElementById('upload-section');
-        const successModal = document.getElementById('successModal');
-        const closeModal = document.querySelector('.close');
+    // REMOVA O EVENTO submit DO FORMULÁRIO QUE USA preventDefault()
+// E substitua por este código:
 
-        // Função para exibir o modal
-        function showModal() {
-            successModal.style.display = 'flex';
-            setTimeout(function () {
-                successModal.style.display = 'none';
-                window.location.href = "{% url 'Campanha:listar_campanhas' %}";
-            }, 3000); 
+document.addEventListener('DOMContentLoaded', function () {
+    const fileInput = document.getElementById('{{ form.imagem.id_for_label }}');
+    const preview = document.getElementById('preview');
+    const deleteButton = document.getElementById('delete-image');
+    const uploadSection = document.getElementById('upload-section');
+
+    // REMOVA O BLOCO DE CÓDIGO DO submit (mantenha apenas o preview da imagem)
+    
+    fileInput.addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                deleteButton.style.display = 'block';
+                uploadSection.style.display = 'none'; 
+            };
+            reader.readAsDataURL(file);
         }
-
-        // Exibir o modal após o envio do formulário
-        const form = document.querySelector('form');
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            setTimeout(function () {
-                showModal();
-            }, 500); 
-        });
-
-        fileInput.addEventListener('change', function (event) {
-            const file = event.target.files[0];
-
-            if (file) {
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                    deleteButton.style.display = 'block';
-                    uploadSection.style.display = 'none'; 
-                };
-
-                reader.readAsDataURL(file);
-            }
-        });
-
-        deleteButton.addEventListener('click', function (e) {
-            e.preventDefault(); 
-            preview.src = '#';
-            preview.style.display = 'none';
-            deleteButton.style.display = 'none';
-            uploadSection.style.display = 'block'; 
-            fileInput.value = ''; // Limpa o valor do campo de arquivo
-        });
     });
+
+    deleteButton.addEventListener('click', function (e) {
+        e.preventDefault(); 
+        preview.src = '#';
+        preview.style.display = 'none';
+        deleteButton.style.display = 'none';
+        uploadSection.style.display = 'block'; 
+        fileInput.value = '';
+    });
+});
 </script>

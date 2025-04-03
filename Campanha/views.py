@@ -1,3 +1,4 @@
+from pyexpat.errors import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import permission_required
 from .models import Campanha
@@ -11,11 +12,11 @@ def cadastrar_campanha(request):
         if form.is_valid():
             print('Formulário válido')
             nova_campanha = form.save()
-            print(f'Campanha salva: ID {nova_campanha.id}')
+            messages.success(request, "Campanha cadastrada com sucesso!")
             return redirect('Campanha:listar_campanhas')
         else:
             print('Formulário inválido')
-            print(form.errors)  # Mostra os erros no console
+            print(form.errors)
     else:
         form = CampanhaForm()
     
