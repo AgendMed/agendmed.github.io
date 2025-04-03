@@ -1,6 +1,7 @@
-<!DOCTYPE html>
-{% extends 'base.html' %}
 {% block content %}
+{% include 'reutilizaveis/navbar_paciente.html' %}
+
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -107,12 +108,7 @@
 <body>
     <header>
         <h1>Notificações</h1>
-        <nav>
-            <a href="{% url 'Paciente:pagina_paciente' %}">Editar Perfil</a>
-            <a href="#">Minha Unidade de Saúde</a>
-            <a href="{% url 'Paciente:notificacoes' %}">Notificações</a>
-            <a href="#">Ajuda</a>
-        </nav>
+        
     </header>
 
     <div class="content">

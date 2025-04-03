@@ -1,117 +1,341 @@
-{% extends 'base.html' %}
-
 {% block content %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+{% include 'reutilizaveis/navbar_paciente.html' %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
 <style>
-    /* Estilização geral dos cards */
-.custom-card {
-    max-width: 90%;
-    margin: auto;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
-    border: none;
-}
-
-.custom-card:hover {
-    transform: scale(1.03);
-}
-
-/* Ajuste de espaçamento e fonte */
-.card-body {
-    padding: 20px;
-}
-
-.card-title {
-    font-size: 1.3rem;
-    color: #007bff;
-    font-weight: bold;
-}
-
-/* Botão de cancelamento */
-.btn-danger {
-    background-color: #dc3545;
-    border: none;
-    font-size: 0.9rem;
-}
-
-.btn-danger:hover {
-    background-color: #c82333;
-}
-
-/* Responsividade para notebooks */
-@media (min-width: 992px) {
-    .custom-card {
-        max-width: 75%;
+    /* Estilo Geral */
+    .consulta-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
-    .card-title {
-        font-size: 1.4rem;
+    /* Cabeçalho */
+    .consulta-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        position: relative;
     }
-
-    .btn {
+    
+    .consulta-title {
+        color: #2c3e50;
+        font-weight: 700;
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .consulta-title:after {
+        content: '';
+        position: absolute;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #3498db, #9b59b6);
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 2px;
+    }
+    
+    /* Cards de Consulta */
+    .consulta-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: none;
+    }
+    
+    .consulta-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+    
+    .card-header {
+        background: linear-gradient(135deg, #3498db, #9b59b6);
+        color: white;
+        padding: 1.2rem 1.5rem;
+        border-bottom: none;
+    }
+    
+    .unidade-name {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .unidade-name i {
+        margin-right: 10px;
+        font-size: 1.2em;
+    }
+    
+    .card-body {
+        padding: 1.8rem;
+    }
+    
+    .info-item {
+        display: flex;
+        margin-bottom: 1.5rem; /* Aumentado o margin-bottom */
+        align-items: center;
+    }
+    
+    .info-icon {
+        width: 36px;
+        height: 36px;
+        background: #f8f9fa;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        color: #3498db;
+        font-size: 1.1rem;
+    }
+    
+    .info-text {
+        flex: 1;
+    }
+    
+    .info-label {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        margin-bottom: 0.2rem;
+    }
+    
+    .info-value {
+        font-size: 1.1rem;
+        color: #2c3e50;
+        font-weight: 500;
+    }
+    
+    /* Badges */
+    .badge-prioritario {
+        background: linear-gradient(135deg, #e74c3c, #f39c12);
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    
+    .badge-normal {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    
+    /* Botões */
+    .btn-consulta {
+        border-radius: 8px;
+        padding: 0.7rem 1.5rem;
+        font-weight: 600;
         font-size: 1rem;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px; /* Adicionado margin-right */
+        margin-bottom: 10px; /* Adicionado margin-bottom */
     }
-}
+    
+    .btn-consulta i {
+        margin-right: 8px;
+    }
+    
+    .btn-cancelar {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        border: none;
+    }
+    
+    .btn-cancelar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        color: white;
+    }
+    
+    .btn-mapa {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        border: none;
+    }
+    
+    .btn-mapa:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        color: white;
+    }
+    
+    /* Mensagem sem consultas */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    .empty-icon {
+        font-size: 4rem;
+        color: #bdc3c7;
+        margin-bottom: 1.5rem;
+    }
+    
+    .empty-text {
+        color: #7f8c8d;
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .btn-agendar {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        color: white;
+        padding: 0.8rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        border: none;
+    }
+    
+    .btn-agendar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        color: white;
+    }
 
-.icon-localizacao {
-    display: inline-flex;
-    align-items: center;
-    color: red;
-    font-size: 16px;
-    font-weight: bold;
-    text-decoration: none;
-    margin-left: 10px;
-}
+    .btn-voltar {
+        background: #f0f0f0;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-top: 2rem; /* Adicionado margin-top */
+        text-decoration: none;
+        display: inline-block;
+    }
 
-.icon-localizacao i {
-    margin-right: 5px;
-}
+    .btn-voltar:hover {
+        background: #e0e0e0;
+    }
 
+    /* Estilo para o link "Ver no Mapa" */
+    .icon-localizacao {
+        display: inline-flex;
+        align-items: center;
+        color: red;
+        font-size: 16px;
+        font-weight: bold;
+        text-decoration: none;
+        margin-left: 10px;
+    }
 
+    .icon-localizacao i {
+        margin-right: 5px;
+    }
+    
+    /* Responsivo */
+    @media (max-width: 768px) {
+        .consulta-container {
+            padding: 1rem;
+        }
+        
+        .consulta-title {
+            font-size: 1.8rem;
+        }
+        
+        .btn-consulta {
+            margin-right: 0;
+            margin-bottom: 10px;
+            width: 100%; /* Botões ocupam a largura total */
+        }
+    }
 </style>
-<div class="container mt-5">
-    <h1 class="mb-4 text-center text-primary fw-bold">Minhas Consultas Agendadas</h1>
+
+<div class="consulta-container">
+    <div class="consulta-header">
+        <h1 class="consulta-title">
+            <i class="fas fa-calendar-check me-2"></i>Minhas Consultas
+        </h1>
+        <p class="text-muted">Acompanhe seus agendamentos e consultas marcadas</p>
+    </div>
     
     {% if agendamentos %}
         <div class="row">
             {% for agendamento in agendamentos %}
-                <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-body">
-                            <h5 class="card-title text-secondary fw-bold">
-                                <i class="fas fa-hospital me-2"></i>{{ agendamento.consulta.unidade_saude.nome }}
+                <div class="col-lg-6">
+                    <div class="consulta-card">
+                        <div class="card-header">
+                            <h3 class="unidade-name">
+                                <i class="fas fa-hospital"></i>
+                                {{ agendamento.consulta.unidade_saude.nome }}
                                 <a href="{% url 'UnidadeSaude:detalhe_unidade' agendamento.consulta.unidade_saude.id %}" target="_blank" class="icon-localizacao">
                                     <i class="bi bi-geo-alt"></i>
                                 </a>
-                            </h5>
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-calendar-day"></i>
+                                </div>
+                                <div class="info-text">
+                                    <div class="info-label">Data da Consulta</div>
+                                    <div class="info-value">
+                                        {{ agendamento.consulta.data|date:"d/m/Y" }}
+                                        <span class="ms-3">
+                                            <i class="fas fa-clock"></i> 
+                                            {{ agendamento.consulta.horario_inicio|time:"H:i" }} - {{ agendamento.consulta.horario_fim|time:"H:i" }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                             
-
-                            <hr>
-                            <p class="card-text">
-                                <strong><i class="fas fa-calendar-alt me-2"></i>Data:</strong> 
-                                <span class="text-dark">{{ agendamento.consulta.data|date:"d/m/Y" }}</span><br>
-                                
-                                <strong><i class="fas fa-clock me-2"></i>Horário:</strong> 
-                                <span class="text-dark">{{ agendamento.consulta.horario_inicio|time:"H:i" }} - {{ agendamento.consulta.horario_fim|time:"H:i" }}</span><br>
-                                
-                                <strong><i class="fas fa-ticket-alt me-2"></i>Tipo de Ficha:</strong> 
-                                <span class="text-dark">
-                                    {% if agendamento.paciente.status == 'prioritario' %}
-                                        <span class="badge bg-warning text-dark">Prioritária</span>
-                                    {% else %}
-                                        <span class="badge bg-info text-white">Comum</span>
-                                    {% endif %}
-                                </span><br>
-                                
-                                <strong><i class="fas fa-list-ol me-2"></i>Número na Fila:</strong> 
-                                <span class="text-dark">{{ agendamento.numero_na_fila }}</span>
-                            </p>
-                            <div class="d-grid gap-2">
-                                <form method="post" action="{% url 'Paciente:cancelar_agendamento' agendamento.id %}">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-user-tag"></i>
+                                </div>
+                                <div class="info-text">
+                                    <div class="info-label">Tipo de Atendimento</div>
+                                    <div class="info-value">
+                                        {% if agendamento.paciente.status == 'prioritario' %}
+                                            <span class="badge-prioritario">
+                                                <i class="fas fa-star"></i> Prioritário
+                                            </span>
+                                        {% else %}
+                                            <span class="badge-normal">
+                                                <i class="fas fa-user"></i> Normal
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-list-ol"></i>
+                                </div>
+                                <div class="info-text">
+                                    <div class="info-label">Sua Posição na Fila</div>
+                                    <div class="info-value">
+                                        #{{ agendamento.numero_na_fila }}
+                                        <small class="text-muted ms-2">(na fila {{ agendamento.data_atualizacao|date:"d/m/Y H:i" }})</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex flex-wrap mt-4">
+                                <form method="post" action="{% url 'Paciente:cancelar_agendamento' agendamento.id %}" class="ms-auto">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger btn-sm w-100">
-                                        <i class="fas fa-times-circle me-1"></i>Cancelar Agendamento
+                                    <button type="submit" class="btn btn-consulta btn-cancelar">
+                                        <i class="fas fa-times-circle"></i> Cancelar
                                     </button>
                                 </form>
                             </div>
@@ -121,9 +345,36 @@
             {% endfor %}
         </div>
     {% else %}
-        <div class="alert alert-info text-center" role="alert">
-            <i class="fas fa-info-circle me-2"></i>Você não possui consultas agendadas.
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="far fa-calendar-times"></i>
+            </div>
+            <h3 class="empty-text">Nenhuma consulta agendada</h3>
+            <p class="text-muted mb-4">Você ainda não possui consultas marcadas</p>
+            <a href="#" class="btn btn-agendar">
+                <i class="fas fa-plus-circle"></i> Agendar Consulta
+            </a>
         </div>
     {% endif %}
+
+    <a href="{% url 'Paciente:paciente_home' %}" class="btn btn-voltar">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Efeito de hover nos cards
+    $(document).ready(function() {
+        $('.consulta-card').hover(
+            function() {
+                $(this).css('transform', 'translateY(-5px)');
+            },
+            function() {
+                $(this).css('transform', 'translateY(0)');
+            }
+        );
+    });
+</script>
 {% endblock %}

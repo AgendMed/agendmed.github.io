@@ -1,3 +1,6 @@
+{% if request.user.profissionalsaude_set.exists %}
+    {% include 'reutilizaveis/sidebar_profissional.html' %}
+{% endif %}
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -72,16 +75,15 @@
     </style>
 </head>
 <body>
-    {% include 'reutilizaveis/sidebar_profissional.html' %}
-
     <div class="container" id="container">
         <h1>{{ unidade.nome }}</h1>
         <p><strong>Endereço:</strong> {{ unidade.endereco }}</p>
         <p><strong>Telefone:</strong> {{ unidade.telefone }}</p>
         <p><strong>Email:</strong> {{ unidade.email }}</p>
         
-            <a href="{% url 'UnidadeSaude:editar_unidade_saude' unidade.id %}" class="edit-link">Editar Unidade</a>
-        {% if unidade.latitude and unidade.longitude %}
+        {% if request.user.profissionalsaude_set.exists %}
+        <a href="{% url 'UnidadeSaude:editar_unidade_saude' unidade.id %}" class="edit-link">Editar Unidade</a>
+    {% endif %}        {% if unidade.latitude and unidade.longitude %}
             <h3>Localização no Mapa</h3>
             <div id="map"></div>
 
