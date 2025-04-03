@@ -2,7 +2,7 @@ from django.urls import path
 
 from especialidades.views import listar_especialidades
 from . import views
-from .views import atualizar_status_paciente, editar_paciente, editar_perfil_profissional, lista_pacientes_unidade, perfil_profissional, requisicoes_pendentes
+from .views import acompanha_domicilio, atualizar_status_paciente, editar_paciente, editar_perfil_profissional, lista_pacientes_unidade, perfil_profissional, requisicoes_pendentes
 from .views import filtrar_profissionais
 
 
@@ -23,6 +23,8 @@ urlpatterns = [
     path('agendar/<int:consulta_id>/', views.agendar_consulta_paciente, name='agendar_consulta'),
     path('requisicoes_pendentes/', requisicoes_pendentes, name='requisicoes_pendentes'),
     path('atualizar-status/<int:paciente_id>/', atualizar_status_paciente, name='atualizar_status_paciente'),
+    path('acompanha-domicilio/', acompanha_domicilio, name='acompanha_domicilio'),
+
 
 
 ]

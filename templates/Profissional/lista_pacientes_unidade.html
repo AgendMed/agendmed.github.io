@@ -4,52 +4,42 @@
 <div class="container mt-5">
     <h1 class="text-primary text-center fw-bold">Pacientes da Unidade - {{ unidade_saude.nome }}</h1>
 
-
-    <!-- Campo de Pesquisa -->
     <div class="search-bar mt-4">
         <input type="text" id="searchInput" placeholder="🔍 Pesquisar paciente por nome, CPF ou cartão de saúde..." class="form-control">
     </div>
 
-    <!-- Pacientes Cadastrados -->
     <div class="section mt-4">
         <h2 class="section-title">Pacientes Cadastrados</h2>
         {% if pacientes %}
             <div class="grid" id="pacientesGrid">
-                <!-- Dentro do loop de pacientes -->
-{% for paciente in pacientes %}
-<div class="card">
-    <h5>{{ paciente.usuario.nome_completo }}</h5>
-    <p><strong>CPF:</strong> {{ paciente.usuario.cpf }}</p>
-    <p><strong>Cartão de Saúde:</strong> {{ paciente.cartao_saude }}</p>
-    <p>
-        <strong>Condição:</strong> 
-        {% if paciente.condicao_prioritaria != 'nenhuma' %}
-            <span class="badge red">{{ paciente.get_condicao_prioritaria_display }}</span>
-        {% else %}
-            <span class="badge green">Comum</span>
-        {% endif %}
-    </p>
-    <!-- Botão para alocar o paciente em uma consulta "% url 'AgendaConsulta:alocar_paciente' paciente.id" -->
-    <div class="mt-auto">
-        <a href="{% url 'AgendaConsulta:alocar_paciente' paciente.id%}" class="btn btn-success">
-            <i class="fas fa-calendar-plus"></i> Alocar em Consulta
-        </a>
-    </div>
-    <a href="{% url 'profissional:editar_paciente' paciente.id %}" class="btn btn-success">Editar</a>
-    
-    </a>
-</div>
-{% endfor %}
+                {% for paciente in pacientes %}
+                    <div class="card">
+                        <h5>{{ paciente.usuario.nome_completo }}</h5>
+                        <p><strong>CPF:</strong> {{ paciente.usuario.cpf }}</p>
+                        <p><strong>Cartão de Saúde:</strong> {{ paciente.cartao_saude }}</p>
+                        <p>
+                            <strong>Condição:</strong> 
+                            {% if paciente.condicao_prioritaria != 'nenhuma' %}
+                                <span class="badge red">{{ paciente.get_condicao_prioritaria_display }}</span>
+                            {% else %}
+                                <span class="badge green">Comum</span>
+                            {% endif %}
+                        </p>
+                        <div class="mt-auto button-group">
+                            <a href="{% url 'AgendaConsulta:alocar_paciente' paciente.id %}" class="btn btn-primary">
+                                <i class="fas fa-calendar-plus"></i> Alocar em Consulta
+                            </a>
+                            <a href="{% url 'profissional:editar_paciente' paciente.id %}" class="btn btn-info">Editar</a>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         {% else %}
             <p class="no-data">Nenhum paciente cadastrado nesta unidade.</p>
         {% endif %}
     </div>
-
-    </div>
 </div>
 
-<!-- Estilos simplificados -->
 <style>
 .container {
     max-width: 1200px;
@@ -132,22 +122,27 @@
     margin-top: 20px;
 }
 
-.btn-primary {
+.btn-primary, .btn-info {
     background-color: #007bff;
     border: none;
     padding: 8px 16px;
     border-radius: 5px;
     color: white;
     text-decoration: none;
-    margin-top: auto; /* Alinha o botão no final do card */
+    margin: 5px; /* Adicionado margem para separar os botões */
 }
 
-.btn-primary:hover {
+.btn-primary:hover, .btn-info:hover {
     background-color: #0056b3;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center; /* Centraliza os botões */
+    margin-top: 10px; /* Adiciona espaço acima dos botões */
 }
 </style>
 
-<!-- Script para pesquisa -->
 <script>
 document.getElementById('searchInput').addEventListener('input', function() {
     const searchTerm = this.value.toLowerCase();

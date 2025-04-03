@@ -1,4 +1,3 @@
-{% extends 'base.html' %}
 {% block content %}
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -185,9 +184,11 @@
     <header>
         <h1>Bem-vindo</h1>
         <nav>
+            <a href="#">Home</a>
             <a href="{% url 'Paciente:pagina_paciente' %}">Editar Perfil</a>
             <a href="#">Minha Unidade de Saúde</a>
             <a href="{% url 'Paciente:notificacoes' %}">Notificações</a>
+            <a href="#">Sair</a>
             <a href="#">Ajuda</a>
         </nav>
     </header>

@@ -12,7 +12,7 @@ def cadastrar_campanha(request):
         if form.is_valid():
             print('Formulário válido')
             nova_campanha = form.save()
-            messages.success(request, "Campanha cadastrada com sucesso!")
+            #messages.success(request, "Campanha cadastrada com sucesso!")
             return redirect('Campanha:listar_campanhas')
         else:
             print('Formulário inválido')
@@ -37,7 +37,7 @@ def editar_campanha(request, campanha_id):
         form = CampanhaForm(request.POST, request.FILES, instance=campanha)
         if form.is_valid():
             form.save()
-            messages.success(request, "Campanha atualizada com sucesso!")
+            #messages.success(request, "Campanha atualizada com sucesso!")
             return redirect('Campanha:listar_campanhas')
         else:
             messages.error(request, "Corrija os erros abaixo.")

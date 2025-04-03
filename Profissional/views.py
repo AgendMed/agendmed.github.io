@@ -252,3 +252,24 @@ def atualizar_status_paciente(request, paciente_id):
             messages.error(request, "Status inválido.")
 
     return redirect('profissional:requisicoes_pendentes')
+
+
+
+
+@login_required
+def acompanha_domicilio(request):
+    profissional = get_object_or_404(ProfissionalSaude, usuario=request.user)
+    
+    agendamentos = Agendamento.objects.filter(
+    consulta__unidade_saude=profissional.unidade_saude,
+    consulta__tipo_consulta='domiciliar',
+    paciente__condicao_prioritaria__isnull=False
+).exclude(
+    paciente__condicao_prioritaria='nenhuma'
+).select_related('paciente', 'consulta').order_by('data_agendamento')
+
+
+    return render(request, 'Profissional/acompanha_domicilio.html', {
+        'agendamentos': agendamentos,
+        'unidade_saude': profissional.unidade_saude
+    })
