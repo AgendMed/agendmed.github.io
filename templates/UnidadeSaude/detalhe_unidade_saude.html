@@ -1,5 +1,10 @@
 {% if request.user.profissionalsaude_set.exists %}
     {% include 'reutilizaveis/sidebar_profissional.html' %}
+    {% extends "reutilizaveis/sidebar_profissional.html" %}
+{% endif %}
+{% if user.groups.filter(name='Paciente').exists() %}
+    {% include 'reutilizaveis/navbar_paciente.html' %}
+    {% extends "reutilizaveis/navbar_paciente.html" %}
 {% endif %}
 <!DOCTYPE html>
 <html lang="pt">
