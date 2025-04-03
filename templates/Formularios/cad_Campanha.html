@@ -1,7 +1,7 @@
 {% include 'reutilizaveis/sidebar_profissional.html' %}
 
 {% block content %}
-<!-- NO TOPO DO TEMPLATE cad_Campanha.html -->
+
 {% if messages %}
     {% for message in messages %}
         <div class="alert alert-success">
@@ -293,16 +293,12 @@
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.4/lottie.min.js"></script>
 <script>
-    // REMOVA O EVENTO submit DO FORMULÁRIO QUE USA preventDefault()
-// E substitua por este código:
 
 document.addEventListener('DOMContentLoaded', function () {
     const fileInput = document.getElementById('{{ form.imagem.id_for_label }}');
     const preview = document.getElementById('preview');
     const deleteButton = document.getElementById('delete-image');
     const uploadSection = document.getElementById('upload-section');
-
-    // REMOVA O BLOCO DE CÓDIGO DO submit (mantenha apenas o preview da imagem)
     
     fileInput.addEventListener('change', function (event) {
         const file = event.target.files[0];
