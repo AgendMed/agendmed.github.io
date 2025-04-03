@@ -27,6 +27,30 @@ def listar_campanhas(request):
     campanhas = Campanha.objects.all()
     return render(request, 'campanha/listar_campanhas.html', {'campanhas': campanhas})
 
+
+
+
+def editar_campanha(request, campanha_id):
+    campanha = get_object_or_404(Campanha, id=campanha_id)
+    
+    if request.method == "POST":
+        form = CampanhaForm(request.POST, request.FILES, instance=campanha)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Campanha atualizada com sucesso!")
+            return redirect('Campanha:listar_campanhas')
+        else:
+            messages.error(request, "Corrija os erros abaixo.")
+    else:
+        form = CampanhaForm(instance=campanha)
+    
+    return render(request, 'campanha/edita_campanha.html', {
+        'form': form,
+        'campanha': campanha
+    })
+
+
+
 #@permission_required('campanha.pode_cadastrar_campanha')
 def deletar_campanha(request, campanha_id):
     campanha = get_object_or_404(Campanha, id=campanha_id)

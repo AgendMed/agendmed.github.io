@@ -34,7 +34,7 @@
                     </p>
                     <!-- Contêiner dos botões -->
                     <div class="card-buttons">
-                        <a href="#" class="btn btn-primary">Editar</a>
+                        <a href="{% url 'Campanha:editar_campanha' campanha.id %}" class="btn btn-primary">Editar</a>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ campanha.id }}">
                             Deletar
                         </button>
