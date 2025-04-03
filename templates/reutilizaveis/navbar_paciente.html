@@ -53,7 +53,7 @@
     <header class="navbar-paciente">
         <nav>
             <a href="{% url 'Paciente:paciente_home' %}">Home</a>
-            <a href="#">Campanhas</a>
+            <a href="{% url 'Campanha:lista_campanhas_gerais' %}">Campanhas</a>
             <a href="{% url 'Paciente:lista_minhas_consultas' %}">Minhas Consultas</a>
             <a href="{% url 'Paciente:pagina_paciente' %}">Editar Perfil</a>
             <a href="#">Minha Unidade de Saúde</a>

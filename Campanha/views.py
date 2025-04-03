@@ -58,3 +58,17 @@ def deletar_campanha(request, campanha_id):
         campanha.delete()
         return redirect('Campanha:listar_campanhas')
     return render(request, 'campanha/confirmar_exclusao.html', {'campanha': campanha})
+
+
+
+def lista_campanhas_gerais(request):
+    # Usando data_inicial que existe no modelo (não data_inicio)
+    campanhas_destaque = Campanha.objects.order_by('-data_inicial')[:5]
+    
+    # Todas as campanhas
+    todas_campanhas = Campanha.objects.all().order_by('-data_inicial')
+    
+    return render(request, 'Paciente/campanhas.html', {
+        'campanhas_destaque': campanhas_destaque,
+        'todas_campanhas': todas_campanhas
+    })
