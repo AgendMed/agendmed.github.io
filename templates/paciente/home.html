@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <title>Home Paciente</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        header {
+            background-color: #f4f6f8;
+            color: #007bff;
+            padding: 1px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+
+        }
+        
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 10px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #007bff;
+            padding: 3px 12px;
+            background: rgba(146, 159, 188, 0.2);
+            border-radius: 10px;
+            transition: background 0.3s;
+            font-size: 15px;
+        }
+        
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .content {
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+        }
+        
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px;
+            width: 300px;
+            display: inline-block;
+            vertical-align: top;
+        }
+        .card h3 {
+            margin-top: 0;
+        }
+        .card a {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .card a:hover {
+            background-color: #0056b3;
+        }
+        
+        footer {
+            background-color: #c8cacb;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        footer a {
+            text-decoration: none;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+            margin: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bem-vindo</h1>
+        <nav>
+            <a href="{% url 'Paciente:pagina_paciente' %}">Editar Perfil</a>
+            <a href="#">Minha Unidade de Saúde</a>
+            <a href="{% url 'Paciente:notificacoes' %}">Notificações</a>
+            <a href="#">Ajuda</a>
+        </nav>
+    </header>
+
+    <div class="content">
+        <h3>Em busca de Atendimento?</h3>
+        <input type="text" placeholder="Busque um profissional...">
+        
+        <div>
+            {% comment %} {% for profissional in profissionais %}
+            <div class="card">
+                <img src="{{ profissional.imagem_url }}" alt="{{ profissional.nome }}">
+                <div class="card-body">
+                    <h5>{{ profissional.nome }}</h5>
+                    <p>{{ profissional.especialidade }}</p>
+                    <a href="#">Agendar Consulta</a>
+                </div>
+            </div>
+            {% endfor %} {% endcomment %}
+                <h1>Consultas Disponíveis</h1>
+                {% for consulta in consultas %}
+                    <div class="card">
+                        <h3>{{ consulta.unidade_saude.nome }}</h3>
+                        <p><strong>Profissional:</strong> {{ consulta.profissional.usuario.nome_completo }}</p>
+                        <p><strong>Data:</strong> {{ consulta.data }}</p>
+                        <p><strong>Horário:</strong> {{ consulta.horario_formatado }}</p>
+                        <p><strong>Fichas Prioritárias Disponíveis:</strong> {{ consulta.qtd_fichas_prioritarias }}</p>
+                        <p><strong>Fichas Normais Disponíveis:</strong> {{ consulta.qtd_fichas_normais }}</p>
+                        <a href=" {% url 'AgendaConsulta:agendar_consulta' consulta.id %} "> Agendar Consulta</a>
+                    </div>
+                {% endfor %}
+        </div>
+    </div>
+
+    <footer>
+        <a href="#">Home</a>
+        <a href="{% url 'Campanha:visualizar_campanhas' %}">Campanhas</a>
+        <a href="{% url 'Paciente:lista_minhas_consultas' %}">Consultas</a>
+    </footer>
+</body>
+{% endblock %}
+</html>

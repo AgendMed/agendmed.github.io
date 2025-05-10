@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Perfil - Profissional | AgendMed</title>
+    <link rel="stylesheet" href="{% static 'css/profissional.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="{% static 'img/Logo-branca-AgendMed.png' %}" alt="Logo AgendMed">
+        </header>
+        <main class="main-content">
+            <h2>Editar Perfil</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <h3>Dados do Usuário</h3>
+                {{ usuario_form.as_p }}
+                <h3>Dados do Profissional</h3>
+                {{ profissional_form.as_p }}
+                <button type="submit" class="btn-primary">Salvar Alterações</button>
+            </form>
+            {% if messages %}
+                <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>

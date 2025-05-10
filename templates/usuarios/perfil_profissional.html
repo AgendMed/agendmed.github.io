@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        background: white;
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 50px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2{
+        margin: 2%;
+    }
+    
+    h2, h3 {
+        color: #333;
+    }
+    
+    
+    form h3 {
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+    }
+    
+    form p {
+        margin-bottom: 15px;
+    }
+    
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    input, select, textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    
+    .edt a {
+        background: #007bff;
+        color: white;
+        padding: 5px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+    }
+    
+    .edt a:hover {
+        background: #0056b3;
+    }
+
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<h2>Bem-vindo, {{ usuario.nome_completo }}!</h2>
+<p><strong>CPF:</strong> {{ usuario.cpf }}</p>
+<p><strong>Email:</strong> {{ usuario.email }}</p>
+<p><strong>Telefone:</strong> {{ usuario.telefone }}</p>
+<p><strong>Data de Nascimento:</strong> {{ usuario.data_nascimento }}</p>
+<p><strong>Bairro:</strong> {{ usuario.bairro }}</p>
+<p><strong>Rua:</strong> {{ usuario.rua }}</p>
+<p><strong>Número da Casa:</strong> {{ usuario.numerocasa }}</p>
+<p><strong>Complemento:</strong> {{ usuario.complemento }}</p>
+<p><strong>Especialidade:</strong> {{ profissional.especialidade }}</p>
+<p><strong>Unidade de Saúde:</strong> {{ profissional.unidade_saude }}</p>
+
+<br>
+<div class="edt"><a href="{% url 'profissional:editar_perfil_profissional' %}">Editar Perfil</a></div>
+
+<script>
+    // Verifica se há mensagens de sucesso na sessão
+    {% if messages %}
+        {% for message in messages %}
+            Swal.fire({
+                text: '{{ message }}',
+                icon: '{{ message.type }}',
+                confirmButtonText: 'OK'
+            });
+        {% endfor %}
+    {% endif %}
+</script>
+{% endblock %}

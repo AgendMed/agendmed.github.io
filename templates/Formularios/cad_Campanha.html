@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+/* Reset básico para remover margens e paddings padrões */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Estilização geral */
+    body {
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+
+    /* Formulários */
+    form {
+        margin-top: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input, textarea, select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    /* Botões */
+    .btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    /* Alertas */
+    .alert {
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 15px;
+        display: none;
+    }
+
+    .alert-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .alert-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    /* Tabela para listar campanhas */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .table th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    /* Ícones de ação (editar/excluir) */
+    .action-icons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .action-icons a {
+        text-decoration: none;
+        color: #007bff;
+        font-size: 18px;
+    }
+
+    .action-icons a:hover {
+        color: #0056b3;
+    }
+
+
+</style>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Exibir notificação de sucesso
+    $('form').submit(function(event) {
+        event.preventDefault();
+        $('#notification').fadeIn().delay(3000).fadeOut();
+    });
+</script>
+
+
+<div class="container mt-5">
+    <h2 class="text-center">Cadastro de Campanha</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary btn-block">Salvar</button>
+    </form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Pacientes Agendados para a Consulta</h2>
+
+<p><strong>Unidade de Saúde:</strong> {{ consulta.unidade_saude.nome }}</p>
+<p><strong>Data:</strong> {{ consulta.data|date:"d/m/Y" }}</p>
+<p><strong>Horário:</strong> {{ consulta.horario_inicio|time:"H:i" }} - {{ consulta.horario_fim|time:"H:i" }}</p>
+
+<h3>Fila Prioritária</h3>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Nome do Paciente</th>
+            <th>Status</th>
+            <th>Posição na Fila</th>
+            <th>Ações</th> <!-- Nova coluna para ações -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for agendamento in agendamentos %}
+            {% if agendamento.paciente.status == "prioritario" %}
+                <tr>
+                    <td>{{ agendamento.paciente.usuario.nome_completo }}</td>
+                    <td>Prioritário</td>
+                    <td>{{ agendamento.numero_na_fila }}</td>
+                    <td>
+                        <a href="{% url 'AgendaConsulta:cancelar_agendamento' agendamento.id %}" class="btn btn-danger btn-sm">Cancelar</a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Fila Comum</h3>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Nome do Paciente</th>
+            <th>Status</th>
+            <th>Posição na Fila</th>
+            <th>Ações</th> <!-- Nova coluna para ações -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for agendamento in agendamentos %}
+            {% if agendamento.paciente.status == "comum" %}
+                <tr>
+                    <td>{{ agendamento.paciente.usuario.nome_completo }}</td>
+                    <td>Comum</td>
+                    <td>{{ agendamento.numero_na_fila }}</td>
+                    <td>
+                        <a href="{% url 'AgendaConsulta:cancelar_agendamento' agendamento.id %}" class="btn btn-danger btn-sm">Cancelar</a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'AgendaConsulta:listar_consultas' %}" class="btn btn-secondary">Voltar</a>
+{% endblock %}
