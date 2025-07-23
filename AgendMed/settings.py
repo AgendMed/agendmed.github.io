@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-o^=0_%17tx0px2+s_vjwl%8p49-^9ca!hnk@f3z=y4*bh=bs6+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['agendmed-github-io.onrender.com', 'localhost', '127.0.0.1']
 
 AUTH_USER_MODEL = 'users.Usuario'
 
