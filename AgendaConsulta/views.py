@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.db import transaction
 from django.http import JsonResponse
-from networkx import reverse
+from django.urls import reverse
 from Paciente.models import Paciente
 from Profissional.models import ProfissionalSaude
 from .forms import ConsultaForm, AgendamentoForm
