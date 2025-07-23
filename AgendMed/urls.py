@@ -1,4 +1,3 @@
-from Paciente.views import home  
 import os
 from django.contrib import admin
 from django.conf import settings
@@ -7,10 +6,12 @@ from AgendMed.settings import BASE_DIR
 from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 from django.views.static import serve
+from users.views import home
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 urlpatterns = [
+    path('', home, name='home'),
     path('admin/', admin.site.urls),
     path('paciente/', include('Paciente.urls')),
     path('unidade-saude/', include('Unidade_Saude.urls')),

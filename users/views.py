@@ -4,6 +4,12 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.shortcuts import render
+
+
+
+def home(request):
+    return render(request, 'login/index.html')
 
 
 
