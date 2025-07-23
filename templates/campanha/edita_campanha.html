@@ -1,0 +1,217 @@
+{% load static %}
+
+{% block content %}
+{% include 'reutilizaveis/sidebar_profissional.html' %}
+
+<div class="content">
+    <div class="form-card">
+        <a href="{% url 'Campanha:listar_campanhas' %}" class="btn-voltar-icon" title="Voltar">
+            <img width="32" height="32" src="https://img.icons8.com/color/48/left2.png" alt="left2"/>
+        </a>
+
+        <h2 class="form-title">Editar Campanha</h2>
+
+        <div id="image-preview">
+            <div class="image-container">
+                {% if campanha.imagem %}
+                    <img id="preview" src="{{ campanha.imagem.url }}" alt="Preview da Imagem" />
+                {% else %}
+                    <img id="preview" src="#" alt="Preview da Imagem" style="display: none;" />
+                {% endif %}
+            </div>
+            <button id="delete-image" class="btn btn-danger {% if not campanha.imagem %}d-none{% endif %}">Remover Imagem</button>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div id="upload-section">
+                <div class="form-group">
+                    <label for="{{ form.imagem.id_for_label }}">{{ form.imagem.label }}</label>
+                    {{ form.imagem }}
+                    {% if form.imagem.errors %}
+                        <div class="error-message">{{ form.imagem.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <h3 class="form-section-title">Detalhes da Campanha</h3>
+
+            <div class="form-grid">
+                {% for field in form %}
+                    {% if field.name != 'imagem' %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small>{{ field.help_text }}</small>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="error-message">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                <a href="{% url 'Campanha:listar_campanhas' %}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 80px 20px; 
+    }
+
+    .form-card {
+        background: #FFFFFF;
+        border-radius: 12px;
+        padding: 30px;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+    .form-title {
+        text-align: center;
+        color: #007bff; 
+        font-family: 'Arial', sans-serif;
+        margin-bottom: 20px;
+    }
+
+    .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 300px;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    #preview {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    textarea {
+        height: 100px !important;
+        resize: vertical;
+    }
+
+    .form-section-title {
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-size: 18px;
+        font-weight: bold;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 5px;
+    }
+
+    .btn-voltar-icon {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    @media (min-width: 600px) {
+        .form-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('{{ form.imagem.id_for_label }}');
+    const preview = document.getElementById('preview');
+    const deleteButton = document.getElementById('delete-image');
+    const uploadSection = document.getElementById('upload-section');
+
+    {% if campanha.imagem %}
+    uploadSection.style.display = 'none';
+    {% endif %}
+
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                deleteButton.classList.remove('d-none');
+                uploadSection.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    deleteButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        const deleteInput = document.createElement('input');
+        deleteInput.type = 'hidden';
+        deleteInput.name = 'imagem-clear';
+        deleteInput.value = 'on';
+        fileInput.form.appendChild(deleteInput);
+
+        preview.src = '#';
+        preview.style.display = 'none';
+        deleteButton.classList.add('d-none');
+        uploadSection.style.display = 'block';
+        fileInput.value = '';
+    });
+});
+</script>
+
+{% endblock %}

@@ -109,18 +109,6 @@ document.addEventListener('DOMContentLoaded', function () {
             switch (key) {
                 case 'complemento': // Ignorar
                     break;
-                case 'nome':
-                    validarCampo(fields.nome, errorMessages.nomeError, validarNome);
-                    break;
-                case 'dataNascimento':
-                    validarCampo(fields.dataNascimento, errorMessages.dataNascimentoError, validarDataNascimento);
-                    break;
-                case 'rua':
-                    validarCampo(fields.rua, errorMessages.ruaError, validarRua);
-                    break;
-                case 'bairro':
-                    validarCampo(fields.bairro, errorMessages.bairroError, validarBairro);
-                    break;
                 case 'cartSus':
                     validarCampo(fields.cartSus, errorMessages.cartSusError, validarCartaoSus);
                     break;

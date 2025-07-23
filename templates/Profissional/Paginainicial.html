@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Profissional - AgendMed</title>
+    <link rel="stylesheet" href="{% static 'css/profissional.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    {% include 'reutilizaveis/sidebar_profissional.html' %}
+    <div class="banner">
+        <img src="{% static 'img/banner-saude.jpg' %}" alt="Banner de Saúde Preventiva">
+    </div>
+    <div class="container">
+        <main class="main-content">
+            <div class="cards-container">
+                <!-- Card Consulta -->
+                <div class="card" id="consulta-card" data-url="{% url 'AgendaConsulta:listar_consultas' %}">
+                    <h3><img src="{% static 'img/relatorio-de-saude.gif' %}" alt="Consulta Icon"> Consultas</h3>
+                    <div class="card-content"></div>
+                </div>
+
+                <!-- Card Campanhas -->
+                <div class="card" id="campanha-card" data-url="{% url 'Campanha:listar_campanhas' %}">
+                    <h3><img src="{% static 'img/seringa.gif' %}" alt="Campanha Icon"> Campanhas</h3>
+                </div>
+                
+                <!-- Card Pacientes -->
+                <div class="card" id="paciente-card" data-url="{% url 'profissional:lista_pacientes_unidade' %}">
+                    <h3><img src="{% static 'img/monitoramento-de-saude.gif' %}" alt="Paciente Icon"> Pacientes</h3>
+                    <div class="card-content"></div>
+                </div>
+                
+                <!-- Card Acompanhamento -->
+                <div class="card" id="acompanhamento-card" data-url="{% url 'profissional:acompanha_domicilio' %}">
+                    <h3><img src="{% static 'img/exame-completo-de-saude.gif' %}" alt="Acompanhamento Icon"> Acompanhamento Domiciliar</h3>
+                    <div class="card-content"></div>
+                </div>
+
+                <div class="card" id="acompanhamento-card" data-url="{% url 'UnidadeSaude:detalhe_unidade' unidade.pk %}">
+                    <h3><img src="{% static 'img/farmacia.gif' %}" alt="Acompanhamento Icon"> Unidade de Saúde</h3>
+                    <div class="card-content"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Seleciona todos os cards
+            const cards = document.querySelectorAll(".card");
+
+            // Adiciona evento de clique para cada card
+            cards.forEach(card => {
+                card.addEventListener("click", function () {
+                    const url = card.getAttribute("data-url");
+                    if (url) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script src="{% static 'JS/profissional.js' %}"></script>
+</body>
+</html>

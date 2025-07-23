@@ -1,0 +1,301 @@
+/* Reset de estilos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo geral */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #dbe9ff;
+    color: #333;
+}
+
+/* Container principal */
+.container {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 53%;
+    right: 0;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    z-index: 100;
+}
+
+.header .logo img {
+    height: 100px;
+}
+
+
+.barra-superior{
+    color: #1E3A8A;    
+}
+
+
+/* Conteúdo Principal */
+.main-content {
+    margin-left: 250px;
+    margin-top: 80px;
+    padding: 30px;
+    width: calc(100% - 250px);
+    min-height: calc(100vh - 80px);
+    
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Container dos Cards */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 900px;
+    padding: 0 20px;
+    justify-content: center;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    text-align: center;
+}
+
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border-color: #1E3A8A;
+}
+
+.card h3 {
+    color: #1E3A8A;
+    font-weight: 600;
+    font-size: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+}
+
+.card img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+}
+
+/* Estilo do Banner */
+.banner {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Ajuste no main-content para incluir o banner */
+.main-content {
+    margin-left: 250px;
+    margin-top: 80px;
+    padding: 30px;
+    width: calc(100% - 250px);
+    min-height: calc(100vh - 80px);
+}
+
+
+/* Responsividade */
+/* Reset de estilos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo geral */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+}
+
+/* Container principal */
+.container {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 53%;
+    right: 0;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    z-index: 100;
+}
+
+.header .logo img {
+    height: 100px;
+}
+
+
+
+/* Conteúdo Principal */
+.main-content {
+    margin-top: -400px;
+    padding: 0px;
+    width: calc(100% - 250px);
+    min-height: calc(100vh - 80px);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+}
+
+
+/* Container dos Cards */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+    gap: 2rem;
+    justify-content: center; 
+    width: 100%;
+    max-width: 900px;
+    padding: 2px;
+    margin: 0 auto;
+    padding-top: 10px; 
+    position: relative; 
+    top: -70px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px; 
+    text-align: center;
+}
+
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border-color: #1E3A8A;
+}
+
+.card h3 {
+    color: #1E3A8A;
+    font-weight: 600;
+    font-size: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+}
+
+.card img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+}
+
+/* Estilo do Banner */
+.banner {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.main-content {
+    margin: 80px auto 0;
+    padding: 30px;
+    width: 100%;
+    max-width: 1200px; 
+    min-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    padding-top: 20px;
+}
+
+
+/* Responsividade */
+@media (max-width: 1024px) {
+    .main-content {
+        margin-left: 0; 
+        width: 100%;
+    }
+
+    .cards-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 cards por linha */
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .cards-container {
+        grid-template-columns: 1fr; /* 1 card por linha */
+    }
+    
+    .card {
+        min-height: 140px;
+        padding: 1.5rem;
+    }
+    
+    .card img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+

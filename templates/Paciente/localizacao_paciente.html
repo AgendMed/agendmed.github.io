@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Localização de {{ paciente.usuario.nome_completo }}</title>
+
+    <!-- Leaflet.js -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        #map { height: 400px; width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>{{ paciente.usuario.nome_completo }}</h1>
+    <p><strong>Endereço:</strong> {{ paciente.usuario.rua }}, {{ paciente.usuario.numerocasa }} - {{ paciente.usuario.bairro }}</p>
+
+    {% if paciente.usuario.latitude and paciente.usuario.longitude %}
+        <h3>Localização no Mapa</h3>
+        <div id="map"></div>
+
+        <script>
+            var lat = parseFloat("{{ paciente.usuario.latitude|default:'0.0' }}".replace(',', '.'));
+            var lng = parseFloat("{{ paciente.usuario.longitude|default:'0.0' }}".replace(',', '.'));
+
+            console.log("Latitude:", lat, "Longitude:", lng);
+
+            lat = parseFloat(lat);
+            lng = parseFloat(lng);
+
+            if (!isNaN(lat) && !isNaN(lng)) {
+                var map = L.map('map').setView([lat, lng], 15);
+                L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+                    maxZoom: 20,
+                    attribution: '© Google Maps'
+                }).addTo(map);
+                L.marker([lat, lng]).addTo(map).bindPopup("{{ paciente.usuario.nome_completo }}<br>{{ paciente.usuario.rua }}, {{ paciente.usuario.numerocasa }}").openPopup();
+            } else {
+                console.error("Erro: Latitude ou Longitude inválida.");
+            }
+        </script>
+    {% else %}
+        <p>Localização não disponível.</p>
+    {% endif %}
+</body>
+</html>

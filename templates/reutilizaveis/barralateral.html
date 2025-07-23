@@ -1,0 +1,26 @@
+{% load static %}
+<!-- Sidebar -->
+<nav class="sidebar">
+    <ul class="nav-menu">
+        <li class="active">
+            <a href="#">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fas fa-calendar-check"></i> Unidade de Saúde
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fas fa-users"></i> Meu Perfil
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'users:logout' %}" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </a>
+        </li>
+    </ul>
+</nav>

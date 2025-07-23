@@ -1,0 +1,65 @@
+<style>
+    body {
+        margin: 0; /* Remove a margem padrão do body */
+    }
+
+    .navbar-paciente {
+        background-color: #007bff;
+        color: white;
+        padding: 20px 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        width: 100%;
+        margin: 0; /* Remove margens do navbar */
+    }
+
+    .navbar-paciente nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.1);
+        margin-top: 15px;
+    }
+
+    .navbar-paciente nav a {
+        text-decoration: none;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 25px;
+        transition: all 0.3s;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .navbar-paciente nav a:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+        .navbar-paciente nav {
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .navbar-paciente nav a {
+            padding: 6px 15px;
+            font-size: 0.9em;
+        }
+    }
+</style>
+
+<body>
+    <header class="navbar-paciente">
+        <nav>
+            <a href="{% url 'Paciente:paciente_home' %}">Home</a>
+            <a href="{% url 'Campanha:lista_campanhas_gerais' %}">Campanhas</a>
+            <a href="{% url 'Paciente:lista_minhas_consultas' %}">Minhas Consultas</a>
+            <a href="{% url 'Paciente:pagina_paciente' %}">Editar Perfil</a>
+            <a href="#">Minha Unidade de Saúde</a>
+            <a href="{% url 'Paciente:notificacoes' %}">Notificações</a>
+            <a href="#">Sair</a>
+            <a href="#">Ajuda</a>
+        </nav>
+    </header>
+</body>

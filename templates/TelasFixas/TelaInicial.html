@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Paciente</title>
+    <!-- Link para o Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Definindo a altura e o comportamento do wrapper e sidebar */
+#wrapper {
+    display: flex;
+    align-items: stretch;
+    min-height: 100vh;
+}
+
+#sidebar {
+    width: 250px;
+    height: 100%;
+    background: #f8f9fa;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    transition: all 0.3s;
+}
+
+#sidebar .sidebar-header {
+    background: #007bff;
+    color: white;
+    padding: 20px;
+}
+
+#sidebar ul {
+    padding: 0;
+    list-style: none;
+}
+
+#sidebar ul li {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+#sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
+
+#sidebar ul li a:hover {
+    background: #007bff;
+    color: white;
+}
+
+/* Página principal */
+#page-content-wrapper {
+    flex: 1;
+    padding: 20px;
+    margin-left: 0;
+    transition: margin-left 0.3s;
+}
+
+/* Quando a sidebar está aberta */
+#wrapper.toggled #sidebar {
+    left: 0;
+}
+
+/* Quando a sidebar está aberta, o conteúdo principal é deslocado */
+#wrapper.toggled #page-content-wrapper {
+    margin-left: 250px;
+}
+
+/* Customizações da navbar */
+.navbar {
+    background-color: #007bff;
+    color: white;
+}
+
+.navbar {
+    color: white;
+}
+.navbar-brand{
+    color: #000;
+}
+
+/* Estilo do botão de menu */
+#menu-toggle {
+    font-size: 30px;
+    border: none;
+    background: transparent;
+    color: #007bff;
+}
+
+.search-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+    </style>
+</head>
+<body>
+    <!-- Sidebar Lateral -->
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-light border-right" id="sidebar">
+            <div class="sidebar-header">
+                <h3>AgendMed</h3>
+            </div>
+            <ul class="list-unstyled components">
+                <li><a href="#">Editar perfil</a></li>
+                <li><a href="#">Minha Unidade de Saúde</a></li>
+                <li><a href="#">Notificações</a></li>
+                <li><a href="#">Sair</a></li>
+            </ul>
+        </div>
+
+        <!-- Página Principal (conteúdo) -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <button class="btn btn-primary" id="menu-toggle">
+                    ☰
+                </button>
+                <span class="navbar-brand">Bem-vindo, Victor</span>
+            </nav>
+
+            <div class="container-fluid">
+                <!-- Seção de busca de profissionais -->
+                <div class="search-container mt-4">
+                    <h3>Em busca de Atendimento?</h3>
+                    <input type="text" class="form-control w-50" placeholder="Busque um profissional...">
+                </div>
+
+                <!-- Profissionais Disponíveis -->
+                <div class="professionals-list mt-4">
+                    <h4>Profissionais Disponíveis</h4>
+                    <div class="row">
+                        <!-- Card de Profissional -->
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card">
+                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Profissional 1">
+                                <div class="card-body">
+                                    <h5 class="card-title">Carolina Almeida</h5>
+                                    <p class="card-text">Nutricionista</p>
+                                </div>
+                                <a href="AgendaConsulta.html">
+                                    <button class="btn btn-primary">Agendar Consulta</button>
+                                </a>                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts do Bootstrap e JavaScript para a sidebar -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Toggle a sidebar
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+</body>
+</html>

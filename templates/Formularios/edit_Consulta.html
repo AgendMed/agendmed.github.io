@@ -1,0 +1,122 @@
+{% include 'reutilizaveis/sidebar_profissional.html' %}
+
+{% block content %}
+{% if messages %}
+    <div class="alert alert-success">
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+<div class="container" id="container">
+    <h1>Editar Consulta</h1>
+    <form method="POST" id="consulta-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar Alterações</button>
+    </form>
+
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        flatpickr("input[name='data']", {
+            enableTime: false,
+            dateFormat: "d/m/Y",
+            defaultDate: "{{ form.data.value|default:'' }}",
+            inline: true
+        });
+    });
+
+    $(document).ready(function () {
+        $('#id_unidade_saude').change(function () {
+            var unidadeId = $(this).val();
+            if (unidadeId) {
+                $.ajax({
+                    url: '{% url "profissional:filtrar_profissionais" %}',
+                    data: {
+                        'unidade_id': unidadeId
+                    },
+                    success: function (data) {
+                        $('#id_profissional').empty();
+                        $.each(data, function (key, value) {
+                            $('#id_profissional').append($('<option>', {
+                                value: key,
+                                text: value
+                            }));
+                        });
+                    }
+                });
+            } else {
+                $('#id_profissional').empty();
+            }
+        });
+    });
+</script>
+
+<style>
+    #container {
+        margin-top: 80px;
+        margin-left: 260px;
+        max-width: 600px;
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #00AEEF;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    form {
+        text-align: left;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    button {
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        border: none;
+    }
+
+    button[type="submit"] {
+        background: #00AEEF;
+        color: white;
+    }
+
+    button[type="submit"]:hover {
+        background: #008FCC;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+</style>
+
+{% endblock %}
