@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-from networkx import reverse
+from django.urls import reverse
 from django.utils.timezone import now
 from Paciente.forms import PacienteForm
 from .forms import ProfissionalSaudeForm, UsuarioForm
