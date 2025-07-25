@@ -52,3 +52,9 @@ if __name__ == "__main__":
             exit(1)
     else:
         exit(1)
+
+print("✅ Banco conectado - Verificando migrações...")
+from django.core.management import call_command
+call_command('makemigrations', '--noinput')
+call_command('migrate', '--noinput')
+print("✅ Migrações aplicadas com sucesso!")
