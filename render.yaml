@@ -8,7 +8,7 @@ services:
     buildCommand: |
       pip install -r requirements.txt
       python manage.py collectstatic --no-input
-    startCommand: python manage.py migrate --noinput && gunicorn AgendMed.wsgi:application --bind 0.0.0.0:$PORT
+    startCommand: python manage.py migrate --verbosity 3 --noinput && gunicorn AgendMed.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: AgendMed.settings
