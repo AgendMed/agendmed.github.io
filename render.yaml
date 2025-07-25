@@ -1,6 +1,3 @@
-databases:
-  - name: agendmed-postgres
-
 services:
   - type: web
     name: agendmed
@@ -8,12 +5,10 @@ services:
     buildCommand: |
       pip install -r requirements.txt
       python wait_for_db.py
+      python manage.py makemigrations --no-input
+      python manage.py migrate --no-input
       python manage.py collectstatic --no-input
-      python manage.py migrate
-startCommand: gunicorn AgendMed.wsgi:application
-
-    
-
+    startCommand: gunicorn AgendMed.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: AgendMed.settings
