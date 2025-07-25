@@ -3,25 +3,13 @@ services:
     name: agendmed
     env: python
     buildCommand: |
-      echo ">>> Instalando dependências..."
+      echo "1. Instalando dependências..."
       pip install -r requirements.txt
-  
-      echo ">>> Verificando banco de dados..."
-      python wait_for_db.py || exit 1
-  
-      echo ">>> Forçando migrações..."
-      python manage.py makemigrations --noinput || echo "⚠️ Makemigrations falhou"
-      python manage.py migrate --noinput || echo "⚠️ Migrate falhou"
-      python manage.py showmigrations || echo "⚠️ Showmigrations falhou"
-  
-      echo ">>> Coletando arquivos estáticos..."
+      
+      echo "2. Forçando migrações..."
+      python force_migrate.py || exit 1
+      
+      echo "3. Coletando estáticos..."
       python manage.py collectstatic --noinput
       
-      - key: DJANGO_SETTINGS_MODULE
-        value: AgendMed.settings
-      - key: PYTHON_VERSION
-        value: "3.11"
-      - key: DATABASE_URL
-        fromDatabase:
-          name: agendmed_postgresql
-          property: connectionString
+      echo "✅ Build completo!"

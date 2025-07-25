@@ -3,6 +3,27 @@ from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
 
+# Adicione no final do settings.py
+import sys
+from django.db import connection
+
+def check_migrations():
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT tablename FROM pg_tables WHERE schemaname = 'public'")
+            tables = [row[0] for row in cursor.fetchall()]
+            print(f"\n🔍 TABELAS EXISTENTES: {tables}")
+            
+        from django.db.migrations.recorder import MigrationRecorder
+        applied_migrations = MigrationRecorder.Migration.objects.values_list('app', 'name')
+        print(f"\n📋 MIGRAÇÕES APLICADAS: {list(applied_migrations)}")
+        
+    except Exception as e:
+        print(f"\n❌ ERRO AO VERIFICAR MIGRAÇÕES: {str(e)}")
+
+if 'runserver' not in sys.argv:
+    check_migrations()
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, '.env'))
