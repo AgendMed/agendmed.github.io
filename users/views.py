@@ -6,6 +6,24 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.shortcuts import render
 
+from django.db import connection
+from django.http import HttpResponse
+
+def listar_tabelas(request):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT tablename FROM pg_tables WHERE schemaname='public';
+        """)
+        tabelas = cursor.fetchall()
+    lista = '<br>'.join([t[0] for t in tabelas])
+    return HttpResponse(f"Tabelas no banco:<br>{lista}")
+
+
+
+
+
+
+
 
 
 def home(request):
