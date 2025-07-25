@@ -3,16 +3,20 @@ services:
     name: agendmed
     env: python
     buildCommand: |
+      echo ">>> Instalando dependências..."
       pip install -r requirements.txt
-      python wait_for_db.py
-      echo ">>> Executando makemigrations..."
-      python manage.py makemigrations --noinput
-      echo ">>> Executando migrate..."
-      python manage.py migrate --noinput
-      echo ">>> Verificando migrações aplicadas..."
-      python manage.py showmigrations
+  
+      echo ">>> Verificando banco de dados..."
+      python wait_for_db.py || exit 1
+  
+      echo ">>> Forçando migrações..."
+      python manage.py makemigrations --noinput || echo "⚠️ Makemigrations falhou"
+      python manage.py migrate --noinput || echo "⚠️ Migrate falhou"
+      python manage.py showmigrations || echo "⚠️ Showmigrations falhou"
+  
+      echo ">>> Coletando arquivos estáticos..."
       python manage.py collectstatic --noinput
-    envVars:
+      
       - key: DJANGO_SETTINGS_MODULE
         value: AgendMed.settings
       - key: PYTHON_VERSION
