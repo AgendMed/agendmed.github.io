@@ -9,22 +9,21 @@ def wait_for_db():
     retry_count = 0
     DATABASE_URL = os.getenv('DATABASE_URL')
     
-    if not DATABASE_URL:
-        raise ValueError("DATABASE_URL não está definida")
-    
-    url = urlparse(DATABASE_URL)
+    print("🔄 Aguardando banco de dados ficar disponível...")
     
     while retry_count < max_retries:
         try:
+            url = urlparse(DATABASE_URL)
             conn = psycopg2.connect(
                 dbname=url.path[1:],
                 user=url.username,
                 password=url.password,
                 host=url.hostname,
-                port=url.port
+                port=url.port,
+                connect_timeout=3
             )
             conn.close()
-            print("✅ Banco de dados disponível!")
+            print("✅ Banco conectado com sucesso!")
             
             # Aplicar migrações
             print("🔄 Aplicando migrações...")
@@ -32,12 +31,14 @@ def wait_for_db():
             call_command('migrate', interactive=False)
             
             return True
+            
         except Exception as e:
             retry_count += 1
-            print(f"⚠️ Tentativa {retry_count}/{max_retries}: Banco não disponível - {str(e)}")
+            print(f"⚠️ Tentativa {retry_count}/{max_retries}: {str(e)}")
             time.sleep(5)
     
-    raise Exception("❌ Não foi possível conectar ao banco de dados após várias tentativas")
+    print("❌ Falha ao conectar ao banco de dados")
+    return False
 
 if __name__ == "__main__":
     wait_for_db()
