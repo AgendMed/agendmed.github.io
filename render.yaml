@@ -8,7 +8,10 @@ services:
     buildCommand: |
       pip install -r requirements.txt
       python manage.py collectstatic --no-input
-    startCommand: python manage.py migrate && gunicorn AgendMed.wsgi:application
+      python manage.py migrate
+startCommand: gunicorn AgendMed.wsgi:application
+
+    
 
     envVars:
       - key: DJANGO_SETTINGS_MODULE
