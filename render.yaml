@@ -6,10 +6,17 @@ services:
       echo "1. Instalando dependências..."
       pip install -r requirements.txt
       
-      echo "2. Forçando migrações..."
-      python force_migrate.py || exit 1
+      echo "2. Verificando configuração do banco..."
+      python check_db.py
       
-      echo "3. Coletando estáticos..."
+      echo "3. Aplicando migrações FORÇADAS..."
+      python manage.py makemigrations --noinput
+      python manage.py migrate --noinput --run-syncdb
+      
+      echo "4. Verificando resultado..."
+      python check_db.py || exit 1
+      
+      echo "5. Coletando estáticos..."
       python manage.py collectstatic --noinput
       
-      echo "✅ Build completo!"
+      echo "✅ DEPLOY COMPLETO!"

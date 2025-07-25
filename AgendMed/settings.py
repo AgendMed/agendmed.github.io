@@ -90,9 +90,9 @@ WSGI_APPLICATION = 'AgendMed.wsgi.application'
 # Database
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL"), 
+        default=os.getenv('DATABASE_URL'),
         conn_max_age=600,
-        ssl_require=False 
+        conn_health_checks=True
     )
 }
 
@@ -140,3 +140,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/users/login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+
+
+
+
+
+# No final do settings.py
+import sys
+if 'migrate' in sys.argv or 'runserver' in sys.argv:
+    print("\n🔍 Verificando configuração do banco...")
+    from django.db import connection
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+        print("✅ Conexão com o banco OK")
+    except Exception as e:
+        print(f"❌ Erro na conexão: {str(e)}")
