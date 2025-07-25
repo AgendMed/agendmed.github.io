@@ -93,14 +93,13 @@ WSGI_APPLICATION = 'AgendMed.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'agendmed_postgresql',
+        'NAME': 'agendmed',
         'USER': 'agendmed_user',
-        'PASSWORD': 'UAOYpOYCBi1Xz7XDkUO2exKlH9CAuwV8',
-        'HOST': 'dpg-d20lqr7gi27c73cp1dag-a.oregon-postgres.render.com',
+        'PASSWORD': 'Lnz3f70OOWdvB9tDPVwcAh4ABYxkpBe8',
+        'HOST': 'dpg-d22134vdiees73e9tchg-a.oregon-postgres.render.com',
         'PORT': '5432',
     }
 }
-
 
 
 # Password validation
