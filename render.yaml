@@ -3,21 +3,23 @@ services:
     name: agendmed
     env: python
     buildCommand: |
-
       echo "1. Instalando dependências..."
       pip install -r requirements.txt
       
-      echo "2. Verificando conexão com o banco..."
-      python check_db.py || exit 1
+      echo "2. Verificando banco de dados..."
+      python wait_for_db.py || exit 1
       
-      echo "3. Aplicando migrações..."
-      python manage.py makemigrations --noinput
-      python manage.py migrate --noinput
-      
-      echo "4. Verificando migrações..."
+      echo "3. Verificando migrações aplicadas..."
       python manage.py showmigrations
       
-      echo "5. Coletando arquivos estáticos..."
+      echo "4. Coletando arquivos estáticos..."
       python manage.py collectstatic --noinput
       
       echo "✅ Deploy concluído com sucesso!"
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://agendmed_user:UAOYpOYCBi1Xz7XDkUO2exKlH9CAuwV8@dpg-d20lqr7gi27c73cp1dag-a.oregon-postgres.render.com:5432/agendmed_postgresql
+      - key: DEBUG
+        value: 'True'
+      - key: DISABLE_COLLECTSTATIC
+        value: '1'

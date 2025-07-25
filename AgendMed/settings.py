@@ -88,13 +88,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'AgendMed.wsgi.application'
 
 # Database
+# settings.py
+
 DATABASES = {
-    'default': dj_database_url.parse(
-        os.getenv('DATABASE_URL'),
-        conn_max_age=600,
-        engine='django.db.backends.postgresql'
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'agendmed_postgresql',
+        'USER': 'agendmed_user',
+        'PASSWORD': 'UAOYpOYCBi1Xz7XDkUO2exKlH9CAuwV8',
+        'HOST': 'dpg-d20lqr7gi27c73cp1dag-a.oregon-postgres.render.com',
+        'PORT': '5432',
+    }
 }
+
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
