@@ -89,13 +89,12 @@ WSGI_APPLICATION = 'AgendMed.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
+    'default': dj_database_url.parse(
+        os.getenv('DATABASE_URL'),
         conn_max_age=600,
-        conn_health_checks=True
+        engine='django.db.backends.postgresql'
     )
 }
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
