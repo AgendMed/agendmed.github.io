@@ -4,10 +4,14 @@ services:
     env: python
     buildCommand: |
       pip install -r requirements.txt
-      python wait_for_db.py && 
-      python manage.py makemigrations --no-input && 
-      python manage.py migrate --no-input && 
-      python manage.py collectstatic --no-input
+      python wait_for_db.py
+      echo ">>> Executando makemigrations..."
+      python manage.py makemigrations --noinput
+      echo ">>> Executando migrate..."
+      python manage.py migrate --noinput
+      echo ">>> Verificando migrações aplicadas..."
+      python manage.py showmigrations
+      python manage.py collectstatic --noinput
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: AgendMed.settings
